@@ -568,3 +568,4 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 			printf("\nRaios multiplos! O operador esta incorreto.");	
 	}
 }
+//Hehehehe este comentario é inutil!
