@@ -198,7 +198,7 @@ int main()
 	cleardevice();
 	
 	//Ideia de funcao -> CarregarImagens(SpritesN, Sprites, Sprites_Nomes, Sprites_Tamanhos, Tipo)
-	// ! -> A funcao nao fucionou pois ela nao aceita o array de strings (Sprites_Nomes), nao sei como arrumar isso.
+	// ! -> A funcao nao funcionou pois ela nao aceita o array de strings (Sprites_Nomes), nao sei como arrumar isso.
 	
 	//Sprites de teste
 	SpritesN = SpritesQ; //Numero de sprites.
@@ -510,7 +510,7 @@ void desenhaCenarioColisao(int CPosX, int CPosY, void* Cenario_Colisao[], int Ce
 	switch(CenarioAtual)
 	{
 		case 0:
-			// O if fara com que a imagem não seja desenhada se estiver fora da tela.
+			// O if fara com que a imagem nao seja desenhada se estiver fora da tela.
 			if(((CPosX >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_1][0])) && (CPosX <= TelaLarX)) && ((CPosY >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_1][1])) && (CPosY <= TelaLarY)))
 			{
 				putimage(CPosX, CPosY, Cenario_Colisao[TESTEC_01_1], COPY_PUT);
