@@ -16,7 +16,8 @@
 
 int TamanhoListaOC = 0,
 	TamanhoListaRetangulosDeColisao = 0;
-bool PodeFazerInteracao = true;
+bool PodeFazerInteracao = true,
+	 SpacePress = false;
 
 //Enumera numeros e atribui a marcadores (o primeiro numero pode ser definido, por exempo enum A {A=1, B}, se não, é 0 por padrao).
 //Pode ser utilizado para facilitar o uso de imagens.
@@ -32,6 +33,11 @@ enum Tipos {PER, OBJ, BAU}; //Enumera os tipos que as structs de PosisoesC podem
 
 //Enumero os indices dos itens do jogo.
 enum IndiceItens {NADA, POCAO, POCAO2};
+
+//Baus
+const int NumeroDeBaus = 2;
+int Baus[NumeroDeBaus] = {NADA,
+						  POCAO};
 
 //Definicao de structs
 typedef struct
@@ -51,8 +57,12 @@ typedef struct
 
 typedef struct
 {
+	// DeslocamentoDaImagem é um valor a ser subtraido para a imagem comecar
+	// acima da caixa de colisao, criando perspectiva. Sera usado apenas para
+	// ver se essas imagens estao dentro da tela na hora de desenhar.
 	int PosY,
 		VTroca,
+		DeslocamentoDaImagem,
 		IndIm,
 		Ind,
 		Tipo;
@@ -79,11 +89,45 @@ void desenhaCenarioColisao(int CPosX, int CPosY, void* Cenario_Colisao[], int Ce
 void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCD[], PosicoesD BausCD[]);
 void criarListaRetangulosDeColisao(int CenarioAtual, RetangulosDeColisao RetanguloTeste[], RetangulosDeColisao PosicaoBaus[]);
 
-void interacoesComOMapa()
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[])
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
 	// A variavel global PodeFazerInteracao sera usada para limitar a uma interacao por vez.
+	switch(CenarioAtual)
+	{
+		case 0:
+			{
+				int BauN = 0;
+				
+				BauN = 0;
+				if(!(Baus[BauN] == NADA) && PodeFazerInteracao == true)
+				{
+					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
+					{
+						if((GetKeyState(VK_SPACE)&0x80) && SpacePress == false)
+					    {
+					    	Baus[BauN] = NADA;
+						}
+					}
+				}
+				
+				BauN = 1;
+				if(!(Baus[BauN] == NADA) && PodeFazerInteracao == true)
+				{
+					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
+					{
+						if((GetKeyState(VK_SPACE)&0x80) && SpacePress == false)
+					    {
+					    	Baus[BauN] = NADA;
+						}
+					}
+				}
+				
+				break;
+			}
+			
+	}
 }
 
 //void desenhaCenarioObjetos(int PosX, int PosY, int CPosX, int CPosY, void* Cenario_Objetos[], void* Cenario_Objetos_Mascaras[], int CenarioAtual, int Cenario_Objetos_Tamanhos[][2], int TelaLarX, int TelaLarY, struct ObjetosCInf ObjetosC[]);
@@ -110,20 +154,17 @@ int main()
 	long long unsigned Gt1, Gt2;
 	
 	//Baus
-	int NumeroDeBaus = 2,
-		Bau_AreaDeInteracao = 10;
-	int Baus[NumeroDeBaus] = {POCAO,
-							  POCAO2};
+	int Bau_AreaDeInteracao = 10;
 	
 	RetangulosDeColisao PosicaoBaus[NumeroDeBaus];
 	
 	PosicaoBaus[0].DisX = 700;
-	PosicaoBaus[0].DisY = 270;
+	PosicaoBaus[0].DisY = 300;
 	PosicaoBaus[0].LarX = 50;
 	PosicaoBaus[0].LarY = 50;
 	
-	PosicaoBaus[1].DisX = 700;
-	PosicaoBaus[1].DisY = 330;
+	PosicaoBaus[1].DisX = 680;
+	PosicaoBaus[1].DisY = 370;
 	PosicaoBaus[1].LarX = 50;
 	PosicaoBaus[1].LarY = 50;
 	
@@ -132,8 +173,11 @@ int main()
 	BausCD[0].IndIm = 0;
 	BausCD[1].IndIm = 0;
 	
-	BausCD[0].VTroca = 0;
-	BausCD[1].VTroca = 0;
+	BausCD[0].VTroca = 50;
+	BausCD[1].VTroca = 50;
+	
+	BausCD[0].DeslocamentoDaImagem = 10;
+	BausCD[1].DeslocamentoDaImagem = 10;
 	
 	
 	//Variaveis do cenario
@@ -213,9 +257,13 @@ int main()
 	int Cenario_ObjetosQ = 3;
 	void* Cenario_Objetos[Cenario_ObjetosQ];
 	
+	int Sprites_BausQ = 2;
+	void* Sprites_Baus[Sprites_BausQ];
+	
 	//Vai guardar as mascaras das imagens que precisarem de uma.
 	void* Sprites_Mascaras[SpritesQ];
 	void* Cenario_Objetos_Mascaras[Cenario_ObjetosQ];
+	void* Sprites_Baus_Mascaras[Sprites_BausQ];
 	
 	//Nomes e caminhos dos arquivos, sem o tipo, para poder ser usado pelo codigo das mascaras tambem.
 	// "17"" pois tem que considerar o caractere nulo "\0" que fica no final de uma string.
@@ -231,6 +279,10 @@ int main()
 								 						"Sprites/ObjetoC_Teste_01-2",
 														"Sprites/ObjetoC_Teste_01-3"};
 	
+	//Organizacao = {Bau01 fechado, Bau01 aberto, Bau02 fechado, Bau02 aberto, ...}
+	char Sprites_Baus_Nomes[Sprites_BausQ][16] = {"Sprites/bau01-F",
+								 				  "Sprites/bau01-A"};
+	
 	//Vai guardas a largura e altura das imagens, respectivamente.
 	int Sprites_Tamanhos[SpritesQ][2] = {{100, 50},
 								  		 {70, 50}};
@@ -244,11 +296,15 @@ int main()
 								  		 				 {110, 115},
 														 {110, 115}};
 	
+	int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
+												   {50, 60}};
+	
 	//Arrumar as posicoes de troca dos objetos do cenario.
 	for(i=0; i < NObjetos; i++)
 	{
 		ObjetosCD[i].Tipo = OBJ;
 		ObjetosCD[i].Ind = i; //Indice do struct, para ser usado quando chamar a lista de objetos.
+		ObjetosCD[i].DeslocamentoDaImagem = 0;
 		ObjetosCD[i].PosY = ObjetosC[i].DisY + Cenario_Objetos_Tamanhos[ObjetosCD[i].IndIm][1] - ObjetosCD[i].VTroca;
 	}
 	
@@ -334,6 +390,28 @@ int main()
 	    getimage(0, 0, Cenario_Objetos_Tamanhos[i][0]-1, Cenario_Objetos_Tamanhos[i][1]-1, Cenario_Objetos_Mascaras[i]);
 	}
 	
+	//Baus
+	SpritesN = Sprites_BausQ;
+	strcpy(Tipo, JPG);
+	for(i=0; i < SpritesN; i++)
+	{
+		strcpy(StrcatTemp, Sprites_Baus_Nomes[i]);
+
+		readimagefile(strcat(StrcatTemp, Tipo), 0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1);
+	    Sprites_Baus[i] = malloc(imagesize(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1));
+	    getimage(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1, Sprites_Baus[i]);
+	}
+	
+	strcpy(Tipo, MJPG);
+	for(i=0; i < SpritesN; i++)
+	{
+		strcpy(StrcatTemp, Sprites_Baus_Nomes[i]);
+
+		readimagefile(strcat(StrcatTemp, Tipo), 0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1);
+	    Sprites_Baus_Mascaras[i] = malloc(imagesize(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1));
+	    getimage(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1, Sprites_Baus_Mascaras[i]);
+	}
+	
 	cleardevice();
 	setactivepage(0);
 	
@@ -402,6 +480,25 @@ int main()
 				}
 			}
 			
+			/*
+			printf("\n\n");
+			for(i=0; i < TamanhoListaOC; i++)
+			{
+				if(listaObjetosC[i].Tipo == PER)
+				{
+					printf("Per %d, ", listaObjetosC[i].Ind);
+				}
+				if(listaObjetosC[i].Tipo == OBJ)
+				{
+					printf("Obj %d, ", listaObjetosC[i].Ind);
+				}
+				if(listaObjetosC[i].Tipo == BAU)
+				{
+					printf("Bau %d, ", listaObjetosC[i].Ind);
+				}
+			}
+			*/
+			
 			//Desenhar os objetos e a personagem
 			for(i=0; i < TamanhoListaOC; i++)
 			{
@@ -414,12 +511,31 @@ int main()
 					putimage(PosX - 30, PosY - 60, Sprites_Mascaras[CHADDRIT], AND_PUT);
 					putimage(PosX - 30, PosY - 60, Sprites[CHADDRIT], OR_PUT);
 				}
-				else if(listaObjetosC[i].Tipo == OBJ)
+				
+				if(listaObjetosC[i].Tipo == OBJ)
 				{
 					if(((CPosX + ObjetosC[listaObjetosC[i].Ind].DisX >= (0 - Cenario_Objetos_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + ObjetosC[listaObjetosC[i].Ind].DisX <= TelaLarX)) && ((CPosY + ObjetosC[listaObjetosC[i].Ind].DisY >= (0 - Cenario_Objetos_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + ObjetosC[listaObjetosC[i].Ind].DisY <= TelaLarY)))
 					{
 						putimage(CPosX + ObjetosC[listaObjetosC[i].Ind].DisX, CPosY + ObjetosC[listaObjetosC[i].Ind].DisY, Cenario_Objetos_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
 						putimage(CPosX + ObjetosC[listaObjetosC[i].Ind].DisX, CPosY + ObjetosC[listaObjetosC[i].Ind].DisY, Cenario_Objetos[listaObjetosC[i].IndIm], OR_PUT);
+					}
+				}
+				
+				if(listaObjetosC[i].Tipo == BAU)
+				{
+							
+					if(((CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX  <= TelaLarX)) && ((CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + ObjetosC[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem <= TelaLarY)))
+					{
+						if(Baus[listaObjetosC[i].Ind] == NADA)
+						{
+							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm + 1], AND_PUT);
+							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm + 1], OR_PUT);
+						}
+						else
+						{
+							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
+							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm], OR_PUT);
+						}
 					}
 				}
 			}
@@ -549,7 +665,7 @@ int main()
 			}
 			
 			//Interacoes com o mapa.
-			//InteracoesComOMapa();
+			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus);
 			
 			//Comandos
 			
@@ -571,6 +687,15 @@ int main()
 		    else if(GetKeyState(VK_DOWN)&0x80)
 		    {
 		    	MovY = PVel;
+			}
+			
+			if((GetKeyState(VK_SPACE)&0x80))
+		    {
+		    	SpacePress = true;
+			}
+			if(!(GetKeyState(VK_SPACE)&0x80))
+	      	{
+	      		SpacePress = false;
 			}
 			
 			fflush(stdin); //Aparentemente limpa algum endereco de memoria.
@@ -672,17 +797,19 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 		case 0:
 			{
 				//Preciso colocar as chaves para limitar o escopo da variavel local que e declarada (ListaT), se nao da erro.
-				TamanhoListaOC = 4;
+				TamanhoListaOC = 6;
 				
 				PersonagemD.PosY = PosY - PersonagemD.VTroca;
 				
-				PosicoesD ListaT[TamanhoListaOC] = {PersonagemD, ObjetosCD[OTESTE_01_1], ObjetosCD[OTESTE_01_2], ObjetosCD[OTESTE_01_3]};
+				PosicoesD ListaT[TamanhoListaOC] = {PersonagemD, ObjetosCD[OTESTE_01_1], ObjetosCD[OTESTE_01_2], ObjetosCD[OTESTE_01_3], BausCD[0], BausCD[1]};
 				
 				// O valor de X e Y que os objetos guardam e a distancia deles em relacao ao X e Y do cenario,
 				// aqui na lista, e necessario o valor real da posicao na tela, por isso a soma.
 				ListaT[1].PosY += CPosY;
 				ListaT[2].PosY += CPosY;
 				ListaT[3].PosY += CPosY;
+				ListaT[4].PosY += CPosY;
+				ListaT[5].PosY += CPosY;
 				
 				listaObjetosC = (PosicoesD *)realloc(listaObjetosC, sizeof(PosicoesD) * TamanhoListaOC);
 				for(int i=0; i < TamanhoListaOC; i++)
