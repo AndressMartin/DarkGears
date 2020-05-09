@@ -15,6 +15,7 @@
 //Ponteiros e variaveis globais
 
 int TamanhoListaOC = 0;
+int TamanhoListaRetangulosDeColisao = 0;
 
 //Enumera numeros e atribui a marcadores (o primeiro numero pode ser definido, por exempo enum A {A=1, B}, se não, é 0 por padrao).
 //Pode ser utilizado para facilitar o uso de imagens.
@@ -53,13 +54,67 @@ typedef struct
 		Tipo;
 } PosicoesD; //Informacoes das posicos para desenhar coisas que se sobrepoem (podem ficar na frente ou atras umas das outras).
 
+typedef struct
+{
+	int DisX,
+		DisY,
+		LarX,
+		LarY;
+} RetangulosDeColisao;
+
 //Ponteiro de structs para a funcao desenhaCenariosObjetosC.
 PosicoesD *listaObjetosC = NULL;
+
+//Ponteiro para a lista de retangulos de colisao.
+RetangulosDeColisao *ListaRetangulosDeColisao = NULL;
 
 //Definicao das funcoes, as funcoes em si estao depois do main.
 bool hitTestCenario(int PosX,int PosY);
 void desenhaCenarioColisao(int CPosX, int CPosY, void* Cenario_Colisao[], int CenarioAtual, int Cenario_Colisao_Tamanhos[][2], int TelaLarX, int TelaLarY);
 void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCD[]);
+
+bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY)
+{
+	//Confere a colisao com retângulos.
+	
+	bool Colisao = false;
+	
+	for(int i = 0; i < TamanhoListaRetangulosDeColisao; i++)
+	{
+		if((PosX < ListaRetangulosDeColisao[i].DisX + ListaRetangulosDeColisao[i].LarX + CPosX) && (PosX + PLarX > ListaRetangulosDeColisao[i].DisX + CPosX) && (PosY < ListaRetangulosDeColisao[i].DisY + ListaRetangulosDeColisao[i].LarY + CPosY) && (PosY + PLarY > ListaRetangulosDeColisao[i].DisY + CPosY))
+		{
+			Colisao = true;
+		}
+	}
+	
+	return Colisao;
+}
+
+void criarListaRetangulosDeColisao(int CenarioAtual, RetangulosDeColisao RetanguloTeste[])
+{
+	//Muda a lista (ponteiro) que tem os retangulos para colisao.
+	switch(CenarioAtual)
+	{
+		case 0:
+			{
+				//Preciso colocar as chaves para limitar o escopo da variavel local que e declarada (ListaT), se nao da erro.
+				TamanhoListaRetangulosDeColisao = 2;
+				
+				RetangulosDeColisao ListaT[TamanhoListaRetangulosDeColisao] = {RetanguloTeste[0], RetanguloTeste[1]};
+				
+				
+				ListaRetangulosDeColisao = (RetangulosDeColisao *)realloc(ListaRetangulosDeColisao, sizeof(RetangulosDeColisao) * TamanhoListaRetangulosDeColisao);
+				for(int i=0; i < TamanhoListaRetangulosDeColisao; i++)
+				{
+					ListaRetangulosDeColisao[i] = ListaT[i];
+				}		
+				break;
+			}
+		
+		default:
+			printf("\nRaios multiplos! O operador esta incorreto.");	
+	}
+}
 
 //void desenhaCenarioObjetos(int PosX, int PosY, int CPosX, int CPosY, void* Cenario_Objetos[], void* Cenario_Objetos_Mascaras[], int CenarioAtual, int Cenario_Objetos_Tamanhos[][2], int TelaLarX, int TelaLarY, struct ObjetosCInf ObjetosC[]);
 
@@ -128,6 +183,16 @@ int main()
 	PersonagemD.VTroca = -PLarY;
 	
 	PosicoesD ListaOCT; //Struct para ser usada na hora do sort.
+	
+	RetangulosDeColisao RetanguloTeste[2];
+	RetanguloTeste[0].DisX = 100;
+	RetanguloTeste[0].DisY = 80;
+	RetanguloTeste[0].LarX = 100;
+	RetanguloTeste[0].LarY = 100;
+	RetanguloTeste[1].DisX = 300;
+	RetanguloTeste[1].DisY = 300;
+	RetanguloTeste[1].LarX = 150;
+	RetanguloTeste[1].LarY = 50;
 	
 	char Tipo[13] = "Nice",
 		 JPG[5] = ".jpg",
@@ -265,6 +330,11 @@ int main()
 	cleardevice();
 	setactivepage(0);
 	
+	TamanhoListaRetangulosDeColisao = 2;
+	ListaRetangulosDeColisao = (RetangulosDeColisao *)realloc(ListaRetangulosDeColisao, sizeof(RetangulosDeColisao) * TamanhoListaRetangulosDeColisao);
+	ListaRetangulosDeColisao[0] = RetanguloTeste[0];
+	ListaRetangulosDeColisao[1] = RetanguloTeste[1];
+	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
 	while(Tecla != ESC)
@@ -294,6 +364,16 @@ int main()
 			
 			//Vai ser substituido pela funcao de desenhar o cenario em si depois.
 	        desenhaCenarioColisao(CPosX, CPosY, Cenario_Colisao, CenarioAtual, Cenario_Colisao_Tamanhos, TelaLarX, TelaLarY);
+	        
+	        //Cria a lista com os retangulos de colisao.
+	        criarListaRetangulosDeColisao(CenarioAtual, RetanguloTeste);
+	        
+			//Teste
+			setfillstyle(0, RGB(130, 45, 70));
+        	for(i = 0; i < TamanhoListaRetangulosDeColisao; i++)
+			{
+				bar(ListaRetangulosDeColisao[i].DisX + CPosX, ListaRetangulosDeColisao[i].DisY + CPosY, ListaRetangulosDeColisao[i].DisX + ListaRetangulosDeColisao[i].LarX + CPosX, ListaRetangulosDeColisao[i].DisY + ListaRetangulosDeColisao[i].LarY + CPosY);
+			}
 			
 			//Arrumar a ordem (quem fica na frente de quem) dos objetos e da personagem, e desenha-los no mapa.
 			criarListaObjetosC(CenarioAtual, CPosY, PosY, PersonagemD, ObjetosCD); //Cria a lista e a coloca em um ponteiro.
@@ -320,6 +400,7 @@ int main()
 			{
 				if(listaObjetosC[i].Tipo == PER)
 				{
+					setfillstyle(1, RGB(133, 144, 200));
 					bar(PosX, PosY, PosX + PLarX, PosY + PLarY);
 					putimage(PosX, PosY, Sprites_Mascaras[LILY], AND_PUT); //Primeiro a mascara.
 					putimage(PosX, PosY, Sprites[LILY], OR_PUT); //Depois a imagem normal.
@@ -370,6 +451,11 @@ int main()
 					MovX --;
 				}
 				
+				while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY))
+				{
+					MovX --;
+				}
+				
 				//Confere se o jogo vai fazer o scroll da tela ou nao.
 				if((PosX > (TelaLarX/2 + 20) - PLarX/2) && (CPosX > Cenario[CenarioAtual].LimiteEsquerda))
 				{
@@ -383,6 +469,11 @@ int main()
 			if(MovX < 0)
 			{
 				while(hitTestCenario(PosX + MovX, PosY)||hitTestCenario(PosX + MovX, PosY + PLarY/2)||hitTestCenario(PosX + MovX, PosY + PLarY)||(PosX + MovX) <= 0)
+				{
+					MovX ++;
+				}
+				
+				while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY))
 				{
 					MovX ++;
 				}
@@ -403,6 +494,11 @@ int main()
 					MovY --;
 				}
 				
+				while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY))
+				{
+					MovY --;
+				}
+				
 				if((PosY > (TelaLarY/2 + 10) - PLarY/2) && (CPosY > Cenario[CenarioAtual].LimiteCima))
 				{
 					CPosY -= MovY;
@@ -415,6 +511,11 @@ int main()
 			if(MovY < 0)
 			{
 				while(hitTestCenario(PosX, PosY + MovY)||hitTestCenario(PosX + PLarX/2, PosY + MovY)||hitTestCenario(PosX + PLarX, PosY + MovY)||(PosY + MovY) <= 0)
+				{
+					MovY ++;
+				}
+				
+				while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY))
 				{
 					MovY ++;
 				}
@@ -543,7 +644,7 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 	{
 		case 0:
 			{
-				//Preciso colocar as chaves para limitar o escopo da variavel local que e declarada, se nao da erro.
+				//Preciso colocar as chaves para limitar o escopo da variavel local que e declarada (ListaT), se nao da erro.
 				TamanhoListaOC = 4;
 				
 				PersonagemD.PosY = PosY - PersonagemD.VTroca;
