@@ -322,52 +322,48 @@ int main()
 	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
 	
 	//CarregarImagens
+	//printf("\n\nSprites: %d", sizeof(Sprites));
+	//printf("\nSpritesM: %d", sizeof(Sprites_Mascaras));
+	
 	CarregarImagens(STESTE);
 	CarregarImagens(CCENTESTE);
 	CarregarImagens(OCENTESTE);
 	CarregarImagens(BAUS);
 	
-	//Codigo para pagar o ponteiro (Não fazia nada com os ponteiros)
+	//Codigo para liberar os ponteiros das imagens, precisa de testes para ver se nao buga e se realmente libera a memoria.
+	
 	/*
+	
 	printf("\n\nSprites: %d", sizeof(Sprites));
 	printf("\nSpritesM: %d", sizeof(Sprites_Mascaras));
-	
-	printf("\n\nCenario_Objetos: %d", sizeof(Cenario_Objetos));
-	printf("\nCenario_ObjetosM: %d", sizeof(Cenario_Objetos_Mascaras));
+	printf("\nSprites[0]: %d", sizeof(Sprites[0]));
+	printf("\nSpritesM[0]: %d", sizeof(Sprites_Mascaras[0]));
 
 	for(i=0; i < SpritesQ; i++)
 	{
-		Sprites[i] = realloc(Sprites[i], imagesize(0, 0, 0, 0) * 1);
-		Sprites_Mascaras[i] = realloc(Sprites_Mascaras[i], imagesize(0, 0, 0, 0) * 1);
+		free(Sprites[i]);
+		free(Sprites_Mascaras[i]);
 	}
 	
 	for(i=0; i < Cenario_ObjetosQ; i++)
 	{
-		Cenario_Objetos[i] = realloc(Sprites[i], imagesize(0, 0, 0, 0) * 1);
-		Cenario_Objetos_Mascaras[i] = realloc(Sprites_Mascaras[i], imagesize(0, 0, 0, 0) * 1);
-	}
-	
-	for(i=0; i < Sprites_BausQ; i++)
-	{
-		Sprites_Baus[i] = realloc(Sprites[i], imagesize(0, 0, 0, 0) * 1);
-		Sprites_Baus_Mascaras[i] = realloc(Sprites_Mascaras[i], imagesize(0, 0, 0, 0) * 1);
+		free(Cenario_Objetos[i]);
+		free(Cenario_Objetos_Mascaras[i]);
 	}
 	
 	printf("\n\nSprites: %d", sizeof(Sprites));
 	printf("\nSpritesM: %d", sizeof(Sprites_Mascaras));
+	printf("\nSprites[0]: %d", sizeof(Sprites[0]));
+	printf("\nSpritesM[0]: %d", sizeof(Sprites_Mascaras[0]));
 	
-	printf("\n\nCenario_Objetos: %d", sizeof(Cenario_Objetos));
-	printf("\nCenario_ObjetosM: %d", sizeof(Cenario_Objetos_Mascaras));
-	
-	//CarregarImagens(STESTE);
-	//CarregarImagens(OCENTESTE);
-	//CarregarImagens(BAUS);
+	CarregarImagens(STESTE);
+	CarregarImagens(OCENTESTE);
 	
 	printf("\n\nSprites: %d", sizeof(Sprites));
 	printf("\nSpritesM: %d", sizeof(Sprites_Mascaras));
+	printf("\nSprites[0]: %d", sizeof(Sprites[0]));
+	printf("\nSpritesM[0]: %d", sizeof(Sprites_Mascaras[0]));
 	
-	printf("\n\nCenario_Objetos: %d", sizeof(Cenario_Objetos));
-	printf("\nCenario_ObjetosM: %d", sizeof(Cenario_Objetos_Mascaras));
 	*/
 	
 	Gt1 = GetTickCount();
