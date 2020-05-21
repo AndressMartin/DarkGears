@@ -24,10 +24,10 @@ bool PodeFazerInteracao = true,
 enum Sprites {LILY, CHADDRIT};
 	
 //CColisoes {AREA_Mapa_ParteDoMapa}
-enum CColisoes {TESTEC_01_1, TESTEC_01_2, TESTEC_01_3, TESTEC_01_4};
+enum CenaColisoes {TESTEC_01_1, TESTEC_01_2, TESTEC_01_3, TESTEC_01_4};
 
 //ObjetosCEnum {O + AREA_Mapa_NumeroDoObjeto}
-enum ObjetosCEnum {OTESTE_01_1, OTESTE_01_2, OTESTE_01_3};
+enum ObjetosCenaEnum {OTESTE_01_1, OTESTE_01_2, OTESTE_01_3};
 
 enum Tipos {PER, OBJ, BAU}; //Enumera os tipos que as structs de PosisoesC podem ter.
 
@@ -126,8 +126,8 @@ typedef struct
 	int PosY,
 		VTroca,
 		DeslocamentoDaImagem,
-		IndIm,
-		Ind,
+		IndIm, //Indice da imagem que sera usada.
+		Ind, //Indice do struct no vetor, para pegar as informacoes na hora de desenhar.
 		Tipo;
 } PosicoesD; //Informacoes das posicos para desenhar coisas que se sobrepoem (podem ficar na frente ou atras umas das outras).
 
@@ -150,51 +150,9 @@ void CarregarImagens(int Imagem);
 bool hitTestCenario(int PosX, int PosY);
 bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY);
 void desenhaCenarioColisao(int CPosX, int CPosY, void* Cenario_Colisao[], int CenarioAtual, int Cenario_Colisao_Tamanhos[][2], int TelaLarX, int TelaLarY);
-void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCD[], PosicoesD BausCD[]);
+void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCenaDesenho[], PosicoesD BausCenaDesenho[]);
 void criarListaRetangulosDeColisao(int CenarioAtual, RetangulosDeColisao RetanguloTeste[], RetangulosDeColisao PosicaoBaus[]);
-
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[])
-{
-	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
-	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
-	// A variavel global PodeFazerInteracao sera usada para limitar a uma interacao por vez.
-	switch(CenarioAtual)
-	{
-		case 0:
-			{
-				int BauN = 0;
-				
-				BauN = 0;
-				if(!(Baus[BauN] == NADA) && PodeFazerInteracao == true)
-				{
-					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
-					{
-						if((GetKeyState(VK_SPACE)&0x80) && SpacePress == false)
-					    {
-					    	Baus[BauN] = NADA;
-						}
-					}
-				}
-				
-				BauN = 1;
-				if(!(Baus[BauN] == NADA) && PodeFazerInteracao == true)
-				{
-					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
-					{
-						if((GetKeyState(VK_SPACE)&0x80) && SpacePress == false)
-					    {
-					    	Baus[BauN] = NADA;
-						}
-					}
-				}
-				
-				break;
-			}
-			
-	}
-}
-
-//void desenhaCenarioObjetos(int PosX, int PosY, int CPosX, int CPosY, void* Cenario_Objetos[], void* Cenario_Objetos_Mascaras[], int CenarioAtual, int Cenario_Objetos_Tamanhos[][2], int TelaLarX, int TelaLarY, struct ObjetosCInf ObjetosC[]);
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[]);
 
 int main()
 {
@@ -233,16 +191,16 @@ int main()
 	PosicaoBaus[1].LarX = 50;
 	PosicaoBaus[1].LarY = 50;
 	
-	PosicoesD BausCD[NumeroDeBaus];
+	PosicoesD BausCenaDesenho[NumeroDeBaus];
 	
-	BausCD[0].IndIm = 0;
-	BausCD[1].IndIm = 0;
+	BausCenaDesenho[0].IndIm = 0;
+	BausCenaDesenho[1].IndIm = 0;
 	
-	BausCD[0].VTroca = 50;
-	BausCD[1].VTroca = 50;
+	BausCenaDesenho[0].VTroca = 50;
+	BausCenaDesenho[1].VTroca = 50;
 	
-	BausCD[0].DeslocamentoDaImagem = 10;
-	BausCD[1].DeslocamentoDaImagem = 10;
+	BausCenaDesenho[0].DeslocamentoDaImagem = 10;
+	BausCenaDesenho[1].DeslocamentoDaImagem = 10;
 	
 	
 	//Variaveis do cenario
@@ -270,18 +228,18 @@ int main()
 	ObjetosC[2].DisX = 70;
 	ObjetosC[2].DisY = 400;
 	
-	PosicoesD ObjetosCD[NObjetos];
+	PosicoesD ObjetosCenaDesenho[NObjetos];
 	
 	//O indice de imagem se refere a imagem que ele vai usar.
-	ObjetosCD[0].IndIm = 0;
-	ObjetosCD[1].IndIm = 1;
-	ObjetosCD[2].IndIm = 2;
+	ObjetosCenaDesenho[0].IndIm = 0;
+	ObjetosCenaDesenho[1].IndIm = 1;
+	ObjetosCenaDesenho[2].IndIm = 2;
 	
 	// O valor usado para organizar a listaObjetosC se refere a base inferior da imagem dos objetos,
 	// o VTroca sera subtraido desse valor, para casos em que o ponto de troca tenha que ser em outro lugar.
-	ObjetosCD[0].VTroca = 0;
-	ObjetosCD[1].VTroca = 0;
-	ObjetosCD[2].VTroca = 20;
+	ObjetosCenaDesenho[0].VTroca = 0;
+	ObjetosCenaDesenho[1].VTroca = 0;
+	ObjetosCenaDesenho[2].VTroca = 20;
 	
 	PosicoesD PersonagemD;
 	PersonagemD.Tipo = PER; //Se refere ao tipo de objeto que a struct representa, se e um personagem, npc, bau, objeto do cenario, etc.
@@ -290,7 +248,7 @@ int main()
 	PersonagemD.Ind = 0;
 	PersonagemD.VTroca = -PLarY;
 	
-	PosicoesD ListaOCT; //Struct para ser usada na hora do sort.
+	PosicoesD ListaObjCenaTemp; //Struct para ser usada na hora do sort.
 	
 	RetangulosDeColisao RetanguloTeste[2];
 	RetanguloTeste[0].DisX = 100;
@@ -306,17 +264,17 @@ int main()
 	//Arrumar as posicoes de troca dos objetos do cenario.
 	for(i=0; i < NObjetos; i++)
 	{
-		ObjetosCD[i].Tipo = OBJ;
-		ObjetosCD[i].Ind = i; //Indice do struct, para ser usado quando chamar a lista de objetos.
-		ObjetosCD[i].DeslocamentoDaImagem = 0;
-		ObjetosCD[i].PosY = ObjetosC[i].DisY + Cenario_Objetos_Tamanhos[ObjetosCD[i].IndIm][1] - ObjetosCD[i].VTroca;
+		ObjetosCenaDesenho[i].Tipo = OBJ;
+		ObjetosCenaDesenho[i].Ind = i; //Indice do struct, para ser usado quando chamar a lista de objetos.
+		ObjetosCenaDesenho[i].DeslocamentoDaImagem = 0;
+		ObjetosCenaDesenho[i].PosY = ObjetosC[i].DisY + Cenario_Objetos_Tamanhos[ObjetosCenaDesenho[i].IndIm][1] - ObjetosCenaDesenho[i].VTroca;
 	}
 	
 	for(i=0; i < NumeroDeBaus; i++)
 	{
-		BausCD[i].Tipo = BAU;
-		BausCD[i].Ind = i; //Indice do struct, para ser usado quando chamar a lista de objetos.
-		BausCD[i].PosY = PosicaoBaus[i].DisY + PosicaoBaus[i].LarY - BausCD[i].VTroca;
+		BausCenaDesenho[i].Tipo = BAU;
+		BausCenaDesenho[i].Ind = i; //Indice do struct, para ser usado quando chamar a lista de objetos.
+		BausCenaDesenho[i].PosY = PosicaoBaus[i].DisY + PosicaoBaus[i].LarY - BausCenaDesenho[i].VTroca;
 	}
 	
 	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
@@ -407,7 +365,7 @@ int main()
 			}
 			
 			//Arrumar a ordem (quem fica na frente de quem) dos objetos e da personagem, e desenha-los no mapa.
-			criarListaObjetosC(CenarioAtual, CPosY, PosY, PersonagemD, ObjetosCD, BausCD); //Cria a lista e a coloca em um ponteiro.
+			criarListaObjetosC(CenarioAtual, CPosY, PosY, PersonagemD, ObjetosCenaDesenho, BausCenaDesenho); //Cria a lista e a coloca em um ponteiro.
 			
 			//Ordenar a lista
 			for(i=0; i < TamanhoListaOC - 1; i++)
@@ -416,11 +374,11 @@ int main()
 				{
 					if(listaObjetosC[i].PosY > listaObjetosC[j].PosY)
 					{
-						ListaOCT = listaObjetosC[i];
+						ListaObjCenaTemp = listaObjetosC[i];
 						listaObjetosC[i] = listaObjetosC[j];
-						listaObjetosC[j] = ListaOCT;
+						listaObjetosC[j] = ListaObjCenaTemp;
 						
-						//printf("\n\nEndereco de ListaOCT         = %p", &ListaOCT);
+						//printf("\n\nEndereco de ListaOCT         = %p", &ListaObjCenaTemp);
 						//printf("\nEndereco de listaObjetosC[j] = %p", &listaObjetosC[j]);
 					}
 				}
@@ -470,17 +428,17 @@ int main()
 				if(listaObjetosC[i].Tipo == BAU)
 				{
 							
-					if(((CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX  <= TelaLarX)) && ((CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + ObjetosC[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem <= TelaLarY)))
+					if(((CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX  <= TelaLarX)) && ((CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + ObjetosC[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem <= TelaLarY)))
 					{
 						if(Baus[listaObjetosC[i].Ind] == NADA)
 						{
-							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm + 1], AND_PUT);
-							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm + 1], OR_PUT);
+							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm + 1], AND_PUT);
+							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm + 1], OR_PUT);
 						}
 						else
 						{
-							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
-							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCD[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm], OR_PUT);
+							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
+							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm], OR_PUT);
 						}
 					}
 				}
@@ -735,10 +693,10 @@ void desenhaCenarioColisao(int CPosX, int CPosY, void* Cenario_Colisao[], int Ce
 	}
 }
 
-void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCD[], PosicoesD BausCD[])
+void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCenaDesenho[], PosicoesD BausCenaDesenho[])
 {
 	//Muda a lista (ponteiro) que ordena os objetos e a personagem no mapa (quem aparece na frente de quem), baseado no cenario atual.
-	// ! - > Apesar do Ponteiro ObjetosCD[] na funcao ser outro, as structs dentro dos indices sao as mesmas, entao elas nao podem ser modificadas.
+	// ! - > Apesar do Ponteiro ObjetosCenaDesenho[] na funcao ser outro, as structs dentro dos indices sao as mesmas, entao elas nao podem ser modificadas.
 	switch(CenarioAtual)
 	{
 		case 0:
@@ -748,7 +706,7 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 				
 				PersonagemD.PosY = PosY - PersonagemD.VTroca;
 				
-				PosicoesD ListaT[TamanhoListaOC] = {PersonagemD, ObjetosCD[OTESTE_01_1], ObjetosCD[OTESTE_01_2], ObjetosCD[OTESTE_01_3], BausCD[0], BausCD[1]};
+				PosicoesD ListaT[TamanhoListaOC] = {PersonagemD, ObjetosCenaDesenho[OTESTE_01_1], ObjetosCenaDesenho[OTESTE_01_2], ObjetosCenaDesenho[OTESTE_01_3], BausCenaDesenho[0], BausCenaDesenho[1]};
 				
 				// O valor de X e Y que os objetos guardam e a distancia deles em relacao ao X e Y do cenario,
 				// aqui na lista, e necessario o valor real da posicao na tela, por isso a soma.
@@ -932,5 +890,46 @@ void CarregarImagens(int Imagem)
 		
 		default:
 		printf("\nRaios multiplos! O operador esta incorreto.");
+	}
+}
+
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[])
+{
+	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
+	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
+	// A variavel global PodeFazerInteracao sera usada para limitar a uma interacao por vez.
+	switch(CenarioAtual)
+	{
+		case 0:
+			{
+				int BauN = 0;
+				
+				BauN = 0;
+				if(!(Baus[BauN] == NADA) && PodeFazerInteracao == true)
+				{
+					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
+					{
+						if((GetKeyState(VK_SPACE)&0x80) && SpacePress == false)
+					    {
+					    	Baus[BauN] = NADA;
+						}
+					}
+				}
+				
+				BauN = 1;
+				if(!(Baus[BauN] == NADA) && PodeFazerInteracao == true)
+				{
+					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
+					{
+						if((GetKeyState(VK_SPACE)&0x80) && SpacePress == false)
+					    {
+					    	Baus[BauN] = NADA;
+						}
+					}
+				}
+				
+				break;
+			}
+			
 	}
 }
