@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = CodigoPrincipal.o
-LINKOBJ  = CodigoPrincipal.o
+OBJ      = CodigoPrincipal.o listasDoMapa.o desenhosDoMapa.o
+LINKOBJ  = CodigoPrincipal.o listasDoMapa.o desenhosDoMapa.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib32" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -m32
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
@@ -26,3 +26,9 @@ $(BIN): $(OBJ)
 
 CodigoPrincipal.o: CodigoPrincipal.cpp
 	$(CPP) -c CodigoPrincipal.cpp -o CodigoPrincipal.o $(CXXFLAGS)
+
+listasDoMapa.o: listasDoMapa.cpp
+	$(CPP) -c listasDoMapa.cpp -o listasDoMapa.o $(CXXFLAGS)
+
+desenhosDoMapa.o: desenhosDoMapa.cpp
+	$(CPP) -c desenhosDoMapa.cpp -o desenhosDoMapa.o $(CXXFLAGS)

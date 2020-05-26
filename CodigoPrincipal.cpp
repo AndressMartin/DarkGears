@@ -4,6 +4,11 @@
 #include<time.h>
 #include<string.h>
 
+#include "structs.h"
+#include "enums.h"
+#include "listasDoMapa.h"
+#include "desenhosDoMapa.h"
+
 #define LEFT   	75
 #define RIGHT  	77
 #define UP     	72
@@ -11,36 +16,6 @@
 #define ESC     27
 
 #define PRETO 0
-
-//Ponteiros e variaveis globais
-
-int TamanhoListaOC = 0,
-	TamanhoListaRetangulosDeColisao = 0;
-bool PodeFazerInteracao = true,
-	 SpacePress = false;
-
-//Enumera numeros e atribui a marcadores (o primeiro numero pode ser definido, por exempo enum A {A=1, B}, se não, é 0 por padrao).
-//Pode ser utilizado para facilitar o uso de imagens.
-enum Sprites {LILY, CHADDRIT};
-	
-//CColisoes {AREA_Mapa_ParteDoMapa}
-enum CenaColisoes {TESTEC_01_1, TESTEC_01_2, TESTEC_01_3, TESTEC_01_4};
-
-//ObjetosCEnum {O + AREA_Mapa_NumeroDoObjeto}
-enum ObjetosCenaEnum {OTESTE_01_1, OTESTE_01_2, OTESTE_01_3};
-
-enum Tipos {PER, OBJ, BAU}; //Enumera os tipos que as structs de PosisoesC podem ter.
-
-//Enumero os indices dos itens do jogo.
-enum IndiceItens {NADA, POCAO, POCAO2};
-
-//Enumera o indice das imagens a serem carregadas.
-enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS};
-
-//Baus
-const int NumeroDeBaus = 2;
-int Baus[NumeroDeBaus] = {NADA,
-						  POCAO};
 						  
 //Ponteiros com as imagens
 char Tipo[13] = "Nice",
@@ -102,57 +77,13 @@ int Cenario_Objetos_Tamanhos[Cenario_ObjetosQ][2] = {{110, 115},
 int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
 											   {50, 60}};
 
-//Definicao de structs
-typedef struct
-{
-	int LimiteCima,
-		LimiteBaixo,
-		LimiteEsquerda,
-		LimiteDireita;
-} CenarioInf; //Informacoes de cada cenario.
-
-typedef struct
-{
-	//Distancia que sua posicao esta em relacao ao CPosX e ao CPosY.
-	int DisX,
-		DisY;
-} ObjetosCInf; //Informacoes de cada objeto dos cenarios.
-
-typedef struct
-{
-	// DeslocamentoDaImagem é um valor a ser subtraido para a imagem comecar
-	// acima da caixa de colisao, criando perspectiva. Sera usado apenas para
-	// ver se essas imagens estao dentro da tela na hora de desenhar.
-	int PosY,
-		VTroca,
-		DeslocamentoDaImagem,
-		IndIm, //Indice da imagem que sera usada.
-		Ind, //Indice do struct no vetor, para pegar as informacoes na hora de desenhar.
-		Tipo;
-} PosicoesD; //Informacoes das posicos para desenhar coisas que se sobrepoem (podem ficar na frente ou atras umas das outras).
-
-typedef struct
-{
-	int DisX,
-		DisY,
-		LarX,
-		LarY;
-} RetangulosDeColisao;
-
-//Ponteiro de structs para a funcao desenhaCenariosObjetosC.
-PosicoesD *listaObjetosC = NULL;
-
-//Ponteiro para a lista de retangulos de colisao.
-RetangulosDeColisao *ListaRetangulosDeColisao = NULL;
-
 //Definicao das funcoes, as funcoes em si estao depois do main.
 void CarregarImagens(int Imagem);
 bool hitTestCenario(int PosX, int PosY);
-bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY);
-void desenhaCenarioColisao(int CPosX, int CPosY, void* Cenario_Colisao[], int CenarioAtual, int Cenario_Colisao_Tamanhos[][2], int TelaLarX, int TelaLarY);
-void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCenaDesenho[], PosicoesD BausCenaDesenho[]);
-void criarListaRetangulosDeColisao(int CenarioAtual, RetangulosDeColisao RetanguloTeste[], RetangulosDeColisao PosicaoBaus[]);
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[]);
+bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY, int TamanhoListaRetangulosDeColisao, RetangulosDeColisao ListaRetangulosDeColisao[]);
+
+//Funcoes que pretendo separar depois.
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress);
 
 int main()
 {
@@ -176,7 +107,27 @@ int main()
 	char Tecla = 0;
 	long long unsigned Gt1, Gt2;
 	
+	bool PodeFazerInteracao = true,
+	 	 SpacePress = false;
+	
+	//Variaveis dos ponteiros das listas mapa.
+	int TamanhoListaOC = 0,
+		TamanhoListaRetangulosDeColisao = 0;
+	
+	//Ponteiro de structs para a lista de objetos do cenario.
+	PosicoesD *listaObjetosC = NULL;
+	
+	//Ponteiro para a lista de retangulos de colisao.
+	RetangulosDeColisao *ListaRetangulosDeColisao = NULL;
+	
 	//Baus
+	int NumeroDeBaus = 2;
+	int *Baus;
+	Baus = (int *)malloc(sizeof(int) * NumeroDeBaus);
+	
+	Baus[0] = POCAO2;
+	Baus[1] = POCAO;
+	
 	int Bau_AreaDeInteracao = 10;
 	
 	RetangulosDeColisao PosicaoBaus[NumeroDeBaus];
@@ -352,10 +303,10 @@ int main()
 	        cleardevice();
 			
 			//Vai ser substituido pela funcao de desenhar o cenario em si depois.
-	        desenhaCenarioColisao(CPosX, CPosY, Cenario_Colisao, CenarioAtual, Cenario_Colisao_Tamanhos, TelaLarX, TelaLarY);
+	        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual, Cenario_Colisao_Tamanhos, TelaLarX, TelaLarY);
 	        
 	        //Cria a lista com os retangulos de colisao.
-	        criarListaRetangulosDeColisao(CenarioAtual, RetanguloTeste, PosicaoBaus);
+	        criarListaRetangulosDeColisao(CenarioAtual, RetanguloTeste, PosicaoBaus, &TamanhoListaRetangulosDeColisao, &ListaRetangulosDeColisao);
 	        
 			//Teste
 			setfillstyle(0, RGB(130, 45, 70));
@@ -365,7 +316,8 @@ int main()
 			}
 			
 			//Arrumar a ordem (quem fica na frente de quem) dos objetos e da personagem, e desenha-los no mapa.
-			criarListaObjetosC(CenarioAtual, CPosY, PosY, PersonagemD, ObjetosCenaDesenho, BausCenaDesenho); //Cria a lista e a coloca em um ponteiro.
+			//Cria a lista e a coloca em um ponteiro.
+			criarListaObjetosC(CenarioAtual, CPosY, PosY, PersonagemD, ObjetosCenaDesenho, BausCenaDesenho, &TamanhoListaOC, &listaObjetosC);
 			
 			//Ordenar a lista
 			for(i=0; i < TamanhoListaOC - 1; i++)
@@ -463,7 +415,7 @@ int main()
 	        cleardevice();
 	        
 	        //Vai chamar a funcao para desenhar a colisao do cenario.
-	        desenhaCenarioColisao(CPosX, CPosY, Cenario_Colisao, CenarioAtual, Cenario_Colisao_Tamanhos, TelaLarX, TelaLarY);
+	        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual, Cenario_Colisao_Tamanhos, TelaLarX, TelaLarY);
 			
 			// MovX mexe com o movimento no eixo X e MovY com o movimento no eixo Y.
 			// Caso um deles um deles seja diferente de 0, o valor sera adicionado a posicao correspondente do personagem,
@@ -478,7 +430,7 @@ int main()
 					MovX --;
 				}
 				
-				while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY))
+				while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
 				{
 					MovX --;
 				}
@@ -500,7 +452,7 @@ int main()
 					MovX ++;
 				}
 				
-				while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY))
+				while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
 				{
 					MovX ++;
 				}
@@ -521,7 +473,7 @@ int main()
 					MovY --;
 				}
 				
-				while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY))
+				while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
 				{
 					MovY --;
 				}
@@ -542,7 +494,7 @@ int main()
 					MovY ++;
 				}
 				
-				while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY))
+				while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
 				{
 					MovY ++;
 				}
@@ -569,7 +521,7 @@ int main()
 			}
 			
 			//Interacoes com o mapa.
-			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus);
+			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress);
 			
 			//Comandos
 			
@@ -644,7 +596,7 @@ bool hitTestCenario(int PosX,int PosY)
 	return Colisao;
 }
 
-bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY)
+bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY, int TamanhoListaRetangulosDeColisao, RetangulosDeColisao ListaRetangulosDeColisao[])
 {
 	//Confere a colisao com retângulos.
 	
@@ -659,100 +611,6 @@ bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, i
 	}
 	
 	return Colisao;
-}
-
-void desenhaCenarioColisao(int CPosX, int CPosY, void* Cenario_Colisao[], int CenarioAtual, int Cenario_Colisao_Tamanhos[][2], int TelaLarX, int TelaLarY)
-{
-	//Dependendo do cenario atual, o mapa vai estar dividido, e nos vamos colocar as imagens na ordem correta.
-	//Como a posicao das imagens em relacao umas as outras dependo do mapa, e vou usar switch para cada ocasiao.
-	switch(CenarioAtual)
-	{
-		case 0:
-			// O if fara com que a imagem nao seja desenhada se estiver fora da tela.
-			if(((CPosX >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_1][0])) && (CPosX <= TelaLarX)) && ((CPosY >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_1][1])) && (CPosY <= TelaLarY)))
-			{
-				putimage(CPosX, CPosY, Cenario_Colisao[TESTEC_01_1], COPY_PUT);
-			}
-			if(((CPosX + 640 >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_2][0])) && (CPosX <= TelaLarX)) && ((CPosY >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_2][1])) && (CPosY <= TelaLarY)))
-			{
-				putimage(CPosX + 640, CPosY, Cenario_Colisao[TESTEC_01_2], COPY_PUT);
-			}
-			if(((CPosX >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_3][0])) && (CPosX <= TelaLarX)) && ((CPosY + 360 >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_3][1])) && (CPosY <= TelaLarY)))
-			{
-				putimage(CPosX, CPosY + 360, Cenario_Colisao[TESTEC_01_3], COPY_PUT);
-			}
-			if(((CPosX + 640 >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_4][0])) && (CPosX <= TelaLarX)) && ((CPosY + 360 >= (0 - Cenario_Colisao_Tamanhos[TESTEC_01_4][1])) && (CPosY <= TelaLarY)))
-			{
-				putimage(CPosX + 640, CPosY + 360, Cenario_Colisao[TESTEC_01_4], COPY_PUT);
-			}
-			break;
-		
-		//Caso nao haja um codigo para o CenarioAtual, ou seja, dar erro.
-		default:
-			printf("\nRaios multiplos! O operador esta incorreto.");
-	}
-}
-
-void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCenaDesenho[], PosicoesD BausCenaDesenho[])
-{
-	//Muda a lista (ponteiro) que ordena os objetos e a personagem no mapa (quem aparece na frente de quem), baseado no cenario atual.
-	// ! - > Apesar do Ponteiro ObjetosCenaDesenho[] na funcao ser outro, as structs dentro dos indices sao as mesmas, entao elas nao podem ser modificadas.
-	switch(CenarioAtual)
-	{
-		case 0:
-			{
-				//Preciso colocar as chaves para limitar o escopo da variavel local que e declarada (ListaT), se nao da erro.
-				TamanhoListaOC = 6;
-				
-				PersonagemD.PosY = PosY - PersonagemD.VTroca;
-				
-				PosicoesD ListaT[TamanhoListaOC] = {PersonagemD, ObjetosCenaDesenho[OTESTE_01_1], ObjetosCenaDesenho[OTESTE_01_2], ObjetosCenaDesenho[OTESTE_01_3], BausCenaDesenho[0], BausCenaDesenho[1]};
-				
-				// O valor de X e Y que os objetos guardam e a distancia deles em relacao ao X e Y do cenario,
-				// aqui na lista, e necessario o valor real da posicao na tela, por isso a soma.
-				ListaT[1].PosY += CPosY;
-				ListaT[2].PosY += CPosY;
-				ListaT[3].PosY += CPosY;
-				ListaT[4].PosY += CPosY;
-				ListaT[5].PosY += CPosY;
-				
-				listaObjetosC = (PosicoesD *)realloc(listaObjetosC, sizeof(PosicoesD) * TamanhoListaOC);
-				for(int i=0; i < TamanhoListaOC; i++)
-				{
-					listaObjetosC[i] = ListaT[i];
-				}		
-				break;
-			}
-		
-		default:
-			printf("\nRaios multiplos! O operador esta incorreto.");	
-	}
-}
-
-void criarListaRetangulosDeColisao(int CenarioAtual, RetangulosDeColisao RetanguloTeste[], RetangulosDeColisao PosicaoBaus[])
-{
-	//Muda a lista (ponteiro) que tem os retangulos para colisao.
-	switch(CenarioAtual)
-	{
-		case 0:
-			{
-				//Preciso colocar as chaves para limitar o escopo da variavel local que e declarada (ListaT), se nao da erro.
-				TamanhoListaRetangulosDeColisao = 4;
-				
-				RetangulosDeColisao ListaT[TamanhoListaRetangulosDeColisao] = {RetanguloTeste[0], RetanguloTeste[1], PosicaoBaus[0], PosicaoBaus[1]};
-				
-				
-				ListaRetangulosDeColisao = (RetangulosDeColisao *)realloc(ListaRetangulosDeColisao, sizeof(RetangulosDeColisao) * TamanhoListaRetangulosDeColisao);
-				for(int i=0; i < TamanhoListaRetangulosDeColisao; i++)
-				{
-					ListaRetangulosDeColisao[i] = ListaT[i];
-				}		
-				break;
-			}
-		
-		default:
-			printf("\nRaios multiplos! O operador esta incorreto.");	
-	}
 }
 
 void CarregarImagens(int Imagem)
@@ -893,7 +751,7 @@ void CarregarImagens(int Imagem)
 	}
 }
 
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[])
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress)
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
@@ -902,33 +760,54 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 	{
 		case 0:
 			{
+				//Baus no mapa.
 				int BauN = 0;
 				
 				BauN = 0;
-				if(!(Baus[BauN] == NADA) && PodeFazerInteracao == true)
+				if(!(BausCopia[BauN] == NADA) && *PodeFazerInteracao == true)
 				{
 					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
 					{
-						if((GetKeyState(VK_SPACE)&0x80) && SpacePress == false)
+						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
 					    {
-					    	Baus[BauN] = NADA;
+					    	int *BausTemp;
+					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
+					    	
+					    	BausCopia[BauN] = NADA;
+					    	
+					    	for(int i=0; i < NumeroDeBaus; i++)
+					    	{
+					    		BausTemp[i] = BausCopia[i];
+							}
+							
+							free(*Baus);
+							*Baus = BausTemp;
 						}
 					}
 				}
 				
 				BauN = 1;
-				if(!(Baus[BauN] == NADA) && PodeFazerInteracao == true)
+				if(!(BausCopia[BauN] == NADA) && *PodeFazerInteracao == true)
 				{
 					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
 					{
-						if((GetKeyState(VK_SPACE)&0x80) && SpacePress == false)
+						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
 					    {
-					    	Baus[BauN] = NADA;
+					    	int *BausTemp;
+					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
+					    	
+					    	BausCopia[BauN] = NADA;
+					    	
+					    	for(int i=0; i < NumeroDeBaus; i++)
+					    	{
+					    		BausTemp[i] = BausCopia[i];
+							}
+							
+							free(*Baus);
+							*Baus = BausTemp;
 						}
 					}
 				}
-				
-				break;
 			}
 			
 	}
