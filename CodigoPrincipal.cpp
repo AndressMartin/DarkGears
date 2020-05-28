@@ -28,7 +28,7 @@ char StrcatTemp[50] = "Yes"; //O numero de caracteres tem que ser grande para se
 //Imagens
 
 //Vai guardar as imagens.
-const int SpritesQ = 2; //Quantidade de sprites, vai ser usado nas outras listas para facilitar mudancas.
+const int SpritesQ = 3; //Quantidade de sprites, vai ser usado nas outras listas para facilitar mudancas.
 void* Sprites[SpritesQ];
 void* Sprites_Mascaras[SpritesQ];
 
@@ -45,8 +45,9 @@ void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
 //Nomes e caminhos dos arquivos, sem o tipo, para poder ser usado pelo codigo das mascaras tambem.
 // "17"" pois tem que considerar o caractere nulo "\0" que fica no final de uma string.
-char Sprites_Nomes[SpritesQ][17] = {"Sprites/imagem01",
-							 		"Sprites/imagem02"};
+char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
+							 		"Sprites/imagem02",
+									"Sprites/fox_prototype4_2"};
 
 char Cenario_Colisao_Nomes[Cenario_ColisaoQ][35] = {"Sprites/Cenario_Teste_01-1_Colisao",
 									 				"Sprites/Cenario_Teste_01-2_Colisao",
@@ -63,7 +64,8 @@ char Sprites_Baus_Nomes[Sprites_BausQ][16] = {"Sprites/bau01-F",
 
 //Vai guardas a largura e altura das imagens, respectivamente.
 int Sprites_Tamanhos[SpritesQ][2] = {{100, 50},
-							  		 {70, 50}};
+							  		 {70, 50},
+									 {64, 128}};
 
 int Cenario_Colisao_Tamanhos[Cenario_ColisaoQ][2] = {{640, 360},
 													 {199, 360},
@@ -90,8 +92,8 @@ int main()
 	//Variaveis da personagem no mapa
 	int PosX = 20,
 		PosY = 100,
-		PLarX = 50,
-		PLarY = 70,
+		PLarX = 60,
+		PLarY = 14,
 		MovX = 0,
 		MovY = 0,
 		PVel = 10;
@@ -198,6 +200,7 @@ int main()
 	PersonagemD.IndIm = 0;
 	PersonagemD.Ind = 0;
 	PersonagemD.VTroca = -PLarY;
+	PersonagemD.DeslocamentoDaImagem = 82;
 	
 	PosicoesD ListaObjCenaTemp; //Struct para ser usada na hora do sort.
 	
@@ -366,6 +369,8 @@ int main()
 					putimage(PosX, PosY, Sprites[LILY], OR_PUT); //Depois a imagem normal.
 					putimage(PosX - 30, PosY - 60, Sprites_Mascaras[CHADDRIT], AND_PUT);
 					putimage(PosX - 30, PosY - 60, Sprites[CHADDRIT], OR_PUT);
+					putimage(PosX - 2, PosY - PersonagemD.DeslocamentoDaImagem, Sprites_Mascaras[LILY3D], AND_PUT);
+					putimage(PosX - 2, PosY - PersonagemD.DeslocamentoDaImagem, Sprites[LILY3D], OR_PUT);
 				}
 				
 				if(listaObjetosC[i].Tipo == OBJ)
@@ -638,7 +643,7 @@ void CarregarImagens(int Imagem)
 				
 				// ! -> Como o 0 conta como 1 pixel, as posicoes x e y finais tem que ser 1 pixel menor
 				//		que as dimensoes totais da imagem, para compensar o pixel "a mais" do 0.
-				readimagefile(strcat(StrcatTemp, JPG), 0, 0, Sprites_Tamanhos[i][0]-1, Sprites_Tamanhos[i][1]-1); //Le uma imagem e copia ela para a tela.
+				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Sprites_Tamanhos[i][0]-1, Sprites_Tamanhos[i][1]-1); //Le uma imagem e copia ela para a tela.
 			    Sprites[i] = malloc(imagesize(0, 0, Sprites_Tamanhos[i][0]-1, Sprites_Tamanhos[i][1]-1)); //Aloca a memoria necessaria para guardar a imagem na RAM.
 				getimage(0, 0, Sprites_Tamanhos[i][0]-1, Sprites_Tamanhos[i][1]-1, Sprites[i]); //Copia a imagem na tela para a memoria.
 			}
@@ -647,7 +652,7 @@ void CarregarImagens(int Imagem)
 			{
 				strcpy(StrcatTemp, Sprites_Nomes[i]);
 		
-				readimagefile(strcat(StrcatTemp, MJPG), 0, 0, Sprites_Tamanhos[i][0]-1, Sprites_Tamanhos[i][1]-1);
+				readimagefile(strcat(StrcatTemp, MBMP), 0, 0, Sprites_Tamanhos[i][0]-1, Sprites_Tamanhos[i][1]-1);
 			    Sprites_Mascaras[i] = malloc(imagesize(0, 0, Sprites_Tamanhos[i][0]-1, Sprites_Tamanhos[i][1]-1));
 			    getimage(0, 0, Sprites_Tamanhos[i][0]-1, Sprites_Tamanhos[i][1]-1, Sprites_Mascaras[i]);
 			}
@@ -698,7 +703,6 @@ void CarregarImagens(int Imagem)
 			    getimage(0, 0, Cenario_Objetos_Tamanhos[i][0]-1, Cenario_Objetos_Tamanhos[i][1]-1, Cenario_Objetos[i]);
 			}
 			
-			strcpy(Tipo, MBMP);
 			for(int i=0; i < Cenario_ObjetosQ; i++)
 			{
 				strcpy(StrcatTemp, Cenario_Objetos_Nomes[i]);
@@ -731,7 +735,6 @@ void CarregarImagens(int Imagem)
 			    getimage(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1, Sprites_Baus[i]);
 			}
 			
-			strcpy(Tipo, MJPG);
 			for(int i=0; i < Sprites_BausQ; i++)
 			{
 				strcpy(StrcatTemp, Sprites_Baus_Nomes[i]);

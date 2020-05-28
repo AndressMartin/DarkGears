@@ -3,7 +3,7 @@
 
 //Enumera numeros e atribui a marcadores (o primeiro numero pode ser definido, por exempo enum A {A=1, B}, se não, é 0 por padrao).
 //Pode ser utilizado para facilitar o uso de imagens.
-enum Sprites {LILY, CHADDRIT};
+enum Sprites {LILY, CHADDRIT, LILY3D};
 	
 //CColisoes {AREA_Mapa_ParteDoMapa}
 enum CenaColisoes {TESTEC_01_1, TESTEC_01_2, TESTEC_01_3, TESTEC_01_4};
