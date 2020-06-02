@@ -47,6 +47,23 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 				break;
 			}
 		
+		case 1:
+			{
+				*TamanhoListaOC = 1;
+				
+				PersonagemD.PosY = PosY - PersonagemD.VTroca;
+				
+				PosicoesD *ListaT;
+				ListaT = (PosicoesD *)malloc(sizeof(PosicoesD) * (*TamanhoListaOC));
+				
+				ListaT[0] = PersonagemD;
+				
+				free(*listaObjetosC);
+				*listaObjetosC = ListaT;
+					
+				break;
+			}
+		
 		default:
 			printf("\nRaios multiplos! O operador esta incorreto.");	
 	}
@@ -77,6 +94,24 @@ void criarListaRetangulosDeColisao(int CenarioAtual, RetangulosDeColisao Retangu
 				
 				//Faço ele ser igual ao ponteiro criado nessa funcao.
 				//O endereco do primeiro indice dele fica igual ao endereco do primeiro indice da ListaT.		
+				*ListaRetangulosDeColisao = ListaT;
+				
+				break;
+			}
+		
+		case 1:
+			{
+				*TamanhoListaRetangulosDeColisao = 1;
+				
+				RetangulosDeColisao *ListaT;
+				ListaT = (RetangulosDeColisao *)malloc(sizeof(RetangulosDeColisao) * (*TamanhoListaRetangulosDeColisao));
+				
+				ListaT[0].DisX = 0;
+				ListaT[0].DisY = 0;
+				ListaT[0].LarX = 0;
+				ListaT[0].LarY = 0;
+				
+				free(*ListaRetangulosDeColisao);		
 				*ListaRetangulosDeColisao = ListaT;
 				
 				break;

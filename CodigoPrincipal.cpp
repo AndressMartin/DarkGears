@@ -32,7 +32,7 @@ const int SpritesQ = 3; //Quantidade de sprites, vai ser usado nas outras listas
 void* Sprites[SpritesQ];
 void* Sprites_Mascaras[SpritesQ];
 
-const int Cenario_ColisaoQ = 4;
+const int Cenario_ColisaoQ = 2;
 void* Cenario_Colisao[Cenario_ColisaoQ];
 
 const int Cenario_ObjetosQ = 3;
@@ -49,10 +49,8 @@ char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
 							 		"Sprites/imagem02",
 									"Sprites/fox_prototype4_2"};
 
-char Cenario_Colisao_Nomes[Cenario_ColisaoQ][35] = {"Sprites/Cenario_Teste_01-1_Colisao",
-									 				"Sprites/Cenario_Teste_01-2_Colisao",
-									 				"Sprites/Cenario_Teste_01-3_Colisao",
-									 				"Sprites/Cenario_Teste_01-4_Colisao"};
+char Cenario_Colisao_Nomes[Cenario_ColisaoQ][38] = {"Sprites/Cenarios/Cenario01_01_Colisao",
+									 				"Sprites/Cenarios/Cenario01_02_Colisao"};
 
 char Cenario_Objetos_Nomes[Cenario_ObjetosQ][27] = {"Sprites/ObjetoC_Teste_01-1",
 							 						"Sprites/ObjetoC_Teste_01-2",
@@ -67,10 +65,8 @@ int Sprites_Tamanhos[SpritesQ][2] = {{100, 50},
 							  		 {70, 50},
 									 {64, 128}};
 
-int Cenario_Colisao_Tamanhos[Cenario_ColisaoQ][2] = {{640, 360},
-													 {199, 360},
-													 {640, 199},
-													 {199, 199}};
+int Cenario_Colisao_Tamanhos[Cenario_ColisaoQ][2] = {{840, 560},
+													 {2000, 1000}};
 
 int Cenario_Objetos_Tamanhos[Cenario_ObjetosQ][2] = {{110, 115},
 							  		 				 {110, 115},
@@ -85,14 +81,14 @@ bool hitTestCenario(int PosX, int PosY);
 bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY, int TamanhoListaRetangulosDeColisao, RetangulosDeColisao ListaRetangulosDeColisao[]);
 
 //Funcoes que pretendo separar depois.
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress);
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[]);
 
 int main()
 {
 	//Variaveis da personagem no mapa
 	int PosX = 20,
 		PosY = 100,
-		PLarX = 60,
+		PLarX = 30,
 		PLarY = 14,
 		MovX = 0,
 		MovY = 0,
@@ -111,6 +107,9 @@ int main()
 	
 	bool PodeFazerInteracao = true,
 	 	 SpacePress = false;
+	 	 
+	bool MudancaDeCenario = false;
+	int MudancaDeCenarioNumero = 0;
 	
 	//Variaveis dos ponteiros das listas mapa.
 	int TamanhoListaOC = 0,
@@ -155,18 +154,22 @@ int main()
 	BausCenaDesenho[0].DeslocamentoDaImagem = 10;
 	BausCenaDesenho[1].DeslocamentoDaImagem = 10;
 	
-	
 	//Variaveis do cenario
-	int CPosX = -100,
-		CPosY = -100,
+	int CPosX = -10,
+		CPosY = -10,
 		CenarioAtual = 0;
 	
-	CenarioInf Cenario[1];
+	CenarioInf Cenario[2];
 	
-	Cenario[0].LimiteCima = -198 + (PVel + 1); //Descontar um espaco equivalente a velocidade do personagem + 1, para evitar que a imagem do mapa possa sair da tela.
-	Cenario[0].LimiteBaixo = 0 - (PVel + 1);
-	Cenario[0].LimiteEsquerda = -198 + (PVel + 1);
-	Cenario[0].LimiteDireita = 0 - (PVel + 1);
+	Cenario[0].LimiteCima = -10 + (PVel + 1); //Descontar um espaco equivalente a velocidade do personagem + 1, para evitar que a imagem do mapa possa sair da tela.
+	Cenario[0].LimiteBaixo = -10 - (PVel + 1);
+	Cenario[0].LimiteEsquerda = -10 + (PVel + 1);
+	Cenario[0].LimiteDireita = -10 - (PVel + 1);
+	
+	Cenario[1].LimiteCima = -408 + (PVel + 1); //Descontar um espaco equivalente a velocidade do personagem + 1, para evitar que a imagem do mapa possa sair da tela.
+	Cenario[1].LimiteBaixo = -16 - (PVel + 1);
+	Cenario[1].LimiteEsquerda = -960 + (PVel + 1);
+	Cenario[1].LimiteDireita = -20 - (PVel + 1);
 	
 	int NObjetos = 3;
 	
@@ -200,11 +203,28 @@ int main()
 	PersonagemD.IndIm = 0;
 	PersonagemD.Ind = 0;
 	PersonagemD.VTroca = -PLarY;
-	PersonagemD.DeslocamentoDaImagem = 82;
+	PersonagemD.DeslocamentoDaImagem = 83;
 	
 	PosicoesD ListaObjCenaTemp; //Struct para ser usada na hora do sort.
 	
+	//Portas (Se colidir com elas ocorre uma transicao de cenario)
+	
+	RetangulosDeColisao Portas[2];
+	
+	Portas[0].DisX = 36;
+	Portas[0].DisY = 525;
+	Portas[0].LarX = 140;
+	Portas[0].LarY = 100;
+	
+	Portas[1].DisX = 322;
+	Portas[1].DisY = 10;
+	Portas[1].LarX = 100;
+	Portas[1].LarY = 150;
+	
+	//Retangulos de Colisao de Teste
+	
 	RetangulosDeColisao RetanguloTeste[2];
+	
 	RetanguloTeste[0].DisX = 100;
 	RetanguloTeste[0].DisY = 80;
 	RetanguloTeste[0].LarX = 100;
@@ -231,16 +251,16 @@ int main()
 		BausCenaDesenho[i].PosY = PosicaoBaus[i].DisY + PosicaoBaus[i].LarY - BausCenaDesenho[i].VTroca;
 	}
 	
-	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
+	initwindow(2000, 1000, "Dark Gears - Carregamento", 0, 0);
 	
 	//CarregarImagens
-	//printf("\n\nSprites: %d", sizeof(Sprites));
-	//printf("\nSpritesM: %d", sizeof(Sprites_Mascaras));
 	
 	CarregarImagens(STESTE);
 	CarregarImagens(CCENTESTE);
 	CarregarImagens(OCENTESTE);
 	CarregarImagens(BAUS);
+	
+	closegraph();
 	
 	//Codigo para liberar os ponteiros das imagens, precisa de testes para ver se nao buga e se realmente libera a memoria.
 	
@@ -278,6 +298,8 @@ int main()
 	
 	*/
 	
+	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
+	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
 	while(Tecla != ESC)
@@ -306,7 +328,7 @@ int main()
 	        cleardevice();
 			
 			//Vai ser substituido pela funcao de desenhar o cenario em si depois.
-	        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual, Cenario_Colisao_Tamanhos, TelaLarX, TelaLarY);
+	        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual);
 	        
 	        //Cria a lista com os retangulos de colisao.
 	        criarListaRetangulosDeColisao(CenarioAtual, RetanguloTeste, PosicaoBaus, &TamanhoListaRetangulosDeColisao, &ListaRetangulosDeColisao);
@@ -359,6 +381,24 @@ int main()
 			*/
 			
 			//Desenhar os objetos e a personagem
+			
+			if(CenarioAtual == 0)
+			{
+				i = 0;
+				setfillstyle(4, RGB(23, 47, 180));
+				bar(Portas[i].DisX + CPosX, Portas[i].DisY + CPosY, Portas[i].DisX + CPosX + Portas[i].LarX, Portas[i].DisY + CPosY + Portas[i].LarY);
+			}
+			
+			if(CenarioAtual == 1)
+			{
+				i = 1;
+				setfillstyle(4, RGB(23, 47, 180));
+				bar(Portas[i].DisX + CPosX, Portas[i].DisY + CPosY, Portas[i].DisX + CPosX + Portas[i].LarX, Portas[i].DisY + CPosY + Portas[i].LarY);
+			}
+			
+			//printf("\nPosX = %d, PosY = %d", PosX, PosY);
+			//printf("\nCPosX = %d, CPosY = %d", CPosX, CPosY);
+			
 			for(i=0; i < TamanhoListaOC; i++)
 			{
 				if(listaObjetosC[i].Tipo == PER)
@@ -369,8 +409,8 @@ int main()
 					putimage(PosX, PosY, Sprites[LILY], OR_PUT); //Depois a imagem normal.
 					putimage(PosX - 30, PosY - 60, Sprites_Mascaras[CHADDRIT], AND_PUT);
 					putimage(PosX - 30, PosY - 60, Sprites[CHADDRIT], OR_PUT);
-					putimage(PosX - 2, PosY - PersonagemD.DeslocamentoDaImagem, Sprites_Mascaras[LILY3D], AND_PUT);
-					putimage(PosX - 2, PosY - PersonagemD.DeslocamentoDaImagem, Sprites[LILY3D], OR_PUT);
+					putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites_Mascaras[LILY3D], AND_PUT);
+					putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites[LILY3D], OR_PUT);
 				}
 				
 				if(listaObjetosC[i].Tipo == OBJ)
@@ -420,7 +460,7 @@ int main()
 	        cleardevice();
 	        
 	        //Vai chamar a funcao para desenhar a colisao do cenario.
-	        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual, Cenario_Colisao_Tamanhos, TelaLarX, TelaLarY);
+	        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual);
 			
 			// MovX mexe com o movimento no eixo X e MovY com o movimento no eixo Y.
 			// Caso um deles um deles seja diferente de 0, o valor sera adicionado a posicao correspondente do personagem,
@@ -526,7 +566,15 @@ int main()
 			}
 			
 			//Interacoes com o mapa.
-			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress);
+			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas);
+			
+			//Transicoes de mapas.
+			if(MudancaDeCenario == true)
+			{
+				TransicaoDeMapa(MudancaDeCenarioNumero, &CenarioAtual, &PosX, &PosY, &CPosX, &CPosY);
+				MudancaDeCenario = false;
+				PodeFazerInteracao = true;
+			}
 			
 			//Comandos
 			
@@ -754,7 +802,7 @@ void CarregarImagens(int Imagem)
 	}
 }
 
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress)
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[])
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
@@ -763,20 +811,21 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 	{
 		case 0:
 			{
+				int InteracaoN = 0;
+				
 				//Baus no mapa.
-				int BauN = 0;
 				
-				BauN = 0;
-				if(!(BausCopia[BauN] == NADA) && *PodeFazerInteracao == true)
+				InteracaoN = 0;
+				if(!(BausCopia[InteracaoN] == NADA) && *PodeFazerInteracao == true)
 				{
-					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
+					if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
 					{
 						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
 					    {
 					    	int *BausTemp;
 					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
 					    	
-					    	BausCopia[BauN] = NADA;
+					    	BausCopia[InteracaoN] = NADA;
 					    	
 					    	for(int i=0; i < NumeroDeBaus; i++)
 					    	{
@@ -789,17 +838,17 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					}
 				}
 				
-				BauN = 1;
-				if(!(BausCopia[BauN] == NADA) && *PodeFazerInteracao == true)
+				InteracaoN = 1;
+				if(!(BausCopia[InteracaoN] == NADA) && *PodeFazerInteracao == true)
 				{
-					if((PosX < PosicaoBaus[BauN].DisX + PosicaoBaus[BauN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[BauN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[BauN].DisY + PosicaoBaus[BauN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[BauN].DisY + CPosY - Bau_AreaDeInteracao))
+					if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
 					{
 						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
 					    {
 					    	int *BausTemp;
 					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
 					    	
-					    	BausCopia[BauN] = NADA;
+					    	BausCopia[InteracaoN] = NADA;
 					    	
 					    	for(int i=0; i < NumeroDeBaus; i++)
 					    	{
@@ -811,6 +860,41 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						}
 					}
 				}
+				
+				//Portas
+				
+				InteracaoN = 0;
+				if(*PodeFazerInteracao == true)
+				{
+					if((PosX < Portas[InteracaoN].DisX + Portas[InteracaoN].LarX + CPosX) && (PosX + PLarX > Portas[InteracaoN].DisX + CPosX) && (PosY < Portas[InteracaoN].DisY + Portas[InteracaoN].LarY + CPosY) && (PosY + PLarY > Portas[InteracaoN].DisY + CPosY))
+					{
+						*MudancaDeCenario = true;
+						*MudancaDeCenarioNumero = InteracaoN;
+						*PodeFazerInteracao = false;
+					}	
+				}
+				
+				break;
+			}
+		
+		case 1:
+			{
+				int InteracaoN = 0;
+				
+				//Portas
+				
+				InteracaoN = 1;
+				if(*PodeFazerInteracao == true)
+				{
+					if((PosX < Portas[InteracaoN].DisX + Portas[InteracaoN].LarX + CPosX) && (PosX + PLarX > Portas[InteracaoN].DisX + CPosX) && (PosY < Portas[InteracaoN].DisY + Portas[InteracaoN].LarY + CPosY) && (PosY + PLarY > Portas[InteracaoN].DisY + CPosY))
+					{
+						*MudancaDeCenario = true;
+						*MudancaDeCenarioNumero = InteracaoN;
+						*PodeFazerInteracao = false;
+					}	
+				}
+				
+				break;
 			}
 			
 	}
