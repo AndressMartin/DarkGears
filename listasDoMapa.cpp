@@ -49,7 +49,7 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 		
 		case 1:
 			{
-				*TamanhoListaOC = 1;
+				*TamanhoListaOC = 3;
 				
 				PersonagemD.PosY = PosY - PersonagemD.VTroca;
 				
@@ -57,6 +57,11 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 				ListaT = (PosicoesD *)malloc(sizeof(PosicoesD) * (*TamanhoListaOC));
 				
 				ListaT[0] = PersonagemD;
+				ListaT[1] = ObjetosCenaDesenho[OTESTE_02_1_p1];
+				ListaT[2] = ObjetosCenaDesenho[OTESTE_02_1_p2];
+				
+				ListaT[1].PosY += CPosY;
+				ListaT[2].PosY += CPosY;
 				
 				free(*listaObjetosC);
 				*listaObjetosC = ListaT;

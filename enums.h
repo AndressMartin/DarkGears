@@ -6,7 +6,7 @@
 enum Sprites {LILY, CHADDRIT, LILY3D};
 
 //ObjetosCEnum {O + AREA_Mapa_NumeroDoObjeto}
-enum ObjetosCenaEnum {OTESTE_01_1, OTESTE_01_2, OTESTE_01_3};
+enum ObjetosCenaEnum {OTESTE_01_1, OTESTE_01_2, OTESTE_01_3, OTESTE_02_1_p1, OTESTE_02_1_p2};
 
 enum Tipos {PER, OBJ, BAU}; //Enumera os tipos que as structs de PosisoesC podem ter.
 

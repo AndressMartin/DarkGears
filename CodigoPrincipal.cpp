@@ -35,7 +35,7 @@ void* Sprites_Mascaras[SpritesQ];
 const int Cenario_ColisaoQ = 2;
 void* Cenario_Colisao[Cenario_ColisaoQ];
 
-const int Cenario_ObjetosQ = 3;
+const int Cenario_ObjetosQ = 5;
 void* Cenario_Objetos[Cenario_ObjetosQ];
 void* Cenario_Objetos_Mascaras[Cenario_ObjetosQ];
 
@@ -52,9 +52,11 @@ char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
 char Cenario_Colisao_Nomes[Cenario_ColisaoQ][38] = {"Sprites/Cenarios/Cenario01_01_Colisao",
 									 				"Sprites/Cenarios/Cenario01_02_Colisao"};
 
-char Cenario_Objetos_Nomes[Cenario_ObjetosQ][27] = {"Sprites/ObjetoC_Teste_01-1",
+char Cenario_Objetos_Nomes[Cenario_ObjetosQ][38] = {"Sprites/ObjetoC_Teste_01-1",
 							 						"Sprites/ObjetoC_Teste_01-2",
-													"Sprites/ObjetoC_Teste_01-3"};
+													"Sprites/ObjetoC_Teste_01-3",
+													"Sprites/Cenarios/ObjetoC_Teste_02-1#1",
+													"Sprites/Cenarios/ObjetoC_Teste_02-1#2"};
 
 //Organizacao = {Bau01 fechado, Bau01 aberto, Bau02 fechado, Bau02 aberto, ...}
 char Sprites_Baus_Nomes[Sprites_BausQ][16] = {"Sprites/bau01-F",
@@ -70,7 +72,9 @@ int Cenario_Colisao_Tamanhos[Cenario_ColisaoQ][2] = {{840, 560},
 
 int Cenario_Objetos_Tamanhos[Cenario_ObjetosQ][2] = {{110, 115},
 							  		 				 {110, 115},
-													 {110, 115}};
+													 {110, 115},
+													 {192, 281},
+													 {96, 281}};
 
 int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
 											   {50, 60}};
@@ -171,7 +175,7 @@ int main()
 	Cenario[1].LimiteEsquerda = -960 + (PVel + 1);
 	Cenario[1].LimiteDireita = -20 - (PVel + 1);
 	
-	int NObjetos = 3;
+	int NObjetos = 5;
 	
 	ObjetosCInf ObjetosC[NObjetos];
 	
@@ -184,18 +188,27 @@ int main()
 	ObjetosC[2].DisX = 70;
 	ObjetosC[2].DisY = 400;
 	
+	ObjetosC[3].DisX = 1121; //Um objeto isometrico dividido em dois por causa da perspectiva.
+	ObjetosC[3].DisY = 470;
+	ObjetosC[4].DisX = 	ObjetosC[3].DisX + Cenario_Objetos_Tamanhos[3][0];
+	ObjetosC[4].DisY = 	ObjetosC[3].DisY;
+	
 	PosicoesD ObjetosCenaDesenho[NObjetos];
 	
 	//O indice de imagem se refere a imagem que ele vai usar.
 	ObjetosCenaDesenho[0].IndIm = 0;
 	ObjetosCenaDesenho[1].IndIm = 1;
 	ObjetosCenaDesenho[2].IndIm = 2;
+	ObjetosCenaDesenho[3].IndIm = 3;
+	ObjetosCenaDesenho[4].IndIm = 4;
 	
 	// O valor usado para organizar a listaObjetosC se refere a base inferior da imagem dos objetos,
 	// o VTroca sera subtraido desse valor, para casos em que o ponto de troca tenha que ser em outro lugar.
 	ObjetosCenaDesenho[0].VTroca = 0;
 	ObjetosCenaDesenho[1].VTroca = 0;
 	ObjetosCenaDesenho[2].VTroca = 20;
+	ObjetosCenaDesenho[3].VTroca = 48;
+	ObjetosCenaDesenho[4].VTroca = 96;
 	
 	PosicoesD PersonagemD;
 	PersonagemD.Tipo = PER; //Se refere ao tipo de objeto que a struct representa, se e um personagem, npc, bau, objeto do cenario, etc.
@@ -405,10 +418,12 @@ int main()
 				{
 					setfillstyle(1, RGB(133, 144, 200));
 					bar(PosX, PosY, PosX + PLarX, PosY + PLarY);
-					putimage(PosX, PosY, Sprites_Mascaras[LILY], AND_PUT); //Primeiro a mascara.
-					putimage(PosX, PosY, Sprites[LILY], OR_PUT); //Depois a imagem normal.
-					putimage(PosX - 30, PosY - 60, Sprites_Mascaras[CHADDRIT], AND_PUT);
-					putimage(PosX - 30, PosY - 60, Sprites[CHADDRIT], OR_PUT);
+					//setfillstyle(1, RGB(255, 242, 0));
+					//bar(PosX - 50, PosY - 80, PosX + PLarX + 50, PosY + PLarY - 80);
+					//putimage(PosX, PosY, Sprites_Mascaras[LILY], AND_PUT); //Primeiro a mascara.
+					//putimage(PosX, PosY, Sprites[LILY], OR_PUT); //Depois a imagem normal.
+					//putimage(PosX - 30, PosY - 60, Sprites_Mascaras[CHADDRIT], AND_PUT);
+					//putimage(PosX - 30, PosY - 60, Sprites[CHADDRIT], OR_PUT);
 					putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites_Mascaras[LILY3D], AND_PUT);
 					putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites[LILY3D], OR_PUT);
 				}
