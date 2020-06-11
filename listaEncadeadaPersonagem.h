@@ -3,16 +3,12 @@
 #include <conio.h>
 #include <string.h>
 
-typedef struct{
-	char descricao[10];
+typedef struct item{
+    char descricao[10];
 	int tipo_item;
 	int atk;
 	int def;
 	int hit;
-}DetalhesItem;
-
-typedef struct item{
-    DetalhesItem detalhes_item;
     struct item *prox;
     struct item *ant;
 }Item; //definição da lista
@@ -41,11 +37,12 @@ Item * lista_itens_cria()
 /* insere o novo dado no início da lista  e retorna a lista atualizada*/
 Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int def, int hit)
 {
-  	Personagens *novo= (Personagens*) malloc (sizeof(Personagens));
+  	Personagens *novo = (Personagens*) malloc (sizeof(Personagens));
   	strcpy(novo->nome, nome);
     novo->atk = atk;
     novo->def = def;
     novo->hit = hit;
+    novo->id = id;
     novo->prox=li;
     novo->ant=NULL;
     
@@ -70,11 +67,16 @@ int lista_itens_vazia(Item* li)
 Personagens* lista_busca(Personagens* li, int id)
 {     
 	//variável usada para percorrer a lista
-	Personagens *a; 
-	for(a=li;a!=NULL;a=a->prox)
+	Personagens *a;
+	int i = 0; 
+	for(a = li; a != NULL; a = a->prox)
 	{ 
-	    if(a->id == id) return a;
-	}         
+	    if(a->id == id) 
+		{
+			return a;
+		}
+	}     
+
 	return NULL;
 }
 
@@ -84,7 +86,7 @@ Item* lista_itens_busca(Item* li, int tipo_item)
 	Item *a; 
 	for(a=li;a!=NULL;a=a->prox)
 	{ 
-	    if(a->detalhes_item.tipo_item == tipo_item) return a;
+	    if(a->tipo_item == tipo_item) return a;
 	}         
 	return NULL;
 }
@@ -107,9 +109,9 @@ Personagens* lista_retira(Personagens* li, int tipo_item){
     return li;
 }
 
-Item* lista_itens_retira(Item* li, int id){
+Item* lista_itens_retira(Item* li, int tipo_item){
  	//procura o elemento na lista usando a função busca
-    Item* aux=lista_itens_busca(li, id);
+    Item* aux=lista_itens_busca(li, tipo_item);
     if (aux==NULL) //não achou o elemento
         return li; 
     //retira o elemento encadeado
@@ -124,17 +126,17 @@ Item* lista_itens_retira(Item* li, int id){
     return li;
 }
 
-Item* lista_itens_insere(Item* li, DetalhesItem detalhes)
+Item* lista_itens_insere(Item* li, Item *item)
 {
 	// Procura e remove da lista caso já houver um item do mesmo tipo equipado;
-	li = lista_itens_retira(li, detalhes.tipo_item);
-	
+	li = lista_itens_retira(li, item->tipo_item);
+
   	Item *novo= (Item*) malloc (sizeof(Item));
-    strcpy(novo->detalhes_item.descricao, detalhes.descricao);
-    novo->detalhes_item.atk = detalhes.atk;
-    novo->detalhes_item.def = detalhes.def;
-    novo->detalhes_item.hit = detalhes.hit;
-    novo->detalhes_item.tipo_item = detalhes.tipo_item;
+    strcpy(novo->descricao, item->descricao);
+    novo->atk = item->atk;
+    novo->def = item->def;
+    novo->hit = item->hit;
+    novo->tipo_item = item->tipo_item;
     novo->prox=li;
     novo->ant=NULL;
     
@@ -143,13 +145,13 @@ Item* lista_itens_insere(Item* li, DetalhesItem detalhes)
     return novo;
 }
 
-Personagens* equipa_item(Personagens*li, int id, DetalhesItem detalhes)
+Personagens* equipa_item(Personagens*li, int id, Item *item)
 {
 	Personagens* personagem = lista_busca(li, id);
 	
 	if(personagem != NULL)
 	{
-		personagem->itens = lista_itens_insere(personagem->itens, detalhes);
+		personagem->itens = lista_itens_insere(personagem->itens, item);
 	}
 	
 	return li;
