@@ -8,17 +8,24 @@ typedef struct item{
 	int tipo_item;
 	int atk;
 	int def;
-	int hit;
+	int prec;
+	int luc;
+	int vel;
     struct item *prox;
     struct item *ant;
 }Item; //definição da lista
 
 typedef struct personagem{
 	int id;
+	int exp = 0;
+	int levels;
+	int hp;
 	char nome[10];
 	int atk;
 	int def;
-	int hit;
+	int prec;
+	int luc;
+	int vel;
 	Item *itens = NULL;
     struct personagem *ant; 
     struct personagem *prox;
@@ -35,13 +42,17 @@ Item * lista_itens_cria()
 }
 
 /* insere o novo dado no início da lista  e retorna a lista atualizada*/
-Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int def, int hit)
+Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int def, int prec, int luc, int vel, int levels, int hp)
 {
   	Personagens *novo = (Personagens*) malloc (sizeof(Personagens));
   	strcpy(novo->nome, nome);
-    novo->atk = atk;
+    novo->levels = levels;
+    novo->hp = hp;
+	novo->atk = atk;
     novo->def = def;
-    novo->hit = hit;
+    novo->prec = prec;
+    novo->luc = luc;
+    novo->vel = vel;
     novo->id = id;
     novo->prox=li;
     novo->ant=NULL;
@@ -135,7 +146,9 @@ Item* lista_itens_insere(Item* li, Item *item)
     strcpy(novo->descricao, item->descricao);
     novo->atk = item->atk;
     novo->def = item->def;
-    novo->hit = item->hit;
+    novo->prec = item->prec;
+    novo->luc = item->luc;
+    novo->vel = item->vel;
     novo->tipo_item = item->tipo_item;
     novo->prox=li;
     novo->ant=NULL;
