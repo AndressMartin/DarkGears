@@ -17,7 +17,7 @@ typedef struct item{
 
 typedef struct personagem{
 	int id;
-	int exp = 0;
+	int exp;
 	int levels;
 	int hp;
 	char nome[10];
@@ -27,7 +27,7 @@ typedef struct personagem{
 	int luc;
 	int vel;
 	Item *itens = NULL;
-    struct personagem *ant; 
+    struct personagem *ant;
     struct personagem *prox;
 }Personagens; //definição da lista
 
@@ -47,6 +47,7 @@ Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int de
   	Personagens *novo = (Personagens*) malloc (sizeof(Personagens));
   	strcpy(novo->nome, nome);
     novo->levels = levels;
+    novo->exp = 0;
     novo->hp = hp;
 	novo->atk = atk;
     novo->def = def;

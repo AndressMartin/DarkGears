@@ -8,6 +8,9 @@
 #include "enums.h"
 #include "listasDoMapa.h"
 #include "desenhosDoMapa.h"
+#include "ListaEncadeadaPersonagem.h"
+#include "batalha.h"
+#include "caixaDeDialogo.h"
 
 #define LEFT   	75
 #define RIGHT  	77
@@ -43,6 +46,14 @@ const int Sprites_BausQ = 2;
 void* Sprites_Baus[Sprites_BausQ];
 void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
+const int Sprites_RetratosQ = 2;
+void* Sprites_Retratos[Sprites_RetratosQ];
+void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
+
+const int Sprites_HUDQ = 1;
+void* Sprites_HUD[Sprites_HUDQ];
+void* Sprites_HUD_Mascaras[Sprites_HUDQ];
+
 //Nomes e caminhos dos arquivos, sem o tipo, para poder ser usado pelo codigo das mascaras tambem.
 // "17"" pois tem que considerar o caractere nulo "\0" que fica no final de uma string.
 char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
@@ -57,6 +68,11 @@ char Cenario_Objetos_Nomes[Cenario_ObjetosQ][38] = {"Sprites/ObjetoC_Teste_01-1"
 													"Sprites/ObjetoC_Teste_01-3",
 													"Sprites/Cenarios/ObjetoC_Teste_02-1#1",
 													"Sprites/Cenarios/ObjetoC_Teste_02-1#2"};
+
+char Sprites_Retratos_Nomes[Sprites_RetratosQ][25] = {"Sprites/Retratos/lilly",
+									 				  "Sprites/Retratos/morcego"};
+									 				
+char Sprites_HUD_Nomes[Sprites_HUDQ][27] = {"Sprites/HUD/caixa_de_texto"};
 
 //Organizacao = {Bau01 fechado, Bau01 aberto, Bau02 fechado, Bau02 aberto, ...}
 char Sprites_Baus_Nomes[Sprites_BausQ][16] = {"Sprites/bau01-F",
@@ -78,6 +94,11 @@ int Cenario_Objetos_Tamanhos[Cenario_ObjetosQ][2] = {{110, 115},
 
 int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
 											   {50, 60}};
+
+int Sprites_Retratos_Tamanhos[Sprites_RetratosQ][2] = {{180, 220},
+											   		   {180, 220}};
+
+int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115}};
 
 //Definicao das funcoes, as funcoes em si estao depois do main.
 void CarregarImagens(int Imagem);
@@ -805,6 +826,70 @@ void CarregarImagens(int Imagem)
 				readimagefile(strcat(StrcatTemp, MJPG), 0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1);
 			    Sprites_Baus_Mascaras[i] = malloc(imagesize(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1));
 			    getimage(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1, Sprites_Baus_Mascaras[i]);
+			}
+			
+			cleardevice();
+			setactivepage(0);
+			
+			break;
+		
+		case RETRATOS:
+			//Retratos dos personagens
+			
+			cleardevice();
+			setactivepage(1);
+			
+			setbkcolor(RGB(255, 255, 255));
+			cleardevice();
+			
+			for(int i=0; i < Sprites_RetratosQ; i++)
+			{
+				strcpy(StrcatTemp, Sprites_Retratos_Nomes[i]);
+		
+				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Sprites_Retratos_Tamanhos[i][0]-1, Sprites_Retratos_Tamanhos[i][1]-1);
+			    Sprites_Retratos[i] = malloc(imagesize(0, 0, Sprites_Retratos_Tamanhos[i][0]-1, Sprites_Retratos_Tamanhos[i][1]-1));
+			    getimage(0, 0, Sprites_Retratos_Tamanhos[i][0]-1, Sprites_Retratos_Tamanhos[i][1]-1, Sprites_Retratos[i]);
+			}
+			
+			for(int i=0; i < Sprites_RetratosQ; i++)
+			{
+				strcpy(StrcatTemp, Sprites_Retratos_Nomes[i]);
+		
+				readimagefile(strcat(StrcatTemp, MBMP), 0, 0, Sprites_Retratos_Tamanhos[i][0]-1, Sprites_Retratos_Tamanhos[i][1]-1);
+			    Sprites_Retratos_Mascaras[i] = malloc(imagesize(0, 0, Sprites_Retratos_Tamanhos[i][0]-1, Sprites_Retratos_Tamanhos[i][1]-1));
+			    getimage(0, 0, Sprites_Retratos_Tamanhos[i][0]-1, Sprites_Retratos_Tamanhos[i][1]-1, Sprites_Retratos_Mascaras[i]);
+			}
+			
+			cleardevice();
+			setactivepage(0);
+			
+			break;
+		
+		case HUD:
+			//Imagens do HUD
+			
+			cleardevice();
+			setactivepage(1);
+			
+			setbkcolor(RGB(255, 255, 255));
+			cleardevice();
+			
+			for(int i=0; i < Sprites_HUDQ; i++)
+			{
+				strcpy(StrcatTemp, Sprites_HUD_Nomes[i]);
+		
+				readimagefile(strcat(StrcatTemp, JPG), 0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1);
+			    Sprites_HUD[i] = malloc(imagesize(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1));
+			    getimage(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1, Sprites_HUD[i]);
+			}
+			
+			for(int i=0; i < Sprites_HUDQ; i++)
+			{
+				strcpy(StrcatTemp, Sprites_HUD_Nomes[i]);
+		
+				readimagefile(strcat(StrcatTemp, MJPG), 0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1);
+			    Sprites_HUD_Mascaras[i] = malloc(imagesize(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1));
+			    getimage(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1, Sprites_HUD_Mascaras[i]);
 			}
 			
 			cleardevice();

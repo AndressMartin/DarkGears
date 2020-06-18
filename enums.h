@@ -14,6 +14,6 @@ enum Tipos {PER, OBJ, BAU}; //Enumera os tipos que as structs de PosisoesC podem
 enum IndiceItens {NADA, POCAO, POCAO2};
 
 //Enumera o indice das imagens a serem carregadas.
-enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS};
+enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD};
 
 #endif
