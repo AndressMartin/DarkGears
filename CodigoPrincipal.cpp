@@ -106,7 +106,7 @@ bool hitTestCenario(int PosX, int PosY);
 bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY, int TamanhoListaRetangulosDeColisao, RetangulosDeColisao ListaRetangulosDeColisao[]);
 
 //Funcoes que pretendo separar depois.
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[]);
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop);
 
 int main()
 {
@@ -129,9 +129,17 @@ int main()
 		SpritesN = 0;
 	char Tecla = 0;
 	long long unsigned Gt1, Gt2;
+	int FPS = 60;
 	
 	bool PodeFazerInteracao = true,
+		 CaixaDeTexto = false,
 	 	 SpacePress = false;
+	
+	char *Arquivo;
+	int DialogoPosX = 0,
+		DialogoPosY = 0,
+		DialogoPartToStart = 0,
+		DialogoPartToStop = 0;
 	 	 
 	bool MudancaDeCenario = false;
 	int MudancaDeCenarioNumero = 0;
@@ -293,6 +301,8 @@ int main()
 	CarregarImagens(CCENTESTE);
 	CarregarImagens(OCENTESTE);
 	CarregarImagens(BAUS);
+	CarregarImagens(RETRATOS);
+	CarregarImagens(HUD);
 	
 	closegraph();
 	
@@ -339,19 +349,19 @@ int main()
 	while(Tecla != ESC)
 	{
 		Gt2 = GetTickCount();
-		if (Gt2 - Gt1 > 16)
+		if (Gt2 - Gt1 > 1000/FPS)
 		{
 			Gt1 = Gt2;
 			
 			//Esse codigo foi movido para o inicio da parte de colisao do personagem com o cenario.
 			//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
-			//if(PG == 0)
+			//if(PG == 1)
 			//{
-				//PG = 1;
+				//PG = 2;
 			//}
 			//else
 			//{
-				//PG = 0;
+				//PG = 1;
 			//}
 			//setactivepage(PG);
 			
@@ -476,19 +486,26 @@ int main()
 					}
 				}
 			}
-			
-			
+
 			//Torna visivel a pagina de desenho.
 			setvisualpage(PG);
 			
-			//Mexendo com a posicao da personagem
-			if(PG == 0)
+			//Caixa de Texto
+			if(CaixaDeTexto == true)
 			{
-				PG = 1;
+				ReadDialogue(DialogoPosX, DialogoPosY, DialogoPartToStart, DialogoPartToStop, Arquivo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+				CaixaDeTexto = false;
+				PodeFazerInteracao = true;
+			}
+			
+			//Mexendo com a posicao da personagem
+			if(PG == 1)
+			{
+				PG = 2;
 			}
 			else
 			{
-				PG = 0;
+				PG = 1;
 			}
 			setactivepage(PG);
 			
@@ -602,7 +619,7 @@ int main()
 			}
 			
 			//Interacoes com o mapa.
-			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas);
+			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop);
 			
 			//Transicoes de mapas.
 			if(MudancaDeCenario == true)
@@ -878,7 +895,7 @@ void CarregarImagens(int Imagem)
 			{
 				strcpy(StrcatTemp, Sprites_HUD_Nomes[i]);
 		
-				readimagefile(strcat(StrcatTemp, JPG), 0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1);
+				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1);
 			    Sprites_HUD[i] = malloc(imagesize(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1));
 			    getimage(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1, Sprites_HUD[i]);
 			}
@@ -887,7 +904,7 @@ void CarregarImagens(int Imagem)
 			{
 				strcpy(StrcatTemp, Sprites_HUD_Nomes[i]);
 		
-				readimagefile(strcat(StrcatTemp, MJPG), 0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1);
+				readimagefile(strcat(StrcatTemp, MBMP), 0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1);
 			    Sprites_HUD_Mascaras[i] = malloc(imagesize(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1));
 			    getimage(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1, Sprites_HUD_Mascaras[i]);
 			}
@@ -902,7 +919,7 @@ void CarregarImagens(int Imagem)
 	}
 }
 
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[])
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop)
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
@@ -934,6 +951,16 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 							
 							free(*Baus);
 							*Baus = BausTemp;
+							*Arquivo = (char *)malloc(sizeof(char) * 17);
+					    	strcpy(*Arquivo, "Textos/Teste.txt");
+					    	
+					    	*DialogoPosX = 169,
+							*DialogoPosY = 435,
+							*DialogoPartToStart = 33,
+							*DialogoPartToStop = 34;
+							
+					    	*PodeFazerInteracao = false;
+					    	*CaixaDeTexto = true;
 						}
 					}
 				}
@@ -957,7 +984,57 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 							
 							free(*Baus);
 							*Baus = BausTemp;
+							
+							free(*Baus);
+							*Baus = BausTemp;
+							*Arquivo = (char *)malloc(sizeof(char) * 17);
+					    	strcpy(*Arquivo, "Textos/Teste.txt");
+					    	
+					    	*DialogoPosX = 169,
+							*DialogoPosY = 30,
+							*DialogoPartToStart = 35,
+							*DialogoPartToStop = 37;
+							
+					    	*PodeFazerInteracao = false;
+					    	*CaixaDeTexto = true;
 						}
+					}
+				}
+				
+				//Dialogos
+				InteracaoN = 0;
+				if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
+				{
+					if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false && *PodeFazerInteracao == true)
+				    {
+				    	*Arquivo = (char *)malloc(sizeof(char) * 17);
+				    	strcpy(*Arquivo, "Textos/Teste.txt");
+				    	
+				    	*DialogoPosX = 229,
+						*DialogoPosY = 435,
+						*DialogoPartToStart = 2,
+						*DialogoPartToStop = 8;
+						
+				    	*PodeFazerInteracao = false;
+				    	*CaixaDeTexto = true;
+					}
+				}
+				
+				InteracaoN = 1;
+				if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
+				{
+					if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false && *PodeFazerInteracao == true)
+				    {
+				    	*Arquivo = (char *)malloc(sizeof(char) * 17);
+				    	strcpy(*Arquivo, "Textos/Teste.txt");
+				    	
+				    	*DialogoPosX = 229,
+						*DialogoPosY = 130,
+						*DialogoPartToStart = 10,
+						*DialogoPartToStop = 19;
+						
+				    	*PodeFazerInteracao = false;
+				    	*CaixaDeTexto = true;
 					}
 				}
 				

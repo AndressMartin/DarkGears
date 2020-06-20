@@ -24,24 +24,26 @@ void iniciarBatalha()
 	int PG = 0;
 	char Tecla = 0;
 	long long unsigned Gt1, Gt2;
+	int FPS = 60;
+	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
 	
 	while(!(batalhaFinalizada) && Tecla != ESC)
 	{
 		Gt2 = GetTickCount();
-		if (Gt2 - Gt1 > 16)
+		if (Gt2 - Gt1 > 1000/FPS)
 		{
 			Gt1 = Gt2;
 			
 			//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
-			if(PG == 0)
+			if(PG == 1)
 			{
-				PG = 1;
+				PG = 2;
 			}
 			else
 			{
-				PG = 0;
+				PG = 1;
 			}
 			setactivepage(PG);
 			

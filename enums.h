@@ -16,4 +16,7 @@ enum IndiceItens {NADA, POCAO, POCAO2};
 //Enumera o indice das imagens a serem carregadas.
 enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD};
 
+//Enumera os indices das imagens de HUD.
+enum ImagensHUD {CAIXADETEXTO};
+
 #endif
