@@ -956,8 +956,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					    	
 					    	*DialogoPosX = 169,
 							*DialogoPosY = 435,
-							*DialogoPartToStart = 33,
-							*DialogoPartToStop = 34;
+							*DialogoPartToStart = 36,
+							*DialogoPartToStop = 37;
 							
 					    	*PodeFazerInteracao = false;
 					    	*CaixaDeTexto = true;
@@ -992,8 +992,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					    	
 					    	*DialogoPosX = 169,
 							*DialogoPosY = 30,
-							*DialogoPartToStart = 35,
-							*DialogoPartToStop = 37;
+							*DialogoPartToStart = 38,
+							*DialogoPartToStop = 40;
 							
 					    	*PodeFazerInteracao = false;
 					    	*CaixaDeTexto = true;
@@ -1013,7 +1013,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 				    	*DialogoPosX = 229,
 						*DialogoPosY = 435,
 						*DialogoPartToStart = 2,
-						*DialogoPartToStop = 8;
+						*DialogoPartToStop = 9;
 						
 				    	*PodeFazerInteracao = false;
 				    	*CaixaDeTexto = true;
@@ -1030,8 +1030,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 				    	
 				    	*DialogoPosX = 229,
 						*DialogoPosY = 130,
-						*DialogoPartToStart = 10,
-						*DialogoPartToStop = 19;
+						*DialogoPartToStart = 11,
+						*DialogoPartToStop = 21;
 						
 				    	*PodeFazerInteracao = false;
 				    	*CaixaDeTexto = true;
