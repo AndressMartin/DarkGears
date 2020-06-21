@@ -6,10 +6,11 @@
 
 void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *Arquivo, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
 {
-	int sizeyTemp = posy + 5;
+	int sizeyTemp = posy;
 	int sizexTemp = posx + 9;
 	int contLines = 1;
-	bool spacePress = false;
+	bool spacePress = true,
+		 pulandoTexto = false;
 	char c[] = "c"; //Conta cada caractere.
 	char f[] = "f"; //Ao chegar no symbolImage, f irá guardar o símbolo até o próximo \n.
 	char symbol[] = "$";
@@ -20,6 +21,7 @@ void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *Arq
 	FILE * fPointer;
 	fPointer = fopen(Arquivo, "r");	
 	
+	settextstyle(0, 0, 0);
 	setbkcolor(RGB(136, 0, 21));
 	setcolor(RGB(0, 0, 0));
 	setlinestyle(0, 0, 1);
@@ -36,15 +38,23 @@ void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *Arq
 				if (contLines >= partToStart && contLines <= partToStop)
 				{	
 					outtextxy(sizexTemp+10, sizeyTemp, c);
-					sizexTemp += 10;
-					if (!(GetKeyState(VK_SPACE)&0x80))
+					sizexTemp += 12;
+					if (!(pulandoTexto))
 					{
 						delay(50);
 					}
-					else
+					
+					if ((GetKeyState(VK_SPACE)&0x80) && spacePress == false)
 					{
+						pulandoTexto = true;
 						spacePress = true;
 					}
+					if (!(GetKeyState(VK_SPACE)&0x80))
+					{
+						pulandoTexto = false;
+						spacePress = false;
+					}
+					
 				}
 				else if (contLines > partToStop)
 				{
@@ -95,10 +105,13 @@ void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *Arq
 			{
 				memset(c, 0, sizeof c);
 				strcpy(c, "c");
-				sizeyTemp = posy + 5;
+				sizeyTemp = posy;
 
 				putimage(posx, posy, Sprites_HUD_Mascaras[CAIXADETEXTO], AND_PUT);
 				putimage(posx, posy, Sprites_HUD[CAIXADETEXTO], OR_PUT);
+				
+				pulandoTexto = false;
+				spacePress = true;
 			}
 			if (!(GetKeyState(VK_SPACE)&0x80))
 			{
