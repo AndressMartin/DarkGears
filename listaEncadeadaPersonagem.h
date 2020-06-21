@@ -170,3 +170,86 @@ Personagens* equipa_item(Personagens*li, int id, Item *item)
 	
 	return li;
 }
+
+// Funcao para aplicar dano no personagem (player ou mob)
+Personagens* aplicar_dano(Personagens* li, int id, int dano)
+{
+	Personagens *aux = lista_cria();
+	Item *item = lista_itens_cria();
+	
+	aux = lista_busca(li, id);
+	int defesa = 0;
+	
+	if(aux != NULL)
+	{
+		item = lista_itens_busca(aux->itens, 2); // 2 = item de defesa
+		if(item != NULL)
+		{
+			defesa = item->def;
+		}
+		
+		dano = dano - defesa; // calcula dano e trava o valor para nao ser menor que 1
+		if(dano < 1)
+		{
+			dano = 1;	
+		}
+		
+		aux->hp -= dano; // aplica o dano e trava o valor para nao ser menor que 0
+		if(aux->hp < 0)
+		{
+			aux->hp = 0;
+		}
+	}
+	
+	return li;
+}
+
+// Retorna o dano do inimigo que ira realizar o ataque
+int calcular_dano(Personagens* li, int id)
+{
+	Personagens *aux = lista_cria();
+	Item *item = lista_itens_cria();
+	
+	aux = lista_busca(li, id);
+	int dano = 0;
+	
+	if(aux != NULL)
+	{
+		dano = aux->atk;
+		
+		item = lista_itens_busca(aux->itens, 1); // 1 = item de ataque
+		if(item != NULL)
+		{
+			dano += item->atk;
+		}
+	}
+	
+	return dano;
+}
+
+// Adiciona um inimigo na lista, a partir de um id escolhido
+Personagens* inserir_inimigo(Personagens* mob, int id)
+{
+	char nome [10];
+	switch(id)
+	{
+		case 1:
+			strcpy(nome, "Golem");
+			mob = lista_insere(mob, 2, nome, 10, 8, 6, 6, 4, 5, 30);
+			break;
+		case 2:
+			strcpy(nome, "Wumpus");
+			mob = lista_insere(mob, 2, nome, 15, 9, 10, 9, 2, 4, 30);
+			break;
+		case 3:
+			strcpy(nome, "Darius");
+			mob = lista_insere(mob, 2, nome, 10, 3, 6, 1, 6, 15, 40);
+			break;
+		default:
+			strcpy(nome, "Dagon");
+			mob = lista_insere(mob, 2, nome, 7, 5, 10, 5, 7, 10, 50);
+			break;
+	}
+		
+	return mob;	
+} 
