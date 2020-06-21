@@ -235,7 +235,7 @@ Personagens* inserir_inimigo(Personagens* mob, int id)
 	{
 		case 1:
 			strcpy(nome, "Golem");
-			mob = lista_insere(mob, 2, nome, 10, 8, 6, 6, 4, 5, 30);
+			mob = lista_insere(mob, 1, nome, 10, 8, 6, 6, 4, 5, 30);
 			break;
 		case 2:
 			strcpy(nome, "Wumpus");
@@ -243,11 +243,11 @@ Personagens* inserir_inimigo(Personagens* mob, int id)
 			break;
 		case 3:
 			strcpy(nome, "Darius");
-			mob = lista_insere(mob, 2, nome, 10, 3, 6, 1, 6, 15, 40);
+			mob = lista_insere(mob, 3, nome, 10, 3, 6, 1, 6, 15, 40);
 			break;
 		default:
 			strcpy(nome, "Dagon");
-			mob = lista_insere(mob, 2, nome, 7, 5, 10, 5, 7, 10, 50);
+			mob = lista_insere(mob, 4, nome, 7, 5, 10, 5, 7, 10, 50);
 			break;
 	}
 		
