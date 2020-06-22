@@ -26,7 +26,7 @@ typedef struct personagem{
 	int prec;
 	int luc;
 	int vel;
-	Item *itens = NULL;
+	Item *itens;
     struct personagem *ant;
     struct personagem *prox;
 }Personagens; //definição da lista
@@ -57,6 +57,7 @@ Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int de
     novo->id = id;
     novo->prox=li;
     novo->ant=NULL;
+    novo->itens=NULL;
     
     //verifica se a lista não esta vazia
     if(li!= NULL)
