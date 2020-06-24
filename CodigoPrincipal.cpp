@@ -1,8 +1,8 @@
-#include<stdio.h>
-#include<graphics.h>
-#include<conio.h>
-#include<time.h>
-#include<string.h>
+#include<stdio.h> //Biblioteca padrao
+#include<graphics.h> //BGI
+#include<conio.h> //kbhit e getch
+#include<time.h> //Tempo
+#include<string.h> //Funcoes de string
 
 #include "structs.h"
 #include "enums.h"
@@ -46,11 +46,11 @@ const int Sprites_BausQ = 2;
 void* Sprites_Baus[Sprites_BausQ];
 void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
-const int Sprites_RetratosQ = 2;
+const int Sprites_RetratosQ = 4;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
-const int Sprites_HUDQ = 1;
+const int Sprites_HUDQ = 5;
 void* Sprites_HUD[Sprites_HUDQ];
 void* Sprites_HUD_Mascaras[Sprites_HUDQ];
 
@@ -69,10 +69,16 @@ char Cenario_Objetos_Nomes[Cenario_ObjetosQ][38] = {"Sprites/ObjetoC_Teste_01-1"
 													"Sprites/Cenarios/ObjetoC_Teste_02-1#1",
 													"Sprites/Cenarios/ObjetoC_Teste_02-1#2"};
 
-char Sprites_Retratos_Nomes[Sprites_RetratosQ][25] = {"Sprites/Retratos/lilly",
-									 				  "Sprites/Retratos/morcego"};
+char Sprites_Retratos_Nomes[Sprites_RetratosQ][34] = {"Sprites/Retratos/lily",
+									 				  "Sprites/Retratos/morcego",
+													  "Sprites/Retratos/lily_batalha",
+													  "Sprites/Retratos/chaddrit_batalha"};
 									 				
-char Sprites_HUD_Nomes[Sprites_HUDQ][27] = {"Sprites/HUD/caixa_de_texto"};
+char Sprites_HUD_Nomes[Sprites_HUDQ][29] = {"Sprites/HUD/caixa_de_texto",
+											"Sprites/HUD/menuDeBatalha_1",
+											"Sprites/HUD/menuDeBatalha_2",
+											"Sprites/HUD/menuDeBatalha_3",
+											"Sprites/HUD/selecao_monstros"};
 
 //Organizacao = {Bau01 fechado, Bau01 aberto, Bau02 fechado, Bau02 aberto, ...}
 char Sprites_Baus_Nomes[Sprites_BausQ][16] = {"Sprites/bau01-F",
@@ -96,9 +102,15 @@ int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
 											   {50, 60}};
 
 int Sprites_Retratos_Tamanhos[Sprites_RetratosQ][2] = {{180, 220},
-											   		   {180, 220}};
+											   		   {180, 220},
+													   {85, 74},
+													   {85, 74}};
 
-int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115}};
+int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
+											 {970, 220},
+											 {460, 74},
+											 {326, 74},
+											 {85, 74}};
 
 //Definicao das funcoes, as funcoes em si estao depois do main.
 void CarregarImagens(int Imagem);
@@ -110,6 +122,54 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 
 int main()
 {
+	//Lista dos peronagens, inimigos e itens
+	Personagens *li = lista_cria(),
+				*mob = lista_cria();
+	Item item[5];
+	
+	// Carregando propriedades dos itens em structs
+	strcpy(item[0].descricao, "Espada de aco");
+    item[0].atk = 10;
+    item[0].def = 0;
+    item[0].prec = 0;
+    item[0].tipo_item = 1;
+    
+    strcpy(item[1].descricao, "Malha");
+    item[1].atk = 0;
+    item[1].def = 10;
+    item[1].prec = 0;
+    item[1].tipo_item = 2;
+    
+    strcpy(item[2].descricao, "Anel");
+    item[2].atk = 0;
+    item[2].def = 0;
+    item[2].prec = 5;
+    item[2].tipo_item = 3;
+    
+    strcpy(item[3].descricao, "Graveto");
+    item[3].atk = 1;
+    item[3].def = 0;
+    item[3].prec = 0;
+    item[3].tipo_item = 1;
+    
+	//Definindo personagens e seus status
+	char lily [5]  = "Lily";
+	char cueio [9] = "Chaddrit";
+	char quem [9] = "Qsou eu?";
+	
+	li = lista_insere(li, 1, lily, 10, 10, 10, 8, 5, 1, 100);
+	li = lista_insere(li, 2, cueio, 20, 6, 6, 12, 15, 5, 200);
+	li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999);
+	
+	//Equipando os itens nos personagens, é preciso passar a party, o indice do personagem da party e o item que deseja equipar
+	li = equipa_item(li, 1, &item[0]);
+	li = equipa_item(li, 1, &item[1]);
+	li = equipa_item(li, 1, &item[2]);
+	
+	//Insere inimigos na lista
+	mob = inserir_inimigo(mob, 1);
+	mob = inserir_inimigo(mob, 2);
+	
 	//Variaveis da personagem no mapa
 	int PosX = 20,
 		PosY = 100,
@@ -344,11 +404,17 @@ int main()
 	
 	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
 	
+	iniciarBatalha(li, mob, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
 	while(Tecla != ESC)
 	{
 		Gt2 = GetTickCount();
+		if(Gt2 < Gt1)
+		{
+			Gt1 = Gt2;
+		}
 		if (Gt2 - Gt1 > 1000/FPS)
 		{
 			Gt1 = Gt2;

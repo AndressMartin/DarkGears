@@ -38,4 +38,42 @@ typedef struct
 		LarY;
 } RetangulosDeColisao;
 
+typedef struct
+{
+	int Tipo,
+		IndiceAtacante,
+		IndiceRecebedor,
+		Acao,
+		Vel;
+} ListaDosTurnosS;
+
+typedef struct item{
+    char descricao[10];
+	int tipo_item;
+	int atk;
+	int def;
+	int prec;
+	int luc;
+	int vel;
+    struct item *prox;
+    struct item *ant;
+}Item; //definição da lista
+
+typedef struct personagem{
+	int id;
+	int exp;
+	int levels;
+	int hp;
+	int hpmax;
+	char nome[10];
+	int atk;
+	int def;
+	int prec;
+	int luc;
+	int vel;
+	Item *itens;
+    struct personagem *ant;
+    struct personagem *prox;
+}Personagens; //definição da lista
+
 #endif

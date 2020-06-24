@@ -17,6 +17,14 @@ enum IndiceItens {NADA, POCAO, POCAO2};
 enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD};
 
 //Enumera os indices das imagens de HUD.
-enum ImagensHUD {CAIXADETEXTO};
+enum ImagensHUD {CAIXADETEXTO, MENUBATALHA1, MENUBATALHA2, MENUBATALHA3, SELECAOM};
+
+//Enumera os tipos de retratos de batalha
+enum RetratoBatalhaPersonagem {RBLILY, RBCHADDRIT};
+enum RetratoBatalhaTipo {RETRATOBATALHANORMAL, RETRATOBATALHAATACANDO, RETRATOBATALHADANO, RETRATOBATALHANOCAUTEADO};
+
+//Enumera as acoes de batalha
+enum AcoesDeBatalhaTipos {PERSONAGEM, MOB};
+enum AcoesDeBatalha {ATAQUE};
 
 #endif
