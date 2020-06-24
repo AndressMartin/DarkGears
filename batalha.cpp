@@ -64,6 +64,8 @@ void retratoDeBatalha(int PosX, char *Texto, int Tipo, int i, void* Sprites_Retr
 
 void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
 {	
+	srand(time(0));
+	
 	bool batalhaFinalizada = false;
 	
 	bool turnoDosPersonagens = false,
@@ -302,8 +304,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 						ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
 						
 						ListaDosTurnos[ListaDosTurnosTamanho - 1].Acao = ATAQUE;
-						ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceAtacante = Turno;
-						ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceRecebedor = Selecao;
+						ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceAtacante = ArrayIds[Turno];
+						ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceRecebedor = ArrayIdsMob[Selecao];
 						ListaDosTurnos[ListaDosTurnosTamanho - 1].Tipo = PERSONAGEM;
 						
 						a = lista_busca(li, ArrayIds[Turno]);
@@ -314,9 +316,50 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 						if(Turno >= iMax)
 						{
 							turnoDosPersonagens = false;
+							turnoDosMonstros = true;
+							Turno = 0;
 						}
 					}
 				}
+			}
+			
+			if(turnoDosMonstros == true)
+			{
+				for(i=0; i < iMaxMob; i++)
+				{
+					Selecao = rand() % (iMax);
+					
+					ListaDosTurnosTamanho ++;
+					ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
+					
+					ListaDosTurnos[ListaDosTurnosTamanho - 1].Acao = ATAQUE;
+					ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceAtacante = ArrayIdsMob[Turno];
+					ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceRecebedor = ArrayIds[Selecao];
+					ListaDosTurnos[ListaDosTurnosTamanho - 1].Tipo = MOB;
+					
+					a = lista_busca(mob, ArrayIdsMob[Turno]);
+					ListaDosTurnos[ListaDosTurnosTamanho - 1].Vel = a->vel;
+					
+					Turno ++;
+				}
+				
+				turnoDosMonstros = false;
+				Turno = 0;
+				atacando = true;
+				
+				for(i=0; i < ListaDosTurnosTamanho; i++)
+				{
+					printf("\n\nAcao:      %d", ListaDosTurnos[i].Acao);
+					printf("\nAtacante:   %d", ListaDosTurnos[i].IndiceAtacante);
+					printf("\nRecebedor: %d", ListaDosTurnos[i].IndiceRecebedor);
+					printf("\nTipo:      %d", ListaDosTurnos[i].Tipo);
+					printf("\nVel:       %d", ListaDosTurnos[i].Vel);
+				}
+			}
+			
+			if(atacando == true)
+			{
+				
 			}
 			
 			//Variavel Tecla
