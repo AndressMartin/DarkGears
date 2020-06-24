@@ -80,6 +80,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 		Selecao = 0,
 		MenuID = 0;
 	
+	int MobPosXInicial = 0,
+		MobPosY = 31,
+		MobPosXDistancia = 0;
+	
 	int *ArrayIds = NULL,
 		*ArrayIdsMob = NULL,
 		*ArrayIdsAux = NULL;
@@ -101,6 +105,31 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 	long long unsigned Gt1, Gt2;
 	int FPS = 60;
 	
+	//Define o tipo posicionamento dos inimigos
+	iMaxMob = 0;
+	for(a = mob; a != NULL; a = a->prox)
+	{
+		iMaxMob ++;
+	}
+	
+	if(iMaxMob == 1)
+	{
+		MobPosXInicial = 375;
+		MobPosXDistancia = 0;
+	}
+	
+	if(iMaxMob == 2)
+	{
+		MobPosXInicial = 170;
+		MobPosXDistancia = 409;
+	}
+	
+	if(iMaxMob == 3)
+	{
+		MobPosXInicial = 59;
+		MobPosXDistancia = 315;
+	}
+
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
 	
@@ -158,6 +187,12 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			for(i = 0; i < iMaxMob; i++)
 			{
 				ArrayIdsMob[i] = ArrayIdsAux[i];
+			}
+			
+			//Mostrar os mobs
+			for(i = 0; i < iMaxMob; i++)
+			{
+				
 			}
 			
 			//Mostrar os status dos personagens no menu na ordem do menor id para o maior.

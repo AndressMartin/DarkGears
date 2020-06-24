@@ -14,7 +14,7 @@ enum Tipos {PER, OBJ, BAU}; //Enumera os tipos que as structs de PosisoesC podem
 enum IndiceItens {NADA, POCAO, POCAO2};
 
 //Enumera o indice das imagens a serem carregadas.
-enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD};
+enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD, MOBS};
 
 //Enumera os indices das imagens de HUD.
 enum ImagensHUD {CAIXADETEXTO, MENUBATALHA1, MENUBATALHA2, MENUBATALHA3, SELECAOM};
@@ -26,5 +26,8 @@ enum RetratoBatalhaTipo {RETRATOBATALHANORMAL, RETRATOBATALHAATACANDO, RETRATOBA
 //Enumera as acoes de batalha
 enum AcoesDeBatalhaTipos {PERSONAGEM, MOB};
 enum AcoesDeBatalha {ATAQUE};
+
+//Enumera as imagens dos inimigos nas batalhas
+enum ImagensInimigosBatalha {BGOLEM, BWUMPUS};
 
 #endif

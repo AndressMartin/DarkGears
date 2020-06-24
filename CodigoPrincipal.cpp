@@ -54,6 +54,10 @@ const int Sprites_HUDQ = 5;
 void* Sprites_HUD[Sprites_HUDQ];
 void* Sprites_HUD_Mascaras[Sprites_HUDQ];
 
+const int Sprites_MobsQ = 2;
+void* Sprites_Mobs[Sprites_MobsQ];
+void* Sprites_Mobs_Mascaras[Sprites_MobsQ];
+
 //Nomes e caminhos dos arquivos, sem o tipo, para poder ser usado pelo codigo das mascaras tambem.
 // "17"" pois tem que considerar o caractere nulo "\0" que fica no final de uma string.
 char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
@@ -79,6 +83,9 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][29] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_2",
 											"Sprites/HUD/menuDeBatalha_3",
 											"Sprites/HUD/selecao_monstros"};
+											
+char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
+											  "Sprites/Mobs/wumpus"};
 
 //Organizacao = {Bau01 fechado, Bau01 aberto, Bau02 fechado, Bau02 aberto, ...}
 char Sprites_Baus_Nomes[Sprites_BausQ][16] = {"Sprites/bau01-F",
@@ -111,6 +118,9 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 											 {460, 74},
 											 {326, 74},
 											 {85, 74}};
+											 
+int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
+											   {275, 275}};
 
 //Definicao das funcoes, as funcoes em si estao depois do main.
 void CarregarImagens(int Imagem);
@@ -363,6 +373,7 @@ int main()
 	CarregarImagens(BAUS);
 	CarregarImagens(RETRATOS);
 	CarregarImagens(HUD);
+	CarregarImagens(MOBS);
 	
 	closegraph();
 	
@@ -731,6 +742,7 @@ int main()
 			//Se alguma tecla for pressionada, coloca o valor dela na variavel Tecla.
 			// Com essa funcao, ela so pode ter um valor por vez que o laco e rodado, entao pode ser
 			// usada em alguma ocasiao em que duas teclas nao podem ser pressionadas de uma vez.
+			Tecla = 0;
 			if(kbhit())
 			{
 				Tecla = getch();
@@ -973,6 +985,38 @@ void CarregarImagens(int Imagem)
 				readimagefile(strcat(StrcatTemp, MBMP), 0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1);
 			    Sprites_HUD_Mascaras[i] = malloc(imagesize(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1));
 			    getimage(0, 0, Sprites_HUD_Tamanhos[i][0]-1, Sprites_HUD_Tamanhos[i][1]-1, Sprites_HUD_Mascaras[i]);
+			}
+			
+			cleardevice();
+			setactivepage(0);
+			
+			break;
+		
+		case MOBS:
+			//Imagens dos inimigos do jogo nas batalhas
+			
+			cleardevice();
+			setactivepage(1);
+			
+			setbkcolor(RGB(255, 255, 255));
+			cleardevice();
+			
+			for(int i=0; i < Sprites_MobsQ; i++)
+			{
+				strcpy(StrcatTemp, Sprites_Mobs_Nomes[i]);
+		
+				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1);
+			    Sprites_Mobs[i] = malloc(imagesize(0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1));
+			    getimage(0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1, Sprites_Mobs[i]);
+			}
+			
+			for(int i=0; i < Sprites_MobsQ; i++)
+			{
+				strcpy(StrcatTemp, Sprites_Mobs_Nomes[i]);
+		
+				readimagefile(strcat(StrcatTemp, MBMP), 0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1);
+			    Sprites_Mobs_Mascaras[i] = malloc(imagesize(0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1));
+			    getimage(0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1, Sprites_Mobs_Mascaras[i]);
 			}
 			
 			cleardevice();
