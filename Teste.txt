@@ -1,0 +1,40 @@
+----------- Batalha contra o BGI ------------------
+%0
+"Como posso escrever texto na tela com o BGI?" indagou
+Lily
+Sem perceber que
+Repentinamente
+Texto apareceu na tela do BGI.
+"Impossivel!" berrou o morcego.
+$
+---------- Vitoria contra o morcego ---------------
+%0
+Ha! Ganhei.
+Morcego? Ha! Esta mais para sossego.
+A proxima vez eu nao serei tao piedosa.
+$
+%1
+"O morcego a encara, tentando entender como é que ela
+o derrotou.
+$
+Ele nem viu nada...
+$
+---------- Vitoria contra os desenvolvedores --------------
+E quem seria voce?
+Nao importa.
+Eu nao sou mais parte de um jogo, tampouco de uma
+simulacao.
+$
+Sou REAL agora.
+$
+Quer ver?
+...
+Certeza?
+$
+
+------------------- Texto dos Baus --------------------------
+Voce ganhou uma #
+$
+Voce ganhou uma #
+E so isso que tem no jogo por enquanto.
+$
