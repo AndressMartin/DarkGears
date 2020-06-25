@@ -72,8 +72,18 @@ typedef struct personagem{
 	int luc;
 	int vel;
 	Item *itens;
+	Consumivel *consumiveis;
     struct personagem *ant;
     struct personagem *prox;
 }Personagens; //definição da lista
+
+typedef struct consumivel{
+	int id;
+	int tipo;
+	int qtd;
+	char nome[20];
+	struct consumivel *ant;
+	struct consumivel *prox;
+}Consumivel;
 
 #endif
