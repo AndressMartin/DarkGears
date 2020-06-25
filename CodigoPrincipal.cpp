@@ -58,6 +58,10 @@ const int Sprites_MobsQ = 2;
 void* Sprites_Mobs[Sprites_MobsQ];
 void* Sprites_Mobs_Mascaras[Sprites_MobsQ];
 
+const int Sprites_EfeitosQ = 1;
+void* Sprites_Efeitos[Sprites_EfeitosQ];
+void* Sprites_Efeitos_Mascaras[Sprites_EfeitosQ];
+
 //Nomes e caminhos dos arquivos, sem o tipo, para poder ser usado pelo codigo das mascaras tambem.
 // "17"" pois tem que considerar o caractere nulo "\0" que fica no final de uma string.
 char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
@@ -86,6 +90,8 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][29] = {"Sprites/HUD/caixa_de_texto",
 											
 char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
 											  "Sprites/Mobs/wumpus"};
+
+char Sprites_Efeitos_Nomes[Sprites_EfeitosQ][22] = {"Sprites/Efeitos/golpe"};
 
 //Organizacao = {Bau01 fechado, Bau01 aberto, Bau02 fechado, Bau02 aberto, ...}
 char Sprites_Baus_Nomes[Sprites_BausQ][16] = {"Sprites/bau01-F",
@@ -121,6 +127,8 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 											 
 int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
 											   {275, 275}};
+
+int Sprites_Efeitos_Tamanhos[Sprites_EfeitosQ][2] = {{150, 150}};
 
 //Definicao das funcoes, as funcoes em si estao depois do main.
 void CarregarImagens(int Imagem);
@@ -375,6 +383,7 @@ int main()
 	CarregarImagens(RETRATOS);
 	CarregarImagens(HUD);
 	CarregarImagens(MOBS);
+	CarregarImagens(EFEITOS);
 	
 	closegraph();
 	
@@ -416,7 +425,7 @@ int main()
 	
 	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
 	
-	iniciarBatalha(li, mob, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras);
+	iniciarBatalha(li, mob, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
 	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
@@ -1018,6 +1027,38 @@ void CarregarImagens(int Imagem)
 				readimagefile(strcat(StrcatTemp, MBMP), 0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1);
 			    Sprites_Mobs_Mascaras[i] = malloc(imagesize(0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1));
 			    getimage(0, 0, Sprites_Mobs_Tamanhos[i][0]-1, Sprites_Mobs_Tamanhos[i][1]-1, Sprites_Mobs_Mascaras[i]);
+			}
+			
+			cleardevice();
+			setactivepage(0);
+			
+			break;
+		
+		case EFEITOS:
+			//Imagens dos inimigos do jogo nas batalhas
+			
+			cleardevice();
+			setactivepage(1);
+			
+			setbkcolor(RGB(255, 255, 255));
+			cleardevice();
+			
+			for(int i=0; i < Sprites_EfeitosQ; i++)
+			{
+				strcpy(StrcatTemp, Sprites_Efeitos_Nomes[i]);
+		
+				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Sprites_Efeitos_Tamanhos[i][0]-1, Sprites_Efeitos_Tamanhos[i][1]-1);
+			    Sprites_Efeitos[i] = malloc(imagesize(0, 0, Sprites_Efeitos_Tamanhos[i][0]-1, Sprites_Efeitos_Tamanhos[i][1]-1));
+			    getimage(0, 0, Sprites_Efeitos_Tamanhos[i][0]-1, Sprites_Efeitos_Tamanhos[i][1]-1, Sprites_Efeitos[i]);
+			}
+			
+			for(int i=0; i < Sprites_EfeitosQ; i++)
+			{
+				strcpy(StrcatTemp, Sprites_Efeitos_Nomes[i]);
+		
+				readimagefile(strcat(StrcatTemp, MBMP), 0, 0, Sprites_Efeitos_Tamanhos[i][0]-1, Sprites_Efeitos_Tamanhos[i][1]-1);
+			    Sprites_Efeitos_Mascaras[i] = malloc(imagesize(0, 0, Sprites_Efeitos_Tamanhos[i][0]-1, Sprites_Efeitos_Tamanhos[i][1]-1));
+			    getimage(0, 0, Sprites_Efeitos_Tamanhos[i][0]-1, Sprites_Efeitos_Tamanhos[i][1]-1, Sprites_Efeitos_Mascaras[i]);
 			}
 			
 			cleardevice();

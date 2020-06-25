@@ -62,7 +62,49 @@ void retratoDeBatalha(int PosX, char *Texto, int Tipo, int i, void* Sprites_Retr
 	}
 }
 
-void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[])
+void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
+{
+	char *Texto = NULL,
+		 HpTexto[4] = "999";
+	Personagens *a;
+	
+	settextstyle(0, 0, 0);
+	setbkcolor(RGB(185, 122, 87));
+	setcolor(RGB(0, 0, 0));
+	setlinestyle(0, 0, 1);
+	
+	putimage(27, 337, Sprites_HUD_Mascaras[MENUBATALHA1], AND_PUT);
+	putimage(27, 337, Sprites_HUD[MENUBATALHA1], OR_PUT);
+	
+	for(int i = 0; i < iMax; i++)
+	{
+		a = lista_busca(li, ArrayIds[i]);
+	
+	    putimage(537, 337 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHA2], AND_PUT);
+		putimage(537, 337 + (73 * i), Sprites_HUD[MENUBATALHA2], OR_PUT);
+		
+		Texto = (char *)realloc(Texto, sizeof(char) * 10);
+		strcpy(Texto, a->nome);
+		
+		retratoDeBatalha(537, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+		
+		outtextxy(622 + 10, 337 + (73 * i) + 28, Texto);
+		
+		Texto = (char *)realloc(Texto, sizeof(char) * 20);
+		strcpy(Texto, "HP: ");
+		
+		itoa(a->hp, HpTexto, 10);
+		strcat(Texto, HpTexto);
+		strcat(Texto, " / ");
+		
+		itoa(a->hpmax, HpTexto, 10);
+		strcat(Texto, HpTexto);
+		
+		outtextxy(754 + 10, 337 + (73 * i) + 28, Texto);
+	}
+}
+
+void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
 {	
 	srand(time(0));
 	
@@ -161,17 +203,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			
 			//Desenhos
 			
-			setbkcolor(RGB(255, 255, 255));
-			cleardevice();
-			
-			settextstyle(0, 0, 0);
-			setbkcolor(RGB(185, 122, 87));
-			setcolor(RGB(0, 0, 0));
-			setlinestyle(0, 0, 1);
-			
-			putimage(27, 337, Sprites_HUD_Mascaras[MENUBATALHA1], AND_PUT);
-			putimage(27, 337, Sprites_HUD[MENUBATALHA1], OR_PUT);
-			
 			//Cria a lista com os ids dos monstros
 			iMaxMob = 0;
 			for(a = mob; a != NULL; a = a->prox)
@@ -207,18 +238,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 				}
 			}
 			
-			//Mostrar os mobs
-			for(i = 0; i < iMaxMobInicial; i++)
-			{
-				a = lista_busca(mob, ArrayIdsMobInicial[i]);
-				
-				if(a->hp > 0)
-				{
-					putimage(MobPosXInicial + (MobPosXDistancia * i), MobPosY, Sprites_Mobs_Mascaras[a->id - 1], AND_PUT);
-					putimage(MobPosXInicial + (MobPosXDistancia * i), MobPosY, Sprites_Mobs[a->id - 1], OR_PUT);
-				}
-			}
-			
 			//Mostrar os status dos personagens no menu na ordem do menor id para o maior.
 			//Para isso, ele fara um array com os Ids e depois o invertera, para caso a ordem dos Ids nao seja crescente.
 			iMax = 0;
@@ -241,32 +260,24 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 				ArrayIds[i] = ArrayIdsAux[i];
 			}
 			
-			for(i = 0; i < iMax; i++)
-			{
-				a = lista_busca(li, ArrayIds[i]);
+			//Fundo e cenario
+			setbkcolor(RGB(255, 255, 255));
+			cleardevice();
 			
-			    putimage(537, 337 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHA2], AND_PUT);
-				putimage(537, 337 + (73 * i), Sprites_HUD[MENUBATALHA2], OR_PUT);
+			//Mostrar os mobs
+			for(i = 0; i < iMaxMobInicial; i++)
+			{
+				a = lista_busca(mob, ArrayIdsMobInicial[i]);
 				
-				Texto = (char *)realloc(Texto, sizeof(char) * 10);
-				strcpy(Texto, a->nome);
-				
-				retratoDeBatalha(537, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
-				
-				outtextxy(622 + 10, 337 + (73 * i) + 28, Texto);
-				
-				Texto = (char *)realloc(Texto, sizeof(char) * 20);
-				strcpy(Texto, "HP: ");
-				
-				itoa(a->hp, HpTexto, 10);
-				strcat(Texto, HpTexto);
-				strcat(Texto, " / ");
-				
-				itoa(a->hpmax, HpTexto, 10);
-				strcat(Texto, HpTexto);
-				
-				outtextxy(754 + 10, 337 + (73 * i) + 28, Texto);	
+				if(a->hp > 0)
+				{
+					putimage(MobPosXInicial + (MobPosXDistancia * i), MobPosY, Sprites_Mobs_Mascaras[a->id - 1], AND_PUT);
+					putimage(MobPosXInicial + (MobPosXDistancia * i), MobPosY, Sprites_Mobs[a->id - 1], OR_PUT);
+				}
 			}
+			
+			//Menu
+			desenhaMenu(li, ArrayIds, iMax, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
 			
 			if(turnoDosPersonagens == true)
 			{
@@ -315,8 +326,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 					}
 					
 					putimage(353, 337 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
-					putimage(353, 337 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
-					
+					putimage(353, 337 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);	
 				}
 			}
 			
@@ -443,7 +453,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 							// Verifica se o HP do inimigo já foi zerado e escolhe um novo alvo da lista
 							if(a->hp <= 0)
 							{
-								// TODO: Percorrer IDs disponiveis de inimigos
+								for(i = 0; i < iMaxMob; i++)
+								{
+									// TODO: percorrer ids de personagens disponiveis
+								}
 							}
 							
 							dano = calcular_dano(li, ListaDosTurnos[i].IndiceAtacante);
