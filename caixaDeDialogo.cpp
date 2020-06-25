@@ -4,19 +4,20 @@
 #include<stdio.h>
 #include<string.h>
 
-void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *Arquivo, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
+void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *txtChanger, char *Arquivo, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
 {
-	int sizeyTemp = posy;
-	int sizexTemp = posx + 9;
-	int contLines = 1;
+	int sizeyTemp = posy,
+	 	sizexTemp = posx + 9,
+	 	contLines = 1;
 	bool spacePress = true,
 		 pulandoTexto = false;
-	char c[] = "c"; //Conta cada caractere.
-	char f[] = "f"; //Ao chegar no symbolImage, f irá guardar o símbolo até o próximo \n.
-	char symbol[] = "$";
-	char symbolImage[] = "%";
-	char newLine[] = "\n";
-	char imgId[4];
+	char c[] = "c", //Conta cada caractere.
+		 f[] = "f", //Ao chegar no symbolImage, f irá guardar o símbolo até o próximo \n.
+	 	 symbol[] = "$",
+		 symbolImage[] = "%",
+		 symbolChange[] = "#",
+	 	 newLine[] = "\n",
+		 imgId[4];
 	memset(imgId, 0, sizeof imgId);
 	FILE * fPointer;
 	fPointer = fopen(Arquivo, "r");	
@@ -35,42 +36,50 @@ void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *Arq
 		{
 			if (strcmp(c, symbolImage) != 0 && strcmp(f, symbolImage) != 0)
 			{
-				if (contLines >= partToStart && contLines <= partToStop)
-				{	
-					outtextxy(sizexTemp+10, sizeyTemp, c);
-					sizexTemp += 12;
-					if (!(pulandoTexto))
-					{
-						delay(50);
-					}
-					
-					if ((GetKeyState(VK_SPACE)&0x80) && spacePress == false)
-					{
-						pulandoTexto = true;
-						spacePress = true;
-					}
-					if (!(GetKeyState(VK_SPACE)&0x80))
-					{
-						pulandoTexto = false;
-						spacePress = false;
-					}
-					
-				}
-				else if (contLines > partToStop)
+				if (strcmp(c, symbolChange) != 0)
 				{
-					return;
-				}
-			
-				if (strcmp(c, newLine) == 0)
-				{
-					contLines++;
-					if(contLines >= partToStart && contLines <= partToStop)
+					if (contLines >= partToStart && contLines <= partToStop)
+					{	
+						outtextxy(sizexTemp+10, sizeyTemp, c);
+						sizexTemp += 12;
+						if (!(pulandoTexto))
+						{
+							delay(50);
+						}
+						
+						if ((GetKeyState(VK_SPACE)&0x80) && spacePress == false)
+						{
+							pulandoTexto = true;
+							spacePress = true;
+						}
+						if (!(GetKeyState(VK_SPACE)&0x80))
+						{
+							pulandoTexto = false;
+							spacePress = false;
+						}
+						
+					}
+					else if (contLines > partToStop)
 					{
-						sizeyTemp += 15;
-						sizexTemp = posx + 9;
+						return;
 					}
 				
+					if (strcmp(c, newLine) == 0)
+					{
+						contLines++;
+						if(contLines >= partToStart && contLines <= partToStop)
+						{
+							sizeyTemp += 15;
+							sizexTemp = posx + 9;
+						}
+					
+					}
 				}
+				else
+				{
+					outtextxy(sizexTemp+10, sizeyTemp, txtChanger);
+				}
+				
 			}
 			else if (strcmp(f, symbolImage) != 0 && strcmp(c, symbolImage) == 0)
 			{
