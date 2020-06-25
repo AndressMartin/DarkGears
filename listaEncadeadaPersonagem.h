@@ -15,5 +15,6 @@ Personagens* equipa_item(Personagens*li, int id, Item *item);
 Personagens* aplicar_dano(Personagens* li, int id, int dano);
 int calcular_dano(Personagens* li, int id);
 Personagens* inserir_inimigo(Personagens* mob, int id);
+void detalhaStatus(Personagens *item);
 
 #endif

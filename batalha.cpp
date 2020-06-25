@@ -66,6 +66,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 {	
 	srand(time(0));
 	
+	int dano = 0;
+	
 	bool batalhaFinalizada = false;
 	
 	bool turnoDosPersonagens = false,
@@ -394,8 +396,98 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			
 			if(atacando == true)
 			{
+				for(i=0; i < ListaDosTurnosTamanho; i++)
+				{
+					dano = 0;
+					danoCausado = 0;
+					
+					// Calculo precisao
+					if(ListaDosTurnos[i].Acao == ATAQUE) // Se for ataque
+					{
+						if(ListaDosTurnos[i].Tipo == PERSONAGEM)
+						{
+							a = lista_busca(mob, ListaDosTurnos[i].IndiceRecebedor);
+							
+							// Verifica se o HP do inimigo já foi zerado e escolhe um novo alvo da lista
+							if(a.hp == 0)
+							{
+								// TODO: Percorrer IDs disponiveis de inimigos
+							}
+							
+							dano = calcular_dano(li, ListaDosTurnos[i].IndiceAtacante);
+							
+							if(dano == 0)
+							{
+								a = lista_busca(li, ListaDosTurnos[i].IndiceAtacante);
+								printf("\n%s errou o ataque!\n", &a->nome);
+							}
+							else
+							{
+								danoCausado = a.hp;
+								
+								mob = aplicar_dano(mob, ListaDosTurnos[i].IndiceRecebedor, dano);
+								
+								danoCausado -= a.hp;
+								
+								if(a.hp == 0)
+								{
+									printf("\n%s sofre um dano fatal\n", &a.nome);
+								}
+								else
+								{
+									printf("\n%s sofre %d de dano\n", &a.nome, &danoCausado);
+								}	
+							}
+						}
+						else // Se for ataque do mob
+						{
+							a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
+							
+							// Verifica se o HP do inimigo já foi zerado e escolhe um novo alvo da lista
+							if(a.hp == 0)
+							{
+								// TODO: percorrer ids de personagens disponiveis
+							}
+							
+							dano = calcular_dano(mob, ListaDosTurnos[i].IndiceAtacante);
+							
+							if(dano == 0)
+							{
+								a = lista_busca(mob, ListaDosTurnos[i].IndiceAtacante);
+								printf("\n%s errou o ataque!\n", &a->nome);
+							}
+							else
+							{
+								danoCausado = a.hp;
+								
+								li = aplicar_dano(li, ListaDosTurnos[i].IndiceRecebedor, dano);	
+								
+								danoCausado -= a.hp;
+								
+								if(a.hp == 0)
+								{
+									printf("\n%s sofre um dano fatal\n", &a.nome);
+								}
+								else
+								{
+									printf("\n%s sofre %d de dano\n", &a.nome, &danoCausado);
+								}
+							}
+						}
+					}
+					
+				}
 				
+				detalhaStatus(li);
+				detalhaStatus(mob);
+				
+				atacando = false;
+				Turno = 0;
+				ListaDosTurnosTamanho = 0;
+				turnoDosPersonagens = true;
 			}
+			
+			
 			
 			//Variavel Tecla
 			Tecla = 0;

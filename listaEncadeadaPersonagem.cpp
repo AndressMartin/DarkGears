@@ -183,8 +183,11 @@ Personagens* aplicar_dano(Personagens* li, int id, int dano)
 // Retorna o dano do inimigo que ira realizar o ataque
 int calcular_dano(Personagens* li, int id)
 {
+	int min = 0, max = 99;
 	Personagens *aux = lista_cria();
 	Item *item = lista_itens_cria();
+	
+	int randNum = rand()%(max-min + 1) + min;
 	
 	aux = lista_busca(li, id);
 	int dano = 0;
@@ -198,6 +201,15 @@ int calcular_dano(Personagens* li, int id)
 		{
 			dano += item->atk;
 		}
+	}
+	
+	if(randNum > aux.prec) // Caso tire um numero maior que a precisao, erra o golpe
+	{
+		dano = 0;
+	}
+	else if(randNum == aux.prec) // Dano critico caso acerte o max de precisao do personagem
+	{
+		dano = dano * 2;
 	}
 	
 	return dano;
@@ -228,4 +240,22 @@ Personagens* inserir_inimigo(Personagens* mob, int id)
 	}
 		
 	return mob;	
+}
+
+void detalhaStatus(Personagens *item)
+{
+	Personagens *aux = lista_cria();
+	Item *item_aux = lista_itens_cria();
+	
+	for(aux = item; aux != NULL; aux = aux->prox)
+	{
+		printf("\nPersonagem: %s; ATK %d / DEF %d / PREC %d / HP %d", aux->nome, aux->atk, aux->def, aux->prec, aux->hp);
+		printf("\nItems: ");
+		
+		for(item_aux = aux->itens; item_aux != NULL; item_aux = item_aux->prox)
+		{
+			printf("\nDescricao: %s", item_aux->descricao);
+		}
+		printf("\n----------------------------------------\n");
+	}
 }
