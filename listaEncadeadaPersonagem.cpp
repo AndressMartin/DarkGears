@@ -15,6 +15,11 @@ Item * lista_itens_cria()
     return NULL;
 }
 
+Consumivel * lista_consumiveis_cria()
+{
+	return NULL;
+}
+
 /* insere o novo dado no início da lista  e retorna a lista atualizada*/
 Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int def, int prec, int luc, int vel, int levels, int hp)
 {
@@ -33,6 +38,7 @@ Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int de
     novo->prox=li;
     novo->ant=NULL;
     novo->itens=NULL;
+    novo->consumiveis=NULL;
     
     //verifica se a lista não esta vazia
     if(li!= NULL)
@@ -47,6 +53,11 @@ int lista_vazia(Personagens* li)
 }         
 
 int lista_itens_vazia(Item* li)
+{     
+    return(li==NULL); 
+}  
+
+int lista_consumiveis_vazia(Consumivel* li)
 {     
     return(li==NULL); 
 }  
@@ -75,6 +86,17 @@ Item* lista_itens_busca(Item* li, int tipo_item)
 	for(a=li;a!=NULL;a=a->prox)
 	{ 
 	    if(a->tipo_item == tipo_item) return a;
+	}         
+	return NULL;
+}
+
+Consumivel* lista_consumiveis_busca(Consumivel* li, int tipo)
+{
+	//variável usada para percorrer a lista
+	Consumivel *a; 
+	for(a=li;a!=NULL;a=a->prox)
+	{ 
+	    if(a->tipo == tipo) return a;
 	}         
 	return NULL;
 }
@@ -114,6 +136,23 @@ Item* lista_itens_retira(Item* li, int tipo_item){
     return li;
 }
 
+Consumivel* lista_consumiveis_retira(Consumivel* li, int tipo){
+ 	//procura o elemento na lista usando a função busca
+    Consumivel* aux=lista_consumiveis_busca(li, tipo);
+    if (aux==NULL) //não achou o elemento
+        return li; 
+    //retira o elemento encadeado
+    if(li==aux) //verifica se é o primeiro da lista
+    	li=aux->prox;
+    else
+        aux->ant->prox=aux->prox;
+    //testa para ver se é o ultimo da lista
+    if (aux->prox!=NULL)        
+        aux->prox->ant=aux->ant;
+    free(aux);
+    return li;
+}
+
 Item* lista_itens_insere(Item* li, Item *item)
 {
 	// Procura e remove da lista caso já houver um item do mesmo tipo equipado;
@@ -135,6 +174,32 @@ Item* lista_itens_insere(Item* li, Item *item)
     return novo;
 }
 
+Consumivel* lista_consumiveis_insere(Consumivel* li, Consumivel *item)
+{
+	// Procura e remove da lista caso já houver um item do mesmo tipo equipado;
+	li = lista_consumiveis_busca(li, item->tipo);
+	
+	if(li != NULL)
+	{
+		li->qtd += item->qtd;
+		return li;
+	}
+	else
+	{
+		Consumivel *novo= (Consumivel*) malloc (sizeof(Consumivel));
+	    strcpy(novo->nome, item->nome);
+	    novo->tipo = item->tipo;
+	    novo->qtd = item->qtd;
+	    novo->id = item->id;
+	    novo->prox=li;
+	    novo->ant=NULL;
+	    
+	    if(li!= NULL)
+	        li->ant=novo;         
+	    return novo;
+	}
+}
+
 Personagens* equipa_item(Personagens*li, int id, Item *item)
 {
 	Personagens* personagem = lista_busca(li, id);
@@ -142,6 +207,18 @@ Personagens* equipa_item(Personagens*li, int id, Item *item)
 	if(personagem != NULL)
 	{
 		personagem->itens = lista_itens_insere(personagem->itens, item);
+	}
+	
+	return li;
+}
+
+Personagens* adiciona_consumivel(Personagens*li, int id, Consumivel *item)
+{
+	Personagens* personagem = lista_busca(li, id);
+	
+	if(personagem != NULL)
+	{
+		personagem->consumiveis = lista_consumiveis_insere(personagem->consumiveis, item);
 	}
 	
 	return li;
