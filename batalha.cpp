@@ -62,7 +62,7 @@ void retratoDeBatalha(int PosX, char *Texto, int Tipo, int i, void* Sprites_Retr
 	}
 }
 
-void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
+void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[])
 {	
 	srand(time(0));
 	
@@ -76,6 +76,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 		i = 0,
 		iMax = 0,
 		iMaxMob = 0,
+		iMaxMobInicial = 0,
 		Turno = 0,
 		Selecao = 0,
 		MenuID = 0;
@@ -86,6 +87,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 	
 	int *ArrayIds = NULL,
 		*ArrayIdsMob = NULL,
+		*ArrayIdsMobInicial = NULL,
 		*ArrayIdsAux = NULL;
 	
 	ListaDosTurnosS *ListaDosTurnos = NULL;
@@ -172,9 +174,12 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			iMaxMob = 0;
 			for(a = mob; a != NULL; a = a->prox)
 			{
-				iMaxMob ++;
-				ArrayIdsMob = (int *)realloc(ArrayIdsMob, sizeof(int) * iMaxMob);
-				ArrayIdsMob[iMaxMob - 1] = a->id;
+				if(a->hp > 0)
+				{
+					iMaxMob ++;
+					ArrayIdsMob = (int *)realloc(ArrayIdsMob, sizeof(int) * iMaxMob);
+					ArrayIdsMob[iMaxMob - 1] = a->id;
+				}
 			}
 			
 			//Inverter os elementos do array dos mobs
@@ -189,10 +194,27 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 				ArrayIdsMob[i] = ArrayIdsAux[i];
 			}
 			
-			//Mostrar os mobs
-			for(i = 0; i < iMaxMob; i++)
+			if(ArrayIdsMobInicial == NULL)
 			{
+				iMaxMobInicial = iMaxMob;
+				ArrayIdsMobInicial = (int *)realloc(ArrayIdsMobInicial, sizeof(int) * iMaxMobInicial);
 				
+				for(i = 0; i < iMaxMobInicial; i++)
+				{
+					ArrayIdsMobInicial[i] = ArrayIdsMob[i];
+				}
+			}
+			
+			//Mostrar os mobs
+			for(i = 0; i < iMaxMobInicial; i++)
+			{
+				a = lista_busca(mob, ArrayIdsMobInicial[i]);
+				
+				if(a->hp > 0)
+				{
+					putimage(MobPosXInicial + (MobPosXDistancia * i), MobPosY, Sprites_Mobs_Mascaras[a->id - 1], AND_PUT);
+					putimage(MobPosXInicial + (MobPosXDistancia * i), MobPosY, Sprites_Mobs[a->id - 1], OR_PUT);
+				}
 			}
 			
 			//Mostrar os status dos personagens no menu na ordem do menor id para o maior.
@@ -303,58 +325,68 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			
 			if(turnoDosPersonagens == true)
 			{
-				if(MenuID == 0)
+				a = lista_busca(li, ArrayIds[Turno]);
+				
+				if(a->hp > 0)
 				{
-					if(Tecla == TECLAA)
+					if(MenuID == 0)
 					{
-						MenuID = 1;
-						Selecao = 0;
-					}
-				}
-				if(MenuID == 1)
-				{
-					if(Tecla == TECLABACKSPACE)
-					{
-						MenuID = 0;
-					}
-					if(Tecla == UP || Tecla == LEFT)
-					{
-						Selecao --;
-						if(Selecao < 0)
+						if(Tecla == TECLAA)
 						{
+							MenuID = 1;
 							Selecao = 0;
 						}
 					}
-					if(Tecla == DOWN || Tecla == RIGHT)
+					if(MenuID == 1)
 					{
-						Selecao ++;
-						if(Selecao >= iMaxMob)
+						if(Tecla == TECLABACKSPACE)
 						{
-							Selecao = iMaxMob - 1;
+							MenuID = 0;
+						}
+						if(Tecla == UP || Tecla == LEFT)
+						{
+							Selecao --;
+							if(Selecao < 0)
+							{
+								Selecao = 0;
+							}
+						}
+						if(Tecla == DOWN || Tecla == RIGHT)
+						{
+							Selecao ++;
+							if(Selecao >= iMaxMob)
+							{
+								Selecao = iMaxMob - 1;
+							}
+						}
+						if(Tecla == TECLAENTER)
+						{
+							ListaDosTurnosTamanho ++;
+							ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
+							
+							ListaDosTurnos[ListaDosTurnosTamanho - 1].Acao = ATAQUE;
+							ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceAtacante = ArrayIds[Turno];
+							ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceRecebedor = ArrayIdsMob[Selecao];
+							ListaDosTurnos[ListaDosTurnosTamanho - 1].Tipo = PERSONAGEM;
+							
+							a = lista_busca(li, ArrayIds[Turno]);
+							ListaDosTurnos[ListaDosTurnosTamanho - 1].Vel = a->vel;
+							
+							Turno ++;
+							MenuID = 0;
 						}
 					}
-					if(Tecla == TECLAENTER)
-					{
-						ListaDosTurnosTamanho ++;
-						ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
-						
-						ListaDosTurnos[ListaDosTurnosTamanho - 1].Acao = ATAQUE;
-						ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceAtacante = ArrayIds[Turno];
-						ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceRecebedor = ArrayIdsMob[Selecao];
-						ListaDosTurnos[ListaDosTurnosTamanho - 1].Tipo = PERSONAGEM;
-						
-						a = lista_busca(li, ArrayIds[Turno]);
-						ListaDosTurnos[ListaDosTurnosTamanho - 1].Vel = a->vel;
-						
-						Turno ++;
-						MenuID = 0;
-						if(Turno >= iMax)
-						{
-							turnoDosPersonagens = false;
-							turnoDosMonstros = true;
-							Turno = 0;
-						}
-					}
+				}
+				else
+				{
+					Turno ++;
+				}
+				
+				if(Turno >= iMax)
+				{
+					turnoDosPersonagens = false;
+					turnoDosMonstros = true;
+					Turno = 0;
 				}
 			}
 			
@@ -384,8 +416,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 				
 				for(i=0; i < ListaDosTurnosTamanho; i++)
 				{
-					printf("\n\nAcao:      %d", ListaDosTurnos[i].Acao);
-					printf("\nAtacante:   %d", ListaDosTurnos[i].IndiceAtacante);
+					printf("\n\nAcao:    %d", ListaDosTurnos[i].Acao);
+					printf("\nAtacante:  %d", ListaDosTurnos[i].IndiceAtacante);
 					printf("\nRecebedor: %d", ListaDosTurnos[i].IndiceRecebedor);
 					printf("\nTipo:      %d", ListaDosTurnos[i].Tipo);
 					printf("\nVel:       %d", ListaDosTurnos[i].Vel);

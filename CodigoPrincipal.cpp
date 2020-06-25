@@ -128,7 +128,7 @@ bool hitTestCenario(int PosX, int PosY);
 bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY, int TamanhoListaRetangulosDeColisao, RetangulosDeColisao ListaRetangulosDeColisao[]);
 
 //Funcoes que pretendo separar depois.
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop);
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto);
 
 int main()
 {
@@ -205,7 +205,8 @@ int main()
 		 CaixaDeTexto = false,
 	 	 SpacePress = false;
 	
-	char *Arquivo;
+	char *Arquivo = NULL,
+		 *MudancaDeTexto = NULL;
 	int DialogoPosX = 0,
 		DialogoPosY = 0,
 		DialogoPartToStart = 0,
@@ -415,7 +416,7 @@ int main()
 	
 	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
 	
-	iniciarBatalha(li, mob, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+	iniciarBatalha(li, mob, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras);
 	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
@@ -570,7 +571,7 @@ int main()
 			//Caixa de Texto
 			if(CaixaDeTexto == true)
 			{
-				ReadDialogue(DialogoPosX, DialogoPosY, DialogoPartToStart, DialogoPartToStop, Arquivo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+				ReadDialogue(DialogoPosX, DialogoPosY, DialogoPartToStart, DialogoPartToStop, MudancaDeTexto, Arquivo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
 				CaixaDeTexto = false;
 				PodeFazerInteracao = true;
 			}
@@ -696,7 +697,7 @@ int main()
 			}
 			
 			//Interacoes com o mapa.
-			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop);
+			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &MudancaDeTexto);
 			
 			//Transicoes de mapas.
 			if(MudancaDeCenario == true)
@@ -1029,7 +1030,7 @@ void CarregarImagens(int Imagem)
 	}
 }
 
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop)
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto)
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
@@ -1063,6 +1064,9 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 							*Baus = BausTemp;
 							*Arquivo = (char *)malloc(sizeof(char) * 17);
 					    	strcpy(*Arquivo, "Textos/Teste.txt");
+					    	
+					    	*MudancaDeTexto = (char *)malloc(sizeof(char) * 40);
+					    	strcpy(*MudancaDeTexto, "Poção!");
 					    	
 					    	*DialogoPosX = 169,
 							*DialogoPosY = 435,
@@ -1099,6 +1103,9 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 							*Baus = BausTemp;
 							*Arquivo = (char *)malloc(sizeof(char) * 17);
 					    	strcpy(*Arquivo, "Textos/Teste.txt");
+					    	
+					    	*MudancaDeTexto = (char *)malloc(sizeof(char) * 40);
+					    	strcpy(*MudancaDeTexto, "Poção!");
 					    	
 					    	*DialogoPosX = 169,
 							*DialogoPosY = 30,
