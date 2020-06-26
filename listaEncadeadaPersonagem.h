@@ -20,7 +20,7 @@ Consumivel* lista_consumiveis_busca(Consumivel* li, int tipo);
 // Exclusão
 Personagens* lista_retira(Personagens* li, int tipo_item);
 Item* lista_itens_retira(Item* li, int tipo_item);
-Consumivel* lista_consumiveis_retira(Consumivel* li, int tipo){
+Consumivel* lista_consumiveis_retira(Consumivel* li, int tipo);
 
 // Inserção
 Consumivel* lista_consumiveis_insere(Consumivel* li, Consumivel *item);
