@@ -185,6 +185,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 		*ArrayMobPosY = NULL;
 	
 	ListaDosTurnosS *ListaDosTurnos = NULL;
+	ListaDosTurnosS ListaDosTurnosTemp;
 	int ListaDosTurnosTamanho = 0;
 	
 	char *Texto = NULL,
@@ -385,7 +386,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 					}
 					
 					putimage(353, 337 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
-					putimage(353, 337 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);	
+					putimage(353, 337 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
 				}
 			}
 			
@@ -493,6 +494,20 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 				turnoDosMonstros = false;
 				Turno = 0;
 				atacando = true;
+				
+				//Ordenar a lista
+				for(i=0; i < ListaDosTurnosTamanho - 1; i++)
+				{
+					for(p=i+1; p < ListaDosTurnosTamanho; p++)
+					{
+						if(ListaDosTurnos[i].Vel < ListaDosTurnos[p].Vel)
+						{
+							ListaDosTurnosTemp = ListaDosTurnos[i];
+							ListaDosTurnos[i] = ListaDosTurnos[p];
+							ListaDosTurnos[p] = ListaDosTurnosTemp;
+						}
+					}
+				}
 				
 				for(i=0; i < ListaDosTurnosTamanho; i++)
 				{
