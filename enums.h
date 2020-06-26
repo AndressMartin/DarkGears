@@ -30,4 +30,7 @@ enum AcoesDeBatalha {ATAQUE};
 //Enumera as imagens dos inimigos nas batalhas
 enum ImagensInimigosBatalha {BGOLEM, BWUMPUS};
 
+//Enumera as imagens dos efeitos
+enum ImagensEfeitos {GOLPE};
+
 #endif

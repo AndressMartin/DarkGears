@@ -59,6 +59,15 @@ typedef struct item{
     struct item *ant;
 }Item; //definição da lista
 
+typedef struct consumivel{
+	int id;
+	int tipo;
+	int qtd;
+	char nome[20];
+	struct consumivel *ant;
+	struct consumivel *prox;
+}Consumivel;
+
 typedef struct personagem{
 	int id;
 	int exp;
@@ -76,14 +85,5 @@ typedef struct personagem{
     struct personagem *ant;
     struct personagem *prox;
 }Personagens; //definição da lista
-
-typedef struct consumivel{
-	int id;
-	int tipo;
-	int qtd;
-	char nome[20];
-	struct consumivel *ant;
-	struct consumivel *prox;
-}Consumivel;
 
 #endif

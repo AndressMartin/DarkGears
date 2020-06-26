@@ -174,9 +174,11 @@ int main()
 	char lily [5]  = "Lily";
 	char cueio [9] = "Chaddrit";
 	char quem [9] = "Qsou eu?";
+	char golem[] = "Golem";
+	char wumpus[] = "Wumpus";
 	
-	li = lista_insere(li, 1, lily, 10, 10, 10, 8, 5, 1, 100);
-	li = lista_insere(li, 2, cueio, 20, 6, 6, 12, 15, 5, 200);
+	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 100);
+	li = lista_insere(li, 2, cueio, 30, 6, 80, 12, 15, 5, 200);
 	li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999);
 	
 	//Equipando os itens nos personagens, é preciso passar a party, o indice do personagem da party e o item que deseja equipar
@@ -185,8 +187,11 @@ int main()
 	li = equipa_item(li, 1, &item[2]);
 	
 	//Insere inimigos na lista
-	mob = inserir_inimigo(mob, 1);
-	mob = inserir_inimigo(mob, 2);
+	mob = lista_insere(mob, 2, wumpus, 25, 19, 60, 9, 4, 2, 30);
+	mob = lista_insere(mob, 1, golem, 20, 18, 16, 6, 5, 1, 30);
+	mob = lista_insere(mob, 3, wumpus, 25, 19, 60, 9, 4, 2, 30);
+	
+	//mob = inserir_inimigo(mob, 1);
 	
 	//Variaveis da personagem no mapa
 	int PosX = 20,

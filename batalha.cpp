@@ -112,10 +112,14 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 	
 	bool turnoDosPersonagens = false,
 		 turnoDosMonstros = false,
-		 atacando = false;
+		 atacando = false,
+		 animacao = false,
+		 personagensMortos = false,
+		 monstrosMortos = false;
 	
 	int id = 0,
 		i = 0,
+		p = 0,
 		iMax = 0,
 		iMaxMob = 0,
 		iMaxMobInicial = 0,
@@ -123,22 +127,26 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 		Selecao = 0,
 		dano = 0,
 		danoCausado = 0,
-		MenuID = 0;
+		MenuID = 0,
+		controleAnimacao = 0;
 	
 	int MobPosXInicial = 0,
-		MobPosY = 31,
+		MobPosYInicial = 31,
 		MobPosXDistancia = 0;
 	
 	int *ArrayIds = NULL,
 		*ArrayIdsMob = NULL,
 		*ArrayIdsMobInicial = NULL,
-		*ArrayIdsAux = NULL;
+		*ArrayIdsAux = NULL,
+		*ArrayMobPosY = NULL;
 	
 	ListaDosTurnosS *ListaDosTurnos = NULL;
 	int ListaDosTurnosTamanho = 0;
 	
 	char *Texto = NULL,
 		 HpTexto[4] = "999";
+	
+	int PosYTexto;
 	
 	//Variável usada para percorrer a lista
 	Personagens *a;
@@ -228,13 +236,19 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			}
 			
 			if(ArrayIdsMobInicial == NULL)
-			{
+			{	
 				iMaxMobInicial = iMaxMob;
 				ArrayIdsMobInicial = (int *)realloc(ArrayIdsMobInicial, sizeof(int) * iMaxMobInicial);
+				ArrayMobPosY = (int *)realloc(ArrayMobPosY, sizeof(int) * iMaxMobInicial);
 				
 				for(i = 0; i < iMaxMobInicial; i++)
 				{
 					ArrayIdsMobInicial[i] = ArrayIdsMob[i];
+				}
+				
+				for(i = 0; i < iMaxMobInicial; i++)
+				{
+					ArrayMobPosY[i] = MobPosYInicial;
 				}
 			}
 			
@@ -269,10 +283,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			{
 				a = lista_busca(mob, ArrayIdsMobInicial[i]);
 				
-				if(a->hp > 0)
+				if(ArrayMobPosY[i] < 580)
 				{
-					putimage(MobPosXInicial + (MobPosXDistancia * i), MobPosY, Sprites_Mobs_Mascaras[a->id - 1], AND_PUT);
-					putimage(MobPosXInicial + (MobPosXDistancia * i), MobPosY, Sprites_Mobs[a->id - 1], OR_PUT);
+					putimage(MobPosXInicial + (MobPosXDistancia * i), ArrayMobPosY[i], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+					putimage(MobPosXInicial + (MobPosXDistancia * i), ArrayMobPosY[i], Sprites_Mobs[a->levels - 1], OR_PUT);
 				}
 			}
 			
@@ -339,6 +353,14 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			{
 				a = lista_busca(li, ArrayIds[Turno]);
 				
+				/*
+				printf("\n\nTurno: %d\n", Turno);
+				for(i=0; i < iMax; i++)
+				{
+					printf("%d, ", ArrayIds[i]);
+				}
+				*/
+				
 				if(a->hp > 0)
 				{
 					if(MenuID == 0)
@@ -391,6 +413,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 				}
 				else
 				{
+					printf("\n\n%d", a->hp);
+					
 					Turno ++;
 				}
 				
@@ -453,35 +477,173 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 							// Verifica se o HP do inimigo já foi zerado e escolhe um novo alvo da lista
 							if(a->hp <= 0)
 							{
-								for(i = 0; i < iMaxMob; i++)
+								ListaDosTurnos[i].IndiceRecebedor = -1;
+								
+								for(p = 0; p < iMaxMob; p++)
 								{
-									// TODO: percorrer ids de personagens disponiveis
+									a = lista_busca(mob, ArrayIdsMob[p]);
+									
+									if(a->hp > 0)
+									{
+										ListaDosTurnos[i].IndiceRecebedor = ArrayIdsMob[p];
+										
+										break;
+									}
+									printf("p: %d", p);
 								}
 							}
 							
-							dano = calcular_dano(li, ListaDosTurnos[i].IndiceAtacante);
+							if(ListaDosTurnos[i].IndiceRecebedor != -1)
+							{
+								dano = calcular_dano(li, ListaDosTurnos[i].IndiceAtacante);
 							
-							if(dano <= 0)
-							{
-								a = lista_busca(li, ListaDosTurnos[i].IndiceAtacante);
-								printf("\n%s errou o ataque!\n", &a->nome);
-							}
-							else
-							{
 								danoCausado = a->hp;
 								
 								mob = aplicar_dano(mob, ListaDosTurnos[i].IndiceRecebedor, dano);
 								
 								danoCausado -= a->hp;
 								
-								if(a->hp <= 0)
+								animacao = true;
+								controleAnimacao = 0;
+							}
+							
+							while(animacao == true)
+							{
+								Gt2 = GetTickCount();
+								if(Gt2 < Gt1)
 								{
-									printf("\n%s sofre um dano fatal\n", &a->nome);
+									Gt1 = Gt2;
 								}
-								else
+								if (Gt2 - Gt1 > 1000/FPS)
 								{
-									printf("\n%s sofre %d de dano\n", &a->nome, &danoCausado);
-								}	
+									Gt1 = Gt2;
+									
+									//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
+									if(PG == 1)
+									{
+										PG = 2;
+									}
+									else
+									{
+										PG = 1;
+									}
+									setactivepage(PG);
+									
+									//Desenhos
+									
+									//Fundo e cenario
+									setbkcolor(RGB(255, 255, 255));
+									cleardevice();
+									
+									for(p = 0; p < iMaxMobInicial; p++)
+									{
+										a = lista_busca(mob, ArrayIdsMobInicial[p]);
+										
+										if(ArrayMobPosY[p] < 580)
+										{
+											if(ArrayIdsMobInicial[p] != ListaDosTurnos[i].IndiceRecebedor)
+											{
+												putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+												putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+											}
+											else
+											{
+												if(controleAnimacao < 30)
+												{
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+												}
+												else if(controleAnimacao < 35)
+												{
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 10, ArrayMobPosY[p] + 30, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 10, ArrayMobPosY[p] + 30, Sprites_Efeitos[GOLPE], OR_PUT);
+												}
+												else if(controleAnimacao < 40)
+												{
+													putimage(MobPosXInicial + (MobPosXDistancia * p) - 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p) - 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 30, ArrayMobPosY[p] + 10, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 30, ArrayMobPosY[p] + 10, Sprites_Efeitos[GOLPE], OR_PUT);
+												}
+												else if(controleAnimacao < 45)
+												{
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 20, ArrayMobPosY[p] + 40, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p) + 20, ArrayMobPosY[p] + 40, Sprites_Efeitos[GOLPE], OR_PUT);
+												}
+												else if (controleAnimacao < 46)
+												{
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													
+													PosYTexto = ArrayMobPosY[p] + 20;
+													
+													Texto = (char *)realloc(Texto, sizeof(char) * 15);
+													
+													if(dano <= 0)
+													{
+														strcpy(Texto, "Errou");
+													}
+													else
+													{
+														itoa(danoCausado, Texto, 10);
+													}
+												}
+												else if(controleAnimacao < 60)
+												{
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													
+													
+													settextstyle(1, 0, 2);
+													setbkcolor(RGB(255, 255, 255));
+													setcolor(RGB(0, 0, 0));
+													setlinestyle(0, 0, 1);
+													
+													outtextxy(MobPosXInicial + (MobPosXDistancia * p) + 80, ArrayMobPosY[p] + PosYTexto, Texto);
+													
+													if(PosYTexto > ArrayMobPosY[p] - 10)
+													{
+														PosYTexto --;
+													}
+												}
+												else
+												{
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													
+													if(a->hp > 0)
+													{
+														animacao = false;
+													}
+													else
+													{
+														ArrayMobPosY[p] += 20;
+														if(ArrayMobPosY[p] > 580)
+														{
+															animacao = false;
+														}
+													}
+												}
+											}
+										}
+									}
+									
+									//Menu
+									desenhaMenu(li, ArrayIds, iMax, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+									
+									//Controle
+									controleAnimacao ++;
+									
+									//Torna visivel a pagina de desenho.
+									setvisualpage(PG);
+								}
 							}
 						}
 						else // Se for ataque do mob
@@ -530,19 +692,37 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 				ListaDosTurnosTamanho = 0;
 				turnoDosPersonagens = true;
 				
-				batalhaFinalizada = true;
+				monstrosMortos = true;
 				for(i = 0; i < iMaxMob; i++)
 				{
 					a = lista_busca(mob, ArrayIdsMob[i]);
+					printf("\n");
+					printf("HP: %d, ", a->hp);
 					
 					if(a->hp > 0)
 					{
-						batalhaFinalizada = false;
+						monstrosMortos = false;
 					}
-				}	
+				}
+				
+				personagensMortos = true;
+				for(i = 0; i < iMax; i++)
+				{
+					a = lista_busca(li, ArrayIds[i]);
+					printf("\n");
+					printf("HP: %d, ", a->hp);
+					
+					if(a->hp > 0)
+					{
+						personagensMortos = false;
+					}
+				}
 			}
 			
-			
+			if(personagensMortos == true || monstrosMortos == true)
+			{
+				batalhaFinalizada = true;
+			}
 			
 			//Variavel Tecla
 			Tecla = 0;

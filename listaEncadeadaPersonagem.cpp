@@ -280,11 +280,11 @@ int calcular_dano(Personagens* li, int id)
 		}
 	}
 	
-	if(randNum > aux.prec) // Caso tire um numero maior que a precisao, erra o golpe
+	if(randNum > aux->prec) // Caso tire um numero maior que a precisao, erra o golpe
 	{
 		dano = 0;
 	}
-	else if(randNum == aux.prec) // Dano critico caso acerte o max de precisao do personagem
+	else if(randNum == aux->prec) // Dano critico caso acerte o max de precisao do personagem
 	{
 		dano = dano * 2;
 	}
