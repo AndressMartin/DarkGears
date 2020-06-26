@@ -48,12 +48,48 @@ void retratoDeBatalha(int PosX, char *Texto, int Tipo, int i, void* Sprites_Retr
 				putimage(PosX, 337 + (73 * i), Sprites_Retratos[2], OR_PUT);
 				break;	
 			}
+			if(Tipo == RETRATOBATALHAATACANDO)
+			{
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[3], AND_PUT);
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos[3], OR_PUT);
+				break;	
+			}
+			if(Tipo == RETRATOBATALHADANO)
+			{
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[4], AND_PUT);
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos[4], OR_PUT);
+				break;	
+			}
+			if(Tipo == RETRATOBATALHANOCAUTEADO)
+			{
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[5], AND_PUT);
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos[5], OR_PUT);
+				break;
+			}
 		
 		case RBCHADDRIT:
 			if(Tipo == RETRATOBATALHANORMAL)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[3], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[3], OR_PUT);
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[6], AND_PUT);
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos[6], OR_PUT);
+				break;	
+			}
+			if(Tipo == RETRATOBATALHAATACANDO)
+			{
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[7], AND_PUT);
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos[7], OR_PUT);
+				break;	
+			}
+			if(Tipo == RETRATOBATALHADANO)
+			{
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[8], AND_PUT);
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos[8], OR_PUT);
+				break;	
+			}
+			if(Tipo == RETRATOBATALHANOCAUTEADO)
+			{
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[9], AND_PUT);
+				putimage(PosX, 337 + (73 * i), Sprites_Retratos[9], OR_PUT);
 				break;	
 			}
 		
@@ -86,7 +122,14 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 		Texto = (char *)realloc(Texto, sizeof(char) * 10);
 		strcpy(Texto, a->nome);
 		
-		retratoDeBatalha(537, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+		if(a->hp > 0)
+		{
+			retratoDeBatalha(537, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+		}
+		else
+		{
+			retratoDeBatalha(537, Texto, RETRATOBATALHANOCAUTEADO, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+		}
 		
 		outtextxy(622 + 10, 337 + (73 * i) + 28, Texto);
 		
@@ -120,6 +163,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 	int id = 0,
 		i = 0,
 		p = 0,
+		q = 0,
 		iMax = 0,
 		iMaxMob = 0,
 		iMaxMobInicial = 0,
@@ -144,6 +188,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 	int ListaDosTurnosTamanho = 0;
 	
 	char *Texto = NULL,
+		 *Texto2 = NULL,
 		 HpTexto[4] = "999";
 	
 	int PosYTexto;
@@ -352,7 +397,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			if(turnoDosPersonagens == true)
 			{
 				a = lista_busca(li, ArrayIds[Turno]);
-				
 				/*
 				printf("\n\nTurno: %d\n", Turno);
 				for(i=0; i < iMax; i++)
@@ -467,236 +511,486 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 					dano = 0;
 					danoCausado = 0;
 					
-					// Calculo precisao
-					if(ListaDosTurnos[i].Acao == ATAQUE) // Se for ataque
+					if(ListaDosTurnos[i].Tipo == PERSONAGEM)
 					{
-						if(ListaDosTurnos[i].Tipo == PERSONAGEM)
+						a = lista_busca(li, ListaDosTurnos[i].IndiceAtacante);
+					}
+					else
+					{
+						a = lista_busca(mob, ListaDosTurnos[i].IndiceAtacante);
+					}
+					
+					if(a->hp > 0)
+					{
+						if(ListaDosTurnos[i].Acao == ATAQUE) // Se for ataque
 						{
-							a = lista_busca(mob, ListaDosTurnos[i].IndiceRecebedor);
-							
-							// Verifica se o HP do inimigo já foi zerado e escolhe um novo alvo da lista
-							if(a->hp <= 0)
+							if(ListaDosTurnos[i].Tipo == PERSONAGEM)
 							{
-								ListaDosTurnos[i].IndiceRecebedor = -1;
+								a = lista_busca(mob, ListaDosTurnos[i].IndiceRecebedor);
 								
-								for(p = 0; p < iMaxMob; p++)
+								// Verifica se o HP do inimigo já foi zerado e escolhe um novo alvo da lista
+								if(a->hp <= 0)
 								{
-									a = lista_busca(mob, ArrayIdsMob[p]);
+									ListaDosTurnos[i].IndiceRecebedor = -1;
 									
-									if(a->hp > 0)
+									for(p = 0; p < iMaxMob; p++)
 									{
-										ListaDosTurnos[i].IndiceRecebedor = ArrayIdsMob[p];
+										a = lista_busca(mob, ArrayIdsMob[p]);
 										
-										break;
-									}
-									printf("p: %d", p);
-								}
-							}
-							
-							if(ListaDosTurnos[i].IndiceRecebedor != -1)
-							{
-								dano = calcular_dano(li, ListaDosTurnos[i].IndiceAtacante);
-							
-								danoCausado = a->hp;
-								
-								mob = aplicar_dano(mob, ListaDosTurnos[i].IndiceRecebedor, dano);
-								
-								danoCausado -= a->hp;
-								
-								animacao = true;
-								controleAnimacao = 0;
-							}
-							
-							while(animacao == true)
-							{
-								Gt2 = GetTickCount();
-								if(Gt2 < Gt1)
-								{
-									Gt1 = Gt2;
-								}
-								if (Gt2 - Gt1 > 1000/FPS)
-								{
-									Gt1 = Gt2;
-									
-									//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
-									if(PG == 1)
-									{
-										PG = 2;
-									}
-									else
-									{
-										PG = 1;
-									}
-									setactivepage(PG);
-									
-									//Desenhos
-									
-									//Fundo e cenario
-									setbkcolor(RGB(255, 255, 255));
-									cleardevice();
-									
-									for(p = 0; p < iMaxMobInicial; p++)
-									{
-										a = lista_busca(mob, ArrayIdsMobInicial[p]);
-										
-										if(ArrayMobPosY[p] < 580)
+										if(a->hp > 0)
 										{
-											if(ArrayIdsMobInicial[p] != ListaDosTurnos[i].IndiceRecebedor)
+											ListaDosTurnos[i].IndiceRecebedor = ArrayIdsMob[p];
+											
+											break;
+										}
+									}
+								}
+								
+								if(ListaDosTurnos[i].IndiceRecebedor != -1)
+								{
+									dano = calcular_dano(li, ListaDosTurnos[i].IndiceAtacante);
+								
+									danoCausado = a->hp;
+									
+									if(dano > 0)
+									{
+										mob = aplicar_dano(mob, ListaDosTurnos[i].IndiceRecebedor, dano);
+									}
+									
+									danoCausado -= a->hp;
+									
+									animacao = true;
+									controleAnimacao = 0;
+								}
+								
+								while(animacao == true)
+								{
+									Gt2 = GetTickCount();
+									if(Gt2 < Gt1)
+									{
+										Gt1 = Gt2;
+									}
+									if (Gt2 - Gt1 > 1000/FPS)
+									{
+										Gt1 = Gt2;
+										
+										//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
+										if(PG == 1)
+										{
+											PG = 2;
+										}
+										else
+										{
+											PG = 1;
+										}
+										setactivepage(PG);
+										
+										//Desenhos
+										
+										//Fundo e cenario
+										setbkcolor(RGB(255, 255, 255));
+										cleardevice();
+										
+										for(p = 0; p < iMaxMobInicial; p++)
+										{
+											a = lista_busca(mob, ArrayIdsMobInicial[p]);
+											
+											if(ArrayMobPosY[p] < 580)
 											{
-												putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
-												putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
-											}
-											else
-											{
-												if(controleAnimacao < 30)
+												if(ArrayIdsMobInicial[p] != ListaDosTurnos[i].IndiceRecebedor)
 												{
 													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
 													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
-												}
-												else if(controleAnimacao < 35)
-												{
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
-													
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 10, ArrayMobPosY[p] + 30, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 10, ArrayMobPosY[p] + 30, Sprites_Efeitos[GOLPE], OR_PUT);
-												}
-												else if(controleAnimacao < 40)
-												{
-													putimage(MobPosXInicial + (MobPosXDistancia * p) - 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p) - 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
-													
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 30, ArrayMobPosY[p] + 10, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 30, ArrayMobPosY[p] + 10, Sprites_Efeitos[GOLPE], OR_PUT);
-												}
-												else if(controleAnimacao < 45)
-												{
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
-													
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 20, ArrayMobPosY[p] + 40, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p) + 20, ArrayMobPosY[p] + 40, Sprites_Efeitos[GOLPE], OR_PUT);
-												}
-												else if (controleAnimacao < 46)
-												{
-													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
-													
-													PosYTexto = ArrayMobPosY[p] + 20;
-													
-													Texto = (char *)realloc(Texto, sizeof(char) * 15);
-													
-													if(dano <= 0)
-													{
-														strcpy(Texto, "Errou");
-													}
-													else
-													{
-														itoa(danoCausado, Texto, 10);
-													}
-												}
-												else if(controleAnimacao < 60)
-												{
-													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
-													
-													
-													settextstyle(1, 0, 2);
-													setbkcolor(RGB(255, 255, 255));
-													setcolor(RGB(0, 0, 0));
-													setlinestyle(0, 0, 1);
-													
-													outtextxy(MobPosXInicial + (MobPosXDistancia * p) + 80, ArrayMobPosY[p] + PosYTexto, Texto);
-													
-													if(PosYTexto > ArrayMobPosY[p] - 10)
-													{
-														PosYTexto --;
-													}
 												}
 												else
 												{
-													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
-													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
-													
-													if(a->hp > 0)
+													if(controleAnimacao < 30)
 													{
-														animacao = false;
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													}
+													else if(controleAnimacao < 35)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+														
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 10, ArrayMobPosY[p] + 30, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 10, ArrayMobPosY[p] + 30, Sprites_Efeitos[GOLPE], OR_PUT);
+													}
+													else if(controleAnimacao < 40)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p) - 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p) - 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+														
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 30, ArrayMobPosY[p] + 10, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 30, ArrayMobPosY[p] + 10, Sprites_Efeitos[GOLPE], OR_PUT);
+													}
+													else if(controleAnimacao < 45)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+														
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 20, ArrayMobPosY[p] + 40, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p) + 20, ArrayMobPosY[p] + 40, Sprites_Efeitos[GOLPE], OR_PUT);
+													}
+													else if (controleAnimacao < 46)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+														
+														PosYTexto = ArrayMobPosY[p] + 20;
+														
+														Texto = (char *)realloc(Texto, sizeof(char) * 15);
+														
+														if(dano <= 0)
+														{
+															strcpy(Texto, "Errou");
+														}
+														else
+														{
+															itoa(danoCausado, Texto, 10);
+														}
+													}
+													else if(controleAnimacao < 60)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+														
+														
+														settextstyle(1, 0, 2);
+														setbkcolor(RGB(255, 255, 255));
+														setcolor(RGB(0, 0, 0));
+														setlinestyle(0, 0, 1);
+														
+														outtextxy(MobPosXInicial + (MobPosXDistancia * p) + 80, PosYTexto, Texto);
+														
+														if(PosYTexto > ArrayMobPosY[p] - 10)
+														{
+															PosYTexto --;
+														}
 													}
 													else
 													{
-														ArrayMobPosY[p] += 20;
-														if(ArrayMobPosY[p] > 580)
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+														
+														if(a->hp > 0)
 														{
 															animacao = false;
+														}
+														else
+														{
+															ArrayMobPosY[p] += 20;
+															if(ArrayMobPosY[p] > 580)
+															{
+																animacao = false;
+															}
 														}
 													}
 												}
 											}
 										}
+										
+										//Menu
+										desenhaMenu(li, ArrayIds, iMax, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+										
+										if(controleAnimacao >= 30)
+										{
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceAtacante)
+												{
+													a = lista_busca(li, ListaDosTurnos[i].IndiceAtacante);
+													
+													Texto2 = (char *)realloc(Texto2, sizeof(char) * 10);
+													strcpy(Texto2, a->nome);
+													
+													retratoDeBatalha(537, Texto2, RETRATOBATALHAATACANDO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
+												}
+											}
+										}
+										
+										//Controle
+										controleAnimacao ++;
+										
+										//Torna visivel a pagina de desenho.
+										setvisualpage(PG);
+										
+										//Variavel Tecla
+										fflush(stdin); //Aparentemente limpa algum endereco de memoria.
+										Tecla = 0;
+										if(kbhit())
+										{
+											Tecla = getch();
+											//printf("%d", Tecla);
+										}
 									}
-									
-									//Menu
-									desenhaMenu(li, ArrayIds, iMax, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
-									
-									//Controle
-									controleAnimacao ++;
-									
-									//Torna visivel a pagina de desenho.
-									setvisualpage(PG);
 								}
 							}
-						}
-						else // Se for ataque do mob
-						{
-							a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
-							
-							// Verifica se o HP do inimigo já foi zerado e escolhe um novo alvo da lista
-							if(a->hp <= 0)
+							else // Se for ataque do mob
 							{
-								// TODO: percorrer ids de personagens disponiveis
-							}
-							
-							dano = calcular_dano(mob, ListaDosTurnos[i].IndiceAtacante);
-							
-							if(dano <= 0)
-							{
-								a = lista_busca(mob, ListaDosTurnos[i].IndiceAtacante);
-								printf("\n%s errou o ataque!\n", &a->nome);
-							}
-							else
-							{
-								danoCausado = a->hp;
+								a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
 								
-								li = aplicar_dano(li, ListaDosTurnos[i].IndiceRecebedor, dano);	
-								
-								danoCausado -= a->hp;
-								
+								// Verifica se o HP do inimigo já foi zerado e escolhe um novo alvo da lista
 								if(a->hp <= 0)
 								{
-									printf("\n%s sofre um dano fatal\n", &a->nome);
+									ListaDosTurnos[i].IndiceRecebedor = -1;
+									
+									for(p = 0; p < iMax; p++)
+									{
+										a = lista_busca(li, ArrayIds[p]);
+										
+										if(a->hp > 0)
+										{
+											ListaDosTurnos[i].IndiceRecebedor = ArrayIds[p];
+											
+											break;
+										}
+									}
 								}
-								else
+								
+								if(ListaDosTurnos[i].IndiceRecebedor != -1)
 								{
-									printf("\n%s sofre %d de dano\n", &a->nome, danoCausado);
+									dano = calcular_dano(mob, ListaDosTurnos[i].IndiceAtacante);
+									
+									animacao = true;
+									controleAnimacao = 0;
+								}
+								
+								while(animacao == true)
+								{
+									Gt2 = GetTickCount();
+									if(Gt2 < Gt1)
+									{
+										Gt1 = Gt2;
+									}
+									if (Gt2 - Gt1 > 1000/FPS)
+									{
+										Gt1 = Gt2;
+										
+										//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
+										if(PG == 1)
+										{
+											PG = 2;
+										}
+										else
+										{
+											PG = 1;
+										}
+										setactivepage(PG);
+										
+										//Desenhos
+										
+										//Fundo e cenario
+										setbkcolor(RGB(255, 255, 255));
+										cleardevice();
+										
+										for(p = 0; p < iMaxMobInicial; p++)
+										{
+											a = lista_busca(mob, ArrayIdsMobInicial[p]);
+											
+											if(ArrayMobPosY[p] < 580)
+											{
+												if(ArrayIdsMobInicial[p] != ListaDosTurnos[i].IndiceAtacante)
+												{
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+													putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+												}
+												else
+												{
+													if(controleAnimacao < 30)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													}
+													else if(controleAnimacao < 35)
+													{
+														if(controleAnimacao < 31)
+														{
+															a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
+															
+															danoCausado = a->hp;
+															
+															if(dano > 0)
+															{
+																li = aplicar_dano(li, ListaDosTurnos[i].IndiceRecebedor, dano);
+															}
+															danoCausado -= a->hp;
+															
+															a = lista_busca(mob, ArrayIdsMobInicial[p]);
+														}
+														
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p] - 5, Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p] - 5, Sprites_Mobs[a->levels - 1], OR_PUT);
+													}
+													else if(controleAnimacao < 40)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p] - 5, Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p] - 5, Sprites_Mobs[a->levels - 1], OR_PUT);
+													}
+													else if(controleAnimacao < 45)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p] - 5, Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p] - 5, Sprites_Mobs[a->levels - 1], OR_PUT);
+													}
+													else if (controleAnimacao < 46)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													}
+													else if(controleAnimacao < 60)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													}
+													else
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+														
+														animacao = false;
+													}
+												}
+											}
+										}
+										
+										//Menu
+										desenhaMenu(li, ArrayIds, iMax, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+										
+										if(controleAnimacao < 30)
+										{
+											//Nada.
+										}
+										else if(controleAnimacao < 35)
+										{
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
+													
+													Texto = (char *)realloc(Texto, sizeof(char) * 10);
+													strcpy(Texto, a->nome);
+													
+													retratoDeBatalha(537, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
+													
+													putimage(790 - 15, 337 + (73 * q) - 30, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+													putimage(790 - 15, 337 + (73 * q) - 30, Sprites_Efeitos[GOLPE], OR_PUT);
+												}
+											}
+										}
+										else if(controleAnimacao < 40)
+										{										
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
+													
+													Texto = (char *)realloc(Texto, sizeof(char) * 10);
+													strcpy(Texto, a->nome);
+													
+													retratoDeBatalha(537, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
+													
+													putimage(790 + 10, 337 + (73 * q) - 15, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+													putimage(790 + 10, 337 + (73 * q) - 15, Sprites_Efeitos[GOLPE], OR_PUT);
+												}
+											}
+										}
+										else if(controleAnimacao < 45)
+										{	
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
+													
+													Texto = (char *)realloc(Texto, sizeof(char) * 10);
+													strcpy(Texto, a->nome);
+													
+													retratoDeBatalha(537, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
+													
+													putimage(790, 337 + (73 * q) - 25, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
+													putimage(790, 337 + (73 * q) - 25, Sprites_Efeitos[GOLPE], OR_PUT);
+												}
+											}
+										}
+										else if (controleAnimacao < 46)
+										{	
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													PosYTexto = 337 + (73 * q) + 10;
+												}
+											}
+											
+											Texto = (char *)realloc(Texto, sizeof(char) * 15);
+											
+											if(dano <= 0)
+											{
+												strcpy(Texto, "Errou");
+											}
+											else
+											{
+												itoa(danoCausado, Texto, 10);
+											}
+										}
+										else if(controleAnimacao < 60)
+										{
+											settextstyle(1, 0, 2);
+											setbkcolor(RGB(255, 255, 255));
+											setcolor(RGB(0, 0, 0));
+											setlinestyle(0, 0, 1);
+											
+											outtextxy(754 + 65, PosYTexto, Texto);
+											
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													if(PosYTexto > 337 + (73 * q) - 10)
+													{
+														PosYTexto --;
+													}
+												}
+											}
+										}
+										
+										//Controle
+										controleAnimacao ++;
+										
+										//Torna visivel a pagina de desenho.
+										setvisualpage(PG);
+										
+										//Variavel Tecla
+										fflush(stdin); //Aparentemente limpa algum endereco de memoria.
+										Tecla = 0;
+										if(kbhit())
+										{
+											Tecla = getch();
+											//printf("%d", Tecla);
+										}
+									}
 								}
 							}
 						}
 					}		
 				}
 				
-				detalhaStatus(li);
-				detalhaStatus(mob);
+				//detalhaStatus(li);
+				//detalhaStatus(mob);
 				
 				atacando = false;
 				Turno = 0;
 				ListaDosTurnosTamanho = 0;
 				turnoDosPersonagens = true;
 				
+				printf("\n\n");
 				monstrosMortos = true;
 				for(i = 0; i < iMaxMob; i++)
 				{
 					a = lista_busca(mob, ArrayIdsMob[i]);
-					printf("\n");
 					printf("HP: %d, ", a->hp);
 					
 					if(a->hp > 0)
@@ -705,11 +999,11 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 					}
 				}
 				
+				printf("\n");
 				personagensMortos = true;
 				for(i = 0; i < iMax; i++)
 				{
 					a = lista_busca(li, ArrayIds[i]);
-					printf("\n");
 					printf("HP: %d, ", a->hp);
 					
 					if(a->hp > 0)
@@ -725,6 +1019,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			}
 			
 			//Variavel Tecla
+			fflush(stdin); //Aparentemente limpa algum endereco de memoria.
 			Tecla = 0;
 			if(kbhit())
 			{

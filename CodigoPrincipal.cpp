@@ -46,7 +46,7 @@ const int Sprites_BausQ = 2;
 void* Sprites_Baus[Sprites_BausQ];
 void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
-const int Sprites_RetratosQ = 4;
+const int Sprites_RetratosQ = 10;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
@@ -77,10 +77,16 @@ char Cenario_Objetos_Nomes[Cenario_ObjetosQ][38] = {"Sprites/ObjetoC_Teste_01-1"
 													"Sprites/Cenarios/ObjetoC_Teste_02-1#1",
 													"Sprites/Cenarios/ObjetoC_Teste_02-1#2"};
 
-char Sprites_Retratos_Nomes[Sprites_RetratosQ][34] = {"Sprites/Retratos/lily",
+char Sprites_Retratos_Nomes[Sprites_RetratosQ][46] = {"Sprites/Retratos/lily",
 									 				  "Sprites/Retratos/morcego",
 													  "Sprites/Retratos/lily_batalha",
-													  "Sprites/Retratos/chaddrit_batalha"};
+													  "Sprites/Retratos/lily_batalha_atacando",
+													  "Sprites/Retratos/lily_batalha_levandoDano",
+													  "Sprites/Retratos/lily_batalha_semHP",
+													  "Sprites/Retratos/chaddrit_batalha",
+													  "Sprites/Retratos/chaddrit_batalha_atacando",
+													  "Sprites/Retratos/chaddrit_batalha_levandoDano",
+													  "Sprites/Retratos/chaddrit_batalha_semHP"};
 									 				
 char Sprites_HUD_Nomes[Sprites_HUDQ][29] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_1",
@@ -116,6 +122,12 @@ int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
 
 int Sprites_Retratos_Tamanhos[Sprites_RetratosQ][2] = {{180, 220},
 											   		   {180, 220},
+													   {85, 74},
+													   {85, 74},
+													   {85, 74},
+													   {85, 74},
+													   {85, 74},
+													   {85, 74},
 													   {85, 74},
 													   {85, 74}};
 
@@ -187,9 +199,9 @@ int main()
 	li = equipa_item(li, 1, &item[2]);
 	
 	//Insere inimigos na lista
-	mob = lista_insere(mob, 2, wumpus, 25, 19, 60, 9, 4, 2, 30);
-	mob = lista_insere(mob, 1, golem, 20, 18, 16, 6, 5, 1, 30);
-	mob = lista_insere(mob, 3, wumpus, 25, 19, 60, 9, 4, 2, 30);
+	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 300);
+	mob = lista_insere(mob, 1, golem, 20, 18, 50, 6, 5, 1, 300);
+	mob = lista_insere(mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 300);
 	
 	//mob = inserir_inimigo(mob, 1);
 	
