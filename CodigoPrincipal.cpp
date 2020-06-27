@@ -50,7 +50,7 @@ const int Sprites_RetratosQ = 10;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
-const int Sprites_HUDQ = 5;
+const int Sprites_HUDQ = 7;
 void* Sprites_HUD[Sprites_HUDQ];
 void* Sprites_HUD_Mascaras[Sprites_HUDQ];
 
@@ -88,11 +88,13 @@ char Sprites_Retratos_Nomes[Sprites_RetratosQ][46] = {"Sprites/Retratos/lily",
 													  "Sprites/Retratos/chaddrit_batalha_levandoDano",
 													  "Sprites/Retratos/chaddrit_batalha_semHP"};
 									 				
-char Sprites_HUD_Nomes[Sprites_HUDQ][29] = {"Sprites/HUD/caixa_de_texto",
+char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_1",
 											"Sprites/HUD/menuDeBatalha_2",
 											"Sprites/HUD/menuDeBatalha_3",
-											"Sprites/HUD/selecao_monstros"};
+											"Sprites/HUD/selecao_monstros",
+											"Sprites/HUD/menuDeBatalha_resultados",
+											"Sprites/HUD/menuDeBatalha_resultados2"};
 											
 char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
 											  "Sprites/Mobs/wumpus"};
@@ -135,7 +137,9 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 											 {970, 220},
 											 {460, 74},
 											 {326, 74},
-											 {85, 74}};
+											 {85, 74},
+											 {625, 295},
+											 {625, 74}};
 											 
 int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
 											   {275, 275}};
@@ -1148,8 +1152,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					    	int *BausTemp;
 					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
 					    	
-					    	AdicionarItem = true;
-					    	AdicionarItemIndice = BausCopia[InteracaoN];
+					    	*AdicionarItem = true;
+					    	*AdicionarItemIndice = BausCopia[InteracaoN];
 					    	BausCopia[InteracaoN] = NADA;
 					    	
 					    	for(int i=0; i < NumeroDeBaus; i++)
@@ -1186,8 +1190,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					    	int *BausTemp;
 					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
 					    	
-					    	AdicionarItem = true;
-					    	AdicionarItemIndice = BausCopia[InteracaoN];
+					    	*AdicionarItem = true;
+					    	*AdicionarItemIndice = BausCopia[InteracaoN];
 					    	BausCopia[InteracaoN] = NADA;
 					    	
 					    	for(int i=0; i < NumeroDeBaus; i++)

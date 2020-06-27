@@ -22,7 +22,7 @@
 
 #define ESC     27
 
-void retratoDeBatalha(int PosX, char *Texto, int Tipo, int i, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[])
+void retratoDeBatalha(int PosX, int PosY, char *Texto, int Tipo, int i, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[])
 {
 	int Imagem = 0;
 	
@@ -44,52 +44,52 @@ void retratoDeBatalha(int PosX, char *Texto, int Tipo, int i, void* Sprites_Retr
 		case RBLILY:
 			if(Tipo == RETRATOBATALHANORMAL)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[2], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[2], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[2], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[2], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHAATACANDO)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[3], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[3], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[3], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[3], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHADANO)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[4], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[4], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[4], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[4], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHANOCAUTEADO)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[5], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[5], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[5], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[5], OR_PUT);
 				break;
 			}
 		
 		case RBCHADDRIT:
 			if(Tipo == RETRATOBATALHANORMAL)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[6], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[6], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[6], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[6], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHAATACANDO)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[7], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[7], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[7], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[7], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHADANO)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[8], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[8], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[8], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[8], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHANOCAUTEADO)
 			{
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos_Mascaras[9], AND_PUT);
-				putimage(PosX, 337 + (73 * i), Sprites_Retratos[9], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[9], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[9], OR_PUT);
 				break;	
 			}
 		
@@ -124,14 +124,14 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 		
 		if(a->hp > 0)
 		{
-			retratoDeBatalha(537, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+			retratoDeBatalha(537, 337, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
 		}
 		else
 		{
-			retratoDeBatalha(537, Texto, RETRATOBATALHANOCAUTEADO, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+			retratoDeBatalha(537, 337, Texto, RETRATOBATALHANOCAUTEADO, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
 		}
 		
-		outtextxy(622 + 10, 337 + (73 * i) + 28, Texto);
+		outtextxy(622 + 10, 337 + (73 * i) + 30, Texto);
 		
 		Texto = (char *)realloc(Texto, sizeof(char) * 20);
 		strcpy(Texto, "HP: ");
@@ -143,7 +143,7 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 		itoa(a->hpmax, HpTexto, 10);
 		strcat(Texto, HpTexto);
 		
-		outtextxy(754 + 10, 337 + (73 * i) + 28, Texto);
+		outtextxy(754 + 10, 337 + (73 * i) + 30, Texto);
 	}
 }
 
@@ -151,7 +151,9 @@ Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Ret
 {	
 	srand(time(0));
 	
-	bool batalhaFinalizada = false;
+	bool batalhaFinalizada = false,
+		 resultados = true,
+		 gameOver = false;
 	
 	bool turnoDosPersonagens = false,
 		 turnoDosMonstros = false,
@@ -381,9 +383,9 @@ Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Ret
 						Texto = (char *)realloc(Texto, sizeof(char) * 10);
 						strcpy(Texto, a->nome);
 						
-						retratoDeBatalha(27, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+						retratoDeBatalha(27, 337, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
 						
-						outtextxy(112 + 10, 337 + (73 * i) + 28, Texto);
+						outtextxy(112 + 10, 337 + (73 * i) + 30, Texto);
 					}
 					
 					putimage(353, 337 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
@@ -722,7 +724,7 @@ Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Ret
 													Texto2 = (char *)realloc(Texto2, sizeof(char) * 10);
 													strcpy(Texto2, a->nome);
 													
-													retratoDeBatalha(537, Texto2, RETRATOBATALHAATACANDO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
+													retratoDeBatalha(537, 337, Texto2, RETRATOBATALHAATACANDO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
 												}
 											}
 										}
@@ -889,7 +891,7 @@ Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Ret
 													Texto = (char *)realloc(Texto, sizeof(char) * 10);
 													strcpy(Texto, a->nome);
 													
-													retratoDeBatalha(537, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
+													retratoDeBatalha(537, 337, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
 													
 													putimage(790 - 15, 337 + (73 * q) - 30, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
 													putimage(790 - 15, 337 + (73 * q) - 30, Sprites_Efeitos[GOLPE], OR_PUT);
@@ -907,7 +909,7 @@ Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Ret
 													Texto = (char *)realloc(Texto, sizeof(char) * 10);
 													strcpy(Texto, a->nome);
 													
-													retratoDeBatalha(537, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
+													retratoDeBatalha(537, 337, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
 													
 													putimage(790 + 10, 337 + (73 * q) - 15, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
 													putimage(790 + 10, 337 + (73 * q) - 15, Sprites_Efeitos[GOLPE], OR_PUT);
@@ -925,7 +927,7 @@ Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Ret
 													Texto = (char *)realloc(Texto, sizeof(char) * 10);
 													strcpy(Texto, a->nome);
 													
-													retratoDeBatalha(537, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
+													retratoDeBatalha(537, 337, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
 													
 													putimage(790, 337 + (73 * q) - 25, Sprites_Efeitos_Mascaras[GOLPE], AND_PUT);
 													putimage(790, 337 + (73 * q) - 25, Sprites_Efeitos[GOLPE], OR_PUT);
@@ -1057,6 +1059,173 @@ Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Ret
 	if(personagensMortos == false)
 	{
 		li = aplicar_experiencia(li, qtd_exp);
+	}
+	else
+	{
+		gameOver = true;
+	}
+	
+	while(resultados == true && Tecla != ESC)
+	{	
+		Gt2 = GetTickCount();
+		if(Gt2 < Gt1)
+		{
+			Gt1 = Gt2;
+		}
+		if (Gt2 - Gt1 > 1000/FPS)
+		{
+			Gt1 = Gt2;
+			
+			//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
+			if(PG == 1)
+			{
+				PG = 2;
+			}
+			else
+			{
+				PG = 1;
+			}
+			setactivepage(PG);
+			
+			//Desenhos
+			
+			//Cria a lista com os ids dos monstros
+			iMaxMob = 0;
+			for(a = mob; a != NULL; a = a->prox)
+			{
+				if(a->hp > 0)
+				{
+					iMaxMob ++;
+					ArrayIdsMob = (int *)realloc(ArrayIdsMob, sizeof(int) * iMaxMob);
+					ArrayIdsMob[iMaxMob - 1] = a->id;
+				}
+			}
+			
+			//Inverter os elementos do array dos mobs
+			ArrayIdsAux = (int *)realloc(ArrayIdsAux, sizeof(int) * iMaxMob);
+			for(i = 0; i < iMaxMob; i++)
+			{
+				ArrayIdsAux[iMaxMob - 1 - i] = ArrayIdsMob[i];
+			}
+			
+			for(i = 0; i < iMaxMob; i++)
+			{
+				ArrayIdsMob[i] = ArrayIdsAux[i];
+			}
+			
+			//Mostrar os status dos personagens no menu na ordem do menor id para o maior.
+			//Para isso, ele fara um array com os Ids e depois o invertera, para caso a ordem dos Ids nao seja crescente.
+			iMax = 0;
+			for(a = li; a != NULL; a = a->prox)
+			{
+				iMax ++;
+				ArrayIds = (int *)realloc(ArrayIds, sizeof(int) * iMax);
+				ArrayIds[iMax - 1] = a->id;
+			}
+			
+			//Inverter os elementos do array dos personagens
+			ArrayIdsAux = (int *)realloc(ArrayIdsAux, sizeof(int) * iMax);
+			for(i = 0; i < iMax; i++)
+			{
+				ArrayIdsAux[iMax - 1 - i] = ArrayIds[i];
+			}
+			
+			for(i = 0; i < iMax; i++)
+			{
+				ArrayIds[i] = ArrayIdsAux[i];
+			}
+			
+			//Fundo e cenario
+			setbkcolor(RGB(255, 255, 255));
+			cleardevice();
+			
+			//Mostrar os mobs
+			for(i = 0; i < iMaxMobInicial; i++)
+			{
+				a = lista_busca(mob, ArrayIdsMobInicial[i]);
+				
+				if(ArrayMobPosY[i] < 580)
+				{
+					putimage(MobPosXInicial + (MobPosXDistancia * i), ArrayMobPosY[i], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+					putimage(MobPosXInicial + (MobPosXDistancia * i), ArrayMobPosY[i], Sprites_Mobs[a->levels - 1], OR_PUT);
+				}
+			}
+			
+			//Menu
+			desenhaMenu(li, ArrayIds, iMax, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+			
+			if(gameOver == false)
+			{
+				settextstyle(0, 0, 0);
+				setbkcolor(RGB(159, 79, 51));
+				setcolor(RGB(0, 0, 0));
+				setlinestyle(0, 0, 1);
+				
+				putimage(199, 140, Sprites_HUD_Mascaras[MENUBATALHAR], AND_PUT);
+				putimage(199, 140, Sprites_HUD[MENUBATALHAR], OR_PUT);
+				
+				Texto = (char *)realloc(Texto, sizeof(char) * 11);
+					
+				settextstyle(1, 0, 3);
+				setcolor(RGB(0, 0, 0));
+				strcpy(Texto, "Resultados");
+				
+				outtextxy(199 + 230, 140 + 30, Texto);
+				
+				for(int i = 0; i < iMax; i++)
+				{
+					a = lista_busca(li, ArrayIds[i]);
+				
+				    putimage(199, 140 + 75 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHAR2], AND_PUT);
+					putimage(199, 140 + 75 + (73 * i), Sprites_HUD[MENUBATALHAR2], OR_PUT);
+					
+					settextstyle(0, 0, 0);
+					setcolor(RGB(0, 0, 0));
+					
+					Texto = (char *)realloc(Texto, sizeof(char) * 10);
+					strcpy(Texto, a->nome);
+					
+					retratoDeBatalha(199, 140 + 75, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+					
+					outtextxy(199 + 85 + 10, 140 + 75 + (73 * i) + 30, Texto);
+					
+					Texto = (char *)realloc(Texto, sizeof(char) * 20);
+					strcpy(Texto, "Nivel: ");
+					
+					itoa(a->levels, HpTexto, 10);
+					strcat(Texto, HpTexto);
+					
+					outtextxy(199 + 85 + 132 + 10, 140 + 75 + (73 * i) + 30, Texto);
+					
+					strcpy(Texto, "Exp para o");
+					outtextxy(199 + 85 + 132 + 142 + 15 + 15, 140 + 75 + (73 * i) + 18, Texto);
+					
+					strcpy(Texto, "proximo nivel:");
+					outtextxy(199 + 85 + 132 + 142 + 15, 140 + 75 + (73 * i) + 18 + 20, Texto);
+					
+					itoa((((a->levels * 10) + (a->levels + 1) * 10) - a->exp), Texto, 10);
+					outtextxy(199 + 85 + 132 + 142 + 170 + 10, 140 + 75 + (73 * i) + 30, Texto);
+				}
+			}
+			
+			//Torna visivel a pagina de desenho.
+			setvisualpage(PG);
+			
+			//Acoes
+			if(Tecla == TECLAENTER)
+			{
+				resultados = false;
+			}
+			
+			//Variavel Tecla
+			fflush(stdin); //Aparentemente limpa algum endereco de memoria.
+			Tecla = 0;
+			if(kbhit())
+			{
+				Tecla = getch();
+				//printf("%d", Tecla);
+			}
+		}
 	}
 	
 	return li;
