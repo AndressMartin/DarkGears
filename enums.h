@@ -11,7 +11,7 @@ enum ObjetosCenaEnum {OTESTE_01_1, OTESTE_01_2, OTESTE_01_3, OTESTE_02_1_p1, OTE
 enum Tipos {PER, OBJ, BAU}; //Enumera os tipos que as structs de PosisoesC podem ter.
 
 //Enumero os indices dos itens do jogo.
-enum IndiceItens {NADA, POCAO, POCAO2};
+enum IndiceItens {POCAO, POCAO2, POCAO3, CAFE, NADA};
 
 //Enumera o indice das imagens a serem carregadas.
 enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD, MOBS, EFEITOS};

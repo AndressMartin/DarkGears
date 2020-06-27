@@ -148,7 +148,7 @@ bool hitTestCenario(int PosX, int PosY);
 bool colisaoComRetangulos(int CPosX, int CPosY, int PosX, int PosY, int PLarX, int PLarY, int TamanhoListaRetangulosDeColisao, RetangulosDeColisao ListaRetangulosDeColisao[]);
 
 //Funcoes que pretendo separar depois.
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto);
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto, bool *AdicionarItem, int *AdicionarItemIndice);
 
 int main()
 {
@@ -156,6 +156,7 @@ int main()
 	Personagens *li = lista_cria(),
 				*mob = lista_cria();
 	Item item[5];
+	Consumivel itemconsumivel[4];
 	
 	// Carregando propriedades dos itens em structs
 	strcpy(item[0].descricao, "Espada de aco");
@@ -181,6 +182,27 @@ int main()
     item[3].def = 0;
     item[3].prec = 0;
     item[3].tipo_item = 1;
+    
+    // Carregando propriedades dos itens consumiveis em structs
+    strcpy(itemconsumivel[POCAO].nome, "Pocao");
+    itemconsumivel[0].id = POCAO + 1;
+	itemconsumivel[0].tipo = POCAO;
+	itemconsumivel[0].qtd = 1;
+	
+	strcpy(itemconsumivel[POCAO2].nome, "Pocao S.");
+    itemconsumivel[0].id = POCAO2 + 1;
+	itemconsumivel[0].tipo = POCAO2;
+	itemconsumivel[0].qtd = 1;
+	
+	strcpy(itemconsumivel[POCAO3].nome, "Pocao M.");
+    itemconsumivel[0].id = POCAO3 + 1;
+	itemconsumivel[0].tipo = POCAO3;
+	itemconsumivel[0].qtd = 1;
+	
+	strcpy(itemconsumivel[CAFE].nome, "Cafe");
+    itemconsumivel[0].id = CAFE + 1;
+	itemconsumivel[0].tipo = CAFE;
+	itemconsumivel[0].qtd = 1;
     
 	//Definindo personagens e seus status
 	char lily [5]  = "Lily";
@@ -228,7 +250,10 @@ int main()
 	
 	bool PodeFazerInteracao = true,
 		 CaixaDeTexto = false,
+		 AdicionarItem = false,
 	 	 SpacePress = false;
+	
+	int AdicionarItemIndice = 0;
 	
 	char *Arquivo = NULL,
 		 *MudancaDeTexto = NULL;
@@ -442,7 +467,13 @@ int main()
 	
 	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
 	
-	iniciarBatalha(li, mob, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+	printf("\nAntes da batalha:\n");
+	detalhaStatus(li);
+	
+	li = iniciarBatalha(li, mob, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+	
+	printf("\nDepois da bataçha:\n");
+	detalhaStatus(li);
 	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
@@ -594,6 +625,12 @@ int main()
 			//Torna visivel a pagina de desenho.
 			setvisualpage(PG);
 			
+			//Adicionar itens dos baus
+			if(AdicionarItem == true)
+			{
+				//Codigo de adicionar item.
+			}
+			
 			//Caixa de Texto
 			if(CaixaDeTexto == true)
 			{
@@ -723,7 +760,7 @@ int main()
 			}
 			
 			//Interacoes com o mapa.
-			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &MudancaDeTexto);
+			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &MudancaDeTexto, &AdicionarItem, &AdicionarItemIndice);
 			
 			//Transicoes de mapas.
 			if(MudancaDeCenario == true)
@@ -1088,7 +1125,7 @@ void CarregarImagens(int Imagem)
 	}
 }
 
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto)
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto, bool *AdicionarItem, int *AdicionarItemIndice)
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
@@ -1111,6 +1148,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					    	int *BausTemp;
 					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
 					    	
+					    	AdicionarItem = true;
+					    	AdicionarItemIndice = BausCopia[InteracaoN];
 					    	BausCopia[InteracaoN] = NADA;
 					    	
 					    	for(int i=0; i < NumeroDeBaus; i++)
@@ -1147,6 +1186,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					    	int *BausTemp;
 					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
 					    	
+					    	AdicionarItem = true;
+					    	AdicionarItemIndice = BausCopia[InteracaoN];
 					    	BausCopia[InteracaoN] = NADA;
 					    	
 					    	for(int i=0; i < NumeroDeBaus; i++)
