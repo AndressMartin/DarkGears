@@ -176,11 +176,11 @@ Item* lista_itens_insere(Item* li, Item *item)
 Consumivel* lista_consumiveis_insere(Consumivel* li, Consumivel *item)
 {
 	// Procura e remove da lista caso já houver um item do mesmo tipo equipado;
-	li = lista_consumiveis_busca(li, item->tipo);
+	Consumivel *a = lista_consumiveis_busca(li, item->tipo);
 	
-	if(li != NULL)
+	if(a != NULL)
 	{
-		li->qtd += item->qtd;
+		a->qtd += item->qtd;
 		return li;
 	}
 	else

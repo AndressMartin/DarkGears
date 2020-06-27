@@ -147,7 +147,7 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 	}
 }
 
-Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
+void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumiveis, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
 {	
 	srand(time(0));
 	
@@ -1227,6 +1227,4 @@ Personagens* iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Ret
 			}
 		}
 	}
-	
-	return li;
 }
