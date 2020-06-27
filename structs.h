@@ -81,7 +81,6 @@ typedef struct personagem{
 	int luc;
 	int vel;
 	Item *itens;
-	Consumivel *consumiveis;
     struct personagem *ant;
     struct personagem *prox;
 }Personagens; //definição da lista

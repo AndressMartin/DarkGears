@@ -38,7 +38,6 @@ Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int de
     novo->prox=li;
     novo->ant=NULL;
     novo->itens=NULL;
-    novo->consumiveis=NULL;
     
     //verifica se a lista não esta vazia
     if(li!= NULL)
@@ -212,18 +211,6 @@ Personagens* equipa_item(Personagens*li, int id, Item *item)
 	return li;
 }
 
-Personagens* adiciona_consumivel(Personagens*li, int id, Consumivel *item)
-{
-	Personagens* personagem = lista_busca(li, id);
-	
-	if(personagem != NULL)
-	{
-		personagem->consumiveis = lista_consumiveis_insere(personagem->consumiveis, item);
-	}
-	
-	return li;
-}
-
 // Funcao para aplicar dano no personagem (player ou mob)
 Personagens* aplicar_dano(Personagens* li, int id, int dano)
 {
@@ -367,12 +354,18 @@ void detalhaStatus(Personagens *item)
 			printf("\nDescricao: %s", item_aux->descricao);
 		}
 		
-		printf("\nConsumiveis: ");
-		
-		for(consumivel_aux = aux->consumiveis; consumivel_aux != NULL; consumivel_aux = consumivel_aux->prox)
-		{
-			printf("\nDescricao: %s / qtd: %d", consumivel_aux->nome, consumivel_aux->qtd);
-		}
 		printf("\n----------------------------------------\n");
+	}
+}
+
+void detalhaConsumiveis(Consumivel *consumiveis)
+{
+	Consumivel *consumivel_aux = lista_consumiveis_cria();
+
+	printf("\nConsumiveis: ");
+	
+	for(consumivel_aux = consumiveis; consumivel_aux != NULL; consumivel_aux = consumivel_aux->prox)
+	{
+		printf("\nDescricao: %s / qtd: %d", consumivel_aux->nome, consumivel_aux->qtd);
 	}
 }

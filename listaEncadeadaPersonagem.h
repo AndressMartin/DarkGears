@@ -35,5 +35,6 @@ Personagens* inserir_inimigo(Personagens* mob, int id);
 Personagens* aplicar_experiencia(Personagens* li, int qtd_exp);
 
 void detalhaStatus(Personagens *item);
+void detalhaConsumiveis(Consumivel *consumiveis);
 
 #endif
