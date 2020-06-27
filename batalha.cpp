@@ -172,6 +172,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 		dano = 0,
 		danoCausado = 0,
 		MenuID = 0,
+		qtd_exp = 0,
 		controleAnimacao = 0;
 	
 	int MobPosXInicial = 0,
@@ -698,6 +699,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 															ArrayMobPosY[p] += 20;
 															if(ArrayMobPosY[p] > 580)
 															{
+																qtd_exp += a->exp;
 																animacao = false;
 															}
 														}
@@ -1043,4 +1045,21 @@ void iniciarBatalha(Personagens* li, Personagens* mob, void* Sprites_Retratos[],
 			}
 		}
 	}
+	
+	for(i = 0; i < iMaxMobInicial; i++)
+	{
+		a = lista_busca(mob, ArrayIdsMobInicial[i]);
+		
+		printf("\nExp[%d]: %d .", i, a->exp);
+	}
+	printf("\n\nExp: %d", qtd_exp);
+	
+	printf("\nAntes:\n");
+	detalhaStatus(li);
+	if(personagensMortos == false)
+	{
+		li = aplicar_experiencia(li, qtd_exp);
+	}
+	printf("\nDepois:\n");
+	detalhaStatus(li);
 }

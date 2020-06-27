@@ -25,7 +25,7 @@ Consumivel* lista_consumiveis_retira(Consumivel* li, int tipo);
 // Inserção
 Consumivel* lista_consumiveis_insere(Consumivel* li, Consumivel *item);
 Item* lista_itens_insere(Item* li, Item *item);
-Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int def, int prec, int luc, int vel, int levels, int hp);
+Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int def, int prec, int luc, int vel, int levels, int hp, int exp);
 
 // Funções para manuseio de inventario e calculos de batalha
 Personagens* equipa_item(Personagens*li, int id, Item *item);

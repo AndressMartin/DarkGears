@@ -21,12 +21,12 @@ Consumivel * lista_consumiveis_cria()
 }
 
 /* insere o novo dado no início da lista  e retorna a lista atualizada*/
-Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int def, int prec, int luc, int vel, int levels, int hp)
+Personagens* lista_insere( Personagens* li, int id, char nome[], int atk, int def, int prec, int luc, int vel, int levels, int hp, int exp)
 {
   	Personagens *novo = (Personagens*) malloc (sizeof(Personagens));
   	strcpy(novo->nome, nome);
     novo->levels = levels;
-    novo->exp = 0;
+    novo->exp = exp;
     novo->hp = hp;
     novo->hpmax = hp;
 	novo->atk = atk;
@@ -300,19 +300,19 @@ Personagens* inserir_inimigo(Personagens* mob, int id)
 	{
 		case 1:
 			strcpy(nome, "Golem");
-			mob = lista_insere(mob, 1, nome, 10, 8, 6, 6, 4, 5, 30);
+			mob = lista_insere(mob, 1, nome, 10, 8, 6, 6, 4, 5, 30, 0);
 			break;
 		case 2:
 			strcpy(nome, "Wumpus");
-			mob = lista_insere(mob, 2, nome, 15, 9, 10, 9, 2, 4, 30);
+			mob = lista_insere(mob, 2, nome, 15, 9, 10, 9, 2, 4, 30, 0);
 			break;
 		case 3:
 			strcpy(nome, "Darius");
-			mob = lista_insere(mob, 3, nome, 10, 3, 6, 1, 6, 15, 40);
+			mob = lista_insere(mob, 3, nome, 10, 3, 6, 1, 6, 15, 40, 0);
 			break;
 		default:
 			strcpy(nome, "Dagon");
-			mob = lista_insere(mob, 4, nome, 7, 5, 10, 5, 7, 10, 50);
+			mob = lista_insere(mob, 4, nome, 7, 5, 10, 5, 7, 10, 50, 0);
 			break;
 	}
 		
