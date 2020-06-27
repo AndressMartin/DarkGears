@@ -105,7 +105,7 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 	Personagens *a;
 	
 	settextstyle(0, 0, 0);
-	setbkcolor(RGB(185, 122, 87));
+	setbkcolor(RGB(159, 79, 51));
 	setcolor(RGB(0, 0, 0));
 	setlinestyle(0, 0, 1);
 	
