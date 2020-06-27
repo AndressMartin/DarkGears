@@ -32,6 +32,7 @@ Personagens* equipa_item(Personagens*li, int id, Item *item);
 Personagens* aplicar_dano(Personagens* li, int id, int dano);
 int calcular_dano(Personagens* li, int id);
 Personagens* inserir_inimigo(Personagens* mob, int id);
+Personagens* aplicar_experiencia(Personagens* li, int qtd_exp);
 
 void detalhaStatus(Personagens *item);
 

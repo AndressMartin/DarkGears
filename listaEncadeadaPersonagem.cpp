@@ -319,19 +319,59 @@ Personagens* inserir_inimigo(Personagens* mob, int id)
 	return mob;	
 }
 
+// Level UP
+Personagens* aplicar_experiencia(Personagens* li, int qtd_exp)
+{
+	Personagens *aux = lista_cria();
+	int subiu;
+	
+	for(aux = li; aux != NULL; aux = aux->prox)
+	{
+		aux->exp += qtd_exp;
+		subiu = 1;
+		
+		while(subiu == 1)
+		{
+			if(aux->exp > ((aux->levels * 10) + (aux->levels + 1) * 10))
+			{
+				aux->levels += 1;
+				aux->hp += 4;
+				aux->hpmax += 4;
+				aux->atk += 3;
+				aux->def += 2;
+				subiu = 1;
+			}
+			else
+			{
+				subiu = 0;
+			}
+		}
+	}
+	
+	return li;
+}
+
 void detalhaStatus(Personagens *item)
 {
 	Personagens *aux = lista_cria();
 	Item *item_aux = lista_itens_cria();
+	Consumivel *consumivel_aux = lista_consumiveis_cria();
 	
 	for(aux = item; aux != NULL; aux = aux->prox)
 	{
 		printf("\nPersonagem: %s; ATK %d / DEF %d / PREC %d / HP %d", aux->nome, aux->atk, aux->def, aux->prec, aux->hp);
 		printf("\nItems: ");
-		
+
 		for(item_aux = aux->itens; item_aux != NULL; item_aux = item_aux->prox)
 		{
 			printf("\nDescricao: %s", item_aux->descricao);
+		}
+		
+		printf("\nConsumiveis: ");
+		
+		for(consumivel_aux = aux->consumiveis; consumivel_aux != NULL; consumivel_aux = consumivel_aux->prox)
+		{
+			printf("\nDescricao: %s / qtd: %d", consumivel_aux->nome, consumivel_aux->qtd);
 		}
 		printf("\n----------------------------------------\n");
 	}
