@@ -179,7 +179,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 		danoCausado = 0,
 		MenuID = 0,
 		qtd_exp = 0,
-		controleAnimacao = 0;
+		controleAnimacao = 0,
+		randNum, // guarda o numero aleatorio gerado para fugir ou nao da batalha
+		escapou = 0, // controla se o player conseguir fugir da luta
+		fugindo = 0; // caso o player selecione a opcao de fugir
 	
 	int MobPosXInicial = 0,
 		MobPosYInicial = 31,
@@ -675,7 +678,24 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				}
 			}
 			
-			if(turnoDosMonstros == true)
+			// verifica se o player conseguiu fugir do confronto
+			if(fugindo == 1)
+			{
+				randNum = rand()%(99-0 + 1) + 1;
+			
+				if(randNum > 60)
+				{
+					escapou = 1;
+				}
+				else
+				{
+					escapou = 0;
+				}
+				
+				fugindo = 0;
+			}
+			
+			if(turnoDosMonstros == true && escapou == 0)
 			{
 				for(i=0; i < iMaxMob; i++)
 				{
@@ -723,7 +743,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				}
 			}
 			
-			if(atacando == true)
+			if(atacando == true && escapou == 0)
 			{
 				for(i=0; i < ListaDosTurnosTamanho; i++)
 				{
