@@ -220,22 +220,22 @@ int main()
     strcpy(itemconsumivel[POCAO].nome, "Pocao");
     itemconsumivel[POCAO].id = POCAO + 1;
 	itemconsumivel[POCAO].tipo = POCAO;
-	itemconsumivel[POCAO].qtd = 1;
+	itemconsumivel[POCAO].qtd = 30;
 	
 	strcpy(itemconsumivel[POCAO2].nome, "Pocao S.");
     itemconsumivel[POCAO2].id = POCAO2 + 1;
 	itemconsumivel[POCAO2].tipo = POCAO2;
-	itemconsumivel[POCAO2].qtd = 1;
+	itemconsumivel[POCAO2].qtd = 30;
 	
 	strcpy(itemconsumivel[POCAO3].nome, "Pocao M.");
     itemconsumivel[POCAO3].id = POCAO3 + 1;
 	itemconsumivel[POCAO3].tipo = POCAO3;
-	itemconsumivel[POCAO3].qtd = 1;
+	itemconsumivel[POCAO3].qtd = 30;
 	
 	strcpy(itemconsumivel[CAFE].nome, "Cafe");
     itemconsumivel[CAFE].id = CAFE + 1;
 	itemconsumivel[CAFE].tipo = CAFE;
-	itemconsumivel[CAFE].qtd = 1;
+	itemconsumivel[CAFE].qtd = 30;
 	
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
@@ -261,9 +261,9 @@ int main()
 	li = equipa_item(li, 1, &item[2]);
 	
 	//Insere inimigos na lista
-	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 200, 10);
-	mob = lista_insere(mob, 1, golem, 20, 18, 50, 6, 5, 1, 300, 15);
-	mob = lista_insere(mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 200, 10);
+	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 999, 10);
+	mob = lista_insere(mob, 1, golem, 20, 18, 50, 6, 5, 1, 999, 15);
+	mob = lista_insere(mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 999, 10);
 	
 	//mob = inserir_inimigo(mob, 1);
 	
@@ -861,8 +861,14 @@ int main()
 	//free(Sprites);
 	
 	//Liberar a memoria dos ponteiros.
+	free(li);
+	free(mob);
+	free(lista_consumiveis);
+	free(Arquivo);
+	free(MudancaDeTexto);
 	free(listaObjetosC);
 	free(ListaRetangulosDeColisao);
+	free(Baus);
 			
 	closegraph();	
 	return 0; 

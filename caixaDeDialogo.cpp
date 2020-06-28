@@ -130,4 +130,5 @@ void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *txt
 	}
 	
 	fclose(fPointer);
+	free(fPointer);
 }

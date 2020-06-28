@@ -145,6 +145,8 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 		
 		outtextxy(754 + 10, 337 + (73 * i) + 30, Texto);
 	}
+	
+	free(Texto);
 }
 
 void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumiveis, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
@@ -269,7 +271,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			
 			//Desenhos
 			
-			//Cria a lista com os ids dos itens
+			//Cria a lista com os tipos dos itens
 			iMaxItens = 0;
 			for(lcAux = lista_consumiveis; lcAux != NULL; lcAux = lcAux->prox)
 			{
@@ -454,6 +456,12 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					
 					putimage(27 + 410, 337 + (73 * (Selecao - itensScroll)), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
 					putimage(27 + 410, 337 + (73 * (Selecao - itensScroll)), Sprites_HUD[SELECAOM], OR_PUT);
+					
+					printf("\n");
+					for(i=0; i < iMaxItens; i++)
+					{
+						printf("%d", ArrayIdsItens[i]);
+					}
 				}
 				
 				if(MenuID == 21)
@@ -1431,19 +1439,19 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 											
 											if(ListaDosTurnos[i].Acao == BPOCAO)
 											{
-												utilizar_consumivel(lista_consumiveis, POCAO, li, ListaDosTurnos[i].IndiceRecebedor);
+												li = utilizar_consumivel(lista_consumiveis, POCAO, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BPOCAO2)
 											{
-												utilizar_consumivel(lista_consumiveis, POCAO2, li, ListaDosTurnos[i].IndiceRecebedor);
+												li = utilizar_consumivel(lista_consumiveis, POCAO2, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BPOCAO3)
 											{
-												utilizar_consumivel(lista_consumiveis, POCAO3, li, ListaDosTurnos[i].IndiceRecebedor);
+												li = utilizar_consumivel(lista_consumiveis, POCAO3, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BCAFE)
 											{
-												utilizar_consumivel(lista_consumiveis, CAFE, li, ListaDosTurnos[i].IndiceRecebedor);
+												li = utilizar_consumivel(lista_consumiveis, CAFE, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											
 											danoCausado = a->hp - danoCausado;
@@ -1746,4 +1754,15 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			}
 		}
 	}
+	free(ArrayIds);
+	free(ArrayIdsMob);
+	free(ArrayIdsMobInicial);
+	free(ArrayIdsItens);
+	free(ArrayIdsAux);
+	free(ArrayMobPosY);
+	free(ListaDosTurnos);
+	free(Texto);
+	free(Texto2);
+	free(a);
+	free(lcAux);
 }
