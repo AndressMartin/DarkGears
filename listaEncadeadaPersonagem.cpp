@@ -1,3 +1,4 @@
+#include "enums.h"
 #include "structs.h"
 
 #include <stdio.h>
@@ -332,6 +333,94 @@ Personagens* aplicar_experiencia(Personagens* li, int qtd_exp)
 			{
 				subiu = 0;
 			}
+		}
+	}
+	
+	return li;
+}
+
+int personagem_vivo(int hp)
+{
+	if(hp > 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+// Funcao para realizar a utilizacao de um item consumivel
+Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Personagens *li, int id_personagem)
+{
+	Personagens *aux_li = lista_cria();
+	Consumivel *aux = lista_consumiveis_cria();
+	int vivo;
+	
+	aux_li = lista_busca(li, id_personagem);
+	
+	if(aux_li != NULL)
+	{		
+		vivo = personagem_vivo(aux_li->hp);
+	
+		aux = lista_consumiveis_busca(li_cons, tipo_consumivel);
+	
+		if(aux != NULL)
+		{
+			if(aux->tipo == POCAO && vivo == 1)
+			{
+				aux->qtd -= 1;
+				
+				aux_li->hp += 30;
+				
+				// Verifica se o valor do HP ultrapassou o maximo e trava este valor
+				if(aux_li->hp > aux_li->hpmax)
+				{
+					aux_li->hp = aux_li->hpmax;
+				}
+			}
+			else if(aux->tipo == POCAO2 && vivo == 1)
+			{
+				aux->qtd -= 1;
+				
+				aux_li->hp += 60;
+				
+				// Verifica se o valor do HP ultrapassou o maximo e trava este valor
+				if(aux_li->hp > aux_li->hpmax)
+				{
+					aux_li->hp = aux_li->hpmax;
+				}
+			}
+			else if(aux->tipo == POCAO3 && vivo == 1)
+			{
+				aux->qtd -= 1;
+				
+				aux_li->hp += 150;
+				
+				// Verifica se o valor do HP ultrapassou o maximo e trava este valor
+				if(aux_li->hp > aux_li->hpmax)
+				{
+					aux_li->hp = aux_li->hpmax;
+				}	
+			}
+			else if(aux->tipo = CAFE && vivo == 0)
+			{
+				aux->qtd -= 1;
+				
+				aux_li->hp += aux_li->hpmax / 2;
+				// Verifica se o valor do HP ultrapassou o maximo e trava este valor
+				if(aux_li->hp > aux_li->hpmax)
+				{
+					aux_li->hp = aux_li->hpmax;
+				}
+			}
+			
+			if(aux->qtd <= 0) // Se a quantidade for menor ou igual a 0, o item sera removido da lista
+			{
+				li_cons = lista_consumiveis_retira(li_cons, tipo_consumivel);
+			}
+			
 		}
 	}
 	
