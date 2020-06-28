@@ -1763,6 +1763,4 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 	free(ListaDosTurnos);
 	free(Texto);
 	free(Texto2);
-	free(a);
-	free(lcAux);
 }
