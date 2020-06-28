@@ -50,7 +50,7 @@ const int Sprites_RetratosQ = 10;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
-const int Sprites_HUDQ = 7;
+const int Sprites_HUDQ = 8;
 void* Sprites_HUD[Sprites_HUDQ];
 void* Sprites_HUD_Mascaras[Sprites_HUDQ];
 
@@ -94,7 +94,8 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_3",
 											"Sprites/HUD/selecao_monstros",
 											"Sprites/HUD/menuDeBatalha_resultados",
-											"Sprites/HUD/menuDeBatalha_resultados2"};
+											"Sprites/HUD/menuDeBatalha_resultados2",
+											"Sprites/HUD/menuDeBatalha_4"};
 											
 char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
 											  "Sprites/Mobs/wumpus"};
@@ -139,7 +140,8 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 											 {326, 74},
 											 {85, 74},
 											 {625, 295},
-											 {625, 74}};
+											 {625, 74},
+											 {410, 74}};
 											 
 int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
 											   {275, 275}};
@@ -212,9 +214,10 @@ int main()
 	itemconsumivel[CAFE].qtd = 1;
 	
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
-	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO2]);
-	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO2]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
     
 	//Definindo personagens e seus status
@@ -485,7 +488,7 @@ int main()
 	
 	iniciarBatalha(li, mob, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
 	
-	printf("\nDepois da bataçha:\n");
+	printf("\nDepois da batalha:\n");
 	detalhaStatus(li);
 	
 	Gt1 = GetTickCount();

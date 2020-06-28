@@ -17,7 +17,7 @@ enum IndiceItens {POCAO, POCAO2, POCAO3, CAFE, NADA};
 enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD, MOBS, EFEITOS};
 
 //Enumera os indices das imagens de HUD.
-enum ImagensHUD {CAIXADETEXTO, MENUBATALHA1, MENUBATALHA2, MENUBATALHA3, SELECAOM, MENUBATALHAR, MENUBATALHAR2};
+enum ImagensHUD {CAIXADETEXTO, MENUBATALHA1, MENUBATALHA2, MENUBATALHA3, SELECAOM, MENUBATALHAR, MENUBATALHAR2, MENUBATALHA4};
 
 //Enumera os tipos de retratos de batalha
 enum RetratoBatalhaPersonagem {RBLILY, RBCHADDRIT};
@@ -25,7 +25,7 @@ enum RetratoBatalhaTipo {RETRATOBATALHANORMAL, RETRATOBATALHAATACANDO, RETRATOBA
 
 //Enumera as acoes de batalha
 enum AcoesDeBatalhaTipos {PERSONAGEM, MOB};
-enum AcoesDeBatalha {ATAQUE};
+enum AcoesDeBatalha {ATAQUE, BPOCAO, BPOCAO2, BPOCAO3, BCAFE};
 
 //Enumera as imagens dos inimigos nas batalhas
 enum ImagensInimigosBatalha {BGOLEM, BWUMPUS};

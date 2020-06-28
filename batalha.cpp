@@ -166,11 +166,15 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 		i = 0,
 		p = 0,
 		q = 0,
+		itensScroll = 0,
+		itensScroll2 = 0,
 		iMax = 0,
 		iMaxMob = 0,
 		iMaxMobInicial = 0,
+		iMaxItens = 0,
 		Turno = 0,
 		Selecao = 0,
+		SelecaoItem = 0,
 		dano = 0,
 		danoCausado = 0,
 		MenuID = 0,
@@ -184,6 +188,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 	int *ArrayIds = NULL,
 		*ArrayIdsMob = NULL,
 		*ArrayIdsMobInicial = NULL,
+		*ArrayIdsItens = NULL,
 		*ArrayIdsAux = NULL,
 		*ArrayMobPosY = NULL;
 	
@@ -199,6 +204,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 	
 	//Variável usada para percorrer a lista
 	Personagens *a;
+	Consumivel *lcAux;
 	
 	turnoDosPersonagens = true;
 	id = 0;
@@ -259,6 +265,27 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			setactivepage(PG);
 			
 			//Desenhos
+			
+			//Cria a lista com os ids dos itens
+			iMaxItens = 0;
+			for(lcAux = lista_consumiveis; lcAux != NULL; lcAux = lcAux->prox)
+			{
+				iMaxItens ++;
+				ArrayIdsItens = (int *)realloc(ArrayIdsItens, sizeof(int) * iMaxItens);
+				ArrayIdsItens[iMaxItens - 1] = lcAux->tipo;
+			}
+			
+			//Inverter os elementos do array dos itens
+			ArrayIdsAux = (int *)realloc(ArrayIdsAux, sizeof(int) * iMaxItens);
+			for(i = 0; i < iMaxItens; i++)
+			{
+				ArrayIdsAux[iMaxItens - 1 - i] = ArrayIdsItens[i];
+			}
+			
+			for(i = 0; i < iMaxItens; i++)
+			{
+				ArrayIdsItens[i] = ArrayIdsAux[i];
+			}
 			
 			//Cria a lista com os ids dos monstros
 			iMaxMob = 0;
@@ -391,6 +418,69 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					putimage(353, 337 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
 					putimage(353, 337 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
 				}
+				
+				if(MenuID == 2)
+				{
+					itensScroll2 = 0;
+					//Mostrar os itens disponiveis para usar
+					for(i = 0; i < iMaxItens; i++)
+					{
+						if((i >= itensScroll) && (i - itensScroll < 3))
+						{
+							lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]);
+					
+						    putimage(27, 337 + (73 * itensScroll2), Sprites_HUD_Mascaras[MENUBATALHA4], AND_PUT);
+							putimage(27, 337 + (73 * itensScroll2), Sprites_HUD[MENUBATALHA4], OR_PUT);
+							
+							Texto = (char *)realloc(Texto, sizeof(char) * 10);
+							strcpy(Texto, lcAux->nome);
+							
+							retratoDeBatalha(27, 337, Texto, RETRATOBATALHANORMAL, itensScroll2, Sprites_Retratos, Sprites_Retratos_Mascaras);
+							
+							settextstyle(0, 0, 0);
+							outtextxy(112 + 10, 337 + (73 * itensScroll2) + 30, Texto);
+							
+							itoa(lcAux->qtd, Texto, 10);
+							
+							settextstyle(1, 0, 3);
+							outtextxy(27 + 325 + 15, 337 + (73 * itensScroll2) + 30, Texto);
+							
+							itensScroll2 ++;
+						}
+					}
+					
+					putimage(27 + 410, 337 + (73 * (Selecao - itensScroll)), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
+					putimage(27 + 410, 337 + (73 * (Selecao - itensScroll)), Sprites_HUD[SELECAOM], OR_PUT);
+				}
+				
+				if(MenuID == 21)
+				{
+					//Mostrar os aliados disponiveis para selecionar
+					for(i = 0; i < iMax; i++)
+					{
+						a = lista_busca(li, ArrayIds[i]);
+					
+					    putimage(27, 337 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHA3], AND_PUT);
+						putimage(27, 337 + (73 * i), Sprites_HUD[MENUBATALHA3], OR_PUT);
+						
+						Texto = (char *)realloc(Texto, sizeof(char) * 10);
+						strcpy(Texto, a->nome);
+						
+						if(a->hp > 0)
+						{
+							retratoDeBatalha(27, 337, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+						}
+						else
+						{
+							retratoDeBatalha(27, 337, Texto, RETRATOBATALHANOCAUTEADO, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+						}
+						
+						outtextxy(112 + 10, 337 + (73 * i) + 30, Texto);
+					}
+					
+					putimage(353, 337 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
+					putimage(353, 337 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
+				}
 			}
 			
 			//Torna visivel a pagina de desenho.
@@ -418,6 +508,13 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 							MenuID = 1;
 							Selecao = 0;
 						}
+						if(Tecla == TECLAS)
+						{
+							SelecaoItem = 0;
+							MenuID = 2;
+							itensScroll = 0;
+							Selecao = 0;
+						}
 					}
 					if(MenuID == 1)
 					{
@@ -425,21 +522,13 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 						{
 							MenuID = 0;
 						}
-						if(Tecla == UP || Tecla == LEFT)
+						if((Tecla == UP || Tecla == LEFT) && (Selecao > 0))
 						{
 							Selecao --;
-							if(Selecao < 0)
-							{
-								Selecao = 0;
-							}
 						}
-						if(Tecla == DOWN || Tecla == RIGHT)
+						if((Tecla == DOWN || Tecla == RIGHT) && (Selecao < iMaxMob - 1))
 						{
 							Selecao ++;
-							if(Selecao >= iMaxMob)
-							{
-								Selecao = iMaxMob - 1;
-							}
 						}
 						if(Tecla == TECLAENTER)
 						{
@@ -456,6 +545,116 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 							
 							Turno ++;
 							MenuID = 0;
+						}
+					}
+					if(MenuID == 2)
+					{
+						if(Tecla == TECLABACKSPACE)
+						{
+							MenuID = 0;
+						}
+						if((Tecla == UP || Tecla == LEFT) && (Selecao > 0))
+						{
+							Selecao --;
+							if(Selecao < itensScroll)
+							{
+								itensScroll = Selecao;
+							}
+						}
+						if((Tecla == DOWN || Tecla == RIGHT) && (Selecao < iMaxItens - 1))
+						{
+							Selecao ++;
+							if(Selecao - itensScroll > 2)
+							{
+								itensScroll = Selecao - 2;
+							}
+						}
+						if(Tecla == TECLAENTER)
+						{						
+							SelecaoItem = ArrayIdsItens[Selecao];
+							MenuID = 21;
+							Selecao = 0;
+							
+							Tecla = 0;
+						}
+					}
+					if(MenuID == 21)
+					{
+						if(Tecla == TECLABACKSPACE)
+						{
+							MenuID = 2;
+							itensScroll = 0;
+							Selecao = 0;
+						}
+						if((Tecla == UP || Tecla == LEFT) && (Selecao > 0))
+						{
+							Selecao --;
+						}
+						if((Tecla == DOWN || Tecla == RIGHT) && (Selecao < iMax - 1))
+						{
+							Selecao ++;
+						}
+						if(Tecla == TECLAENTER)
+						{
+							if(SelecaoItem == POCAO || SelecaoItem == POCAO2 || SelecaoItem == POCAO3)
+							{
+								a = lista_busca(li, ArrayIds[Selecao]);
+								
+								if(a->hp > 0)
+								{
+									ListaDosTurnosTamanho ++;
+									ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
+									
+									if(SelecaoItem == POCAO)
+									{
+										ListaDosTurnos[ListaDosTurnosTamanho - 1].Acao = BPOCAO;
+									}
+									if(SelecaoItem == POCAO2)
+									{
+										ListaDosTurnos[ListaDosTurnosTamanho - 1].Acao = BPOCAO2;
+									}
+									if(SelecaoItem == POCAO3)
+									{
+										ListaDosTurnos[ListaDosTurnosTamanho - 1].Acao = BPOCAO3;
+									}
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceAtacante = ArrayIds[Turno];
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceRecebedor = ArrayIds[Selecao];
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].Tipo = PERSONAGEM;
+									
+									a = lista_busca(li, ArrayIds[Turno]);
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].Vel = a->vel;
+									
+									Turno ++;
+									MenuID = 0;
+								}
+								else
+								{
+									//Tocar efeito sonoro
+								}
+							}
+							else if(SelecaoItem == CAFE)
+							{
+								if(a->hp <= 0)
+								{
+									ListaDosTurnosTamanho ++;
+									ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
+									
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].Acao = BCAFE;
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceAtacante = ArrayIds[Turno];
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].IndiceRecebedor = ArrayIds[Selecao];
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].Tipo = PERSONAGEM;
+									
+									a = lista_busca(li, ArrayIds[Turno]);
+									ListaDosTurnos[ListaDosTurnosTamanho - 1].Vel = a->vel;
+									
+									Turno ++;
+									MenuID = 0;
+								}
+								else
+								{
+									//Tocar efeito sonoro
+								}
+							}
 						}
 					}
 				}
@@ -978,6 +1177,108 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										
 										//Controle
 										controleAnimacao ++;
+										
+										//Torna visivel a pagina de desenho.
+										setvisualpage(PG);
+										
+										//Variavel Tecla
+										fflush(stdin); //Aparentemente limpa algum endereco de memoria.
+										Tecla = 0;
+										if(kbhit())
+										{
+											Tecla = getch();
+											//printf("%d", Tecla);
+										}
+									}
+								}
+							}
+						}
+						if(ListaDosTurnos[i].Acao == BPOCAO || ListaDosTurnos[i].Acao == BPOCAO2 || ListaDosTurnos[i].Acao == BPOCAO3) // Se for uma pocao
+						{
+							if(ListaDosTurnos[i].Tipo == PERSONAGEM)
+							{
+								a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
+								
+								// Verifica se o HP do aliado já foi zerado e escolhe um novo alvo da lista
+								if(a->hp <= 0)
+								{
+									ListaDosTurnos[i].IndiceRecebedor = -1;
+									
+									for(p = 0; p < iMax; p++)
+									{
+										a = lista_busca(li, ArrayIds[p]);
+										
+										if(a->hp > 0)
+										{
+											ListaDosTurnos[i].IndiceRecebedor = ArrayIds[p];
+											
+											break;
+										}
+									}
+								}
+								
+								//Verifica se tem o item disponivel para usar
+								lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]);
+								
+								if(lcAux == NULL)
+								{
+									ListaDosTurnos[i].IndiceRecebedor = -1;
+								}
+								
+								if(ListaDosTurnos[i].IndiceRecebedor != -1)
+								{					
+									danoCausado = a->hp; //Usar para ver quanto HP foi curado
+									danoCausado -= a->hp;
+									
+									animacao = true;
+									controleAnimacao = 0;
+								}
+								
+								while(animacao == true)
+								{
+									Gt2 = GetTickCount();
+									if(Gt2 < Gt1)
+									{
+										Gt1 = Gt2;
+									}
+									if (Gt2 - Gt1 > 1000/FPS)
+									{
+										Gt1 = Gt2;
+										
+										//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
+										if(PG == 1)
+										{
+											PG = 2;
+										}
+										else
+										{
+											PG = 1;
+										}
+										setactivepage(PG);
+										
+										//Desenhos
+										
+										//Fundo e cenario
+										setbkcolor(RGB(255, 255, 255));
+										cleardevice();
+										
+										for(p = 0; p < iMaxMobInicial; p++)
+										{
+											a = lista_busca(mob, ArrayIdsMobInicial[p]);
+											
+											if(ArrayMobPosY[p] < 580)
+											{
+												putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+												putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+											}
+										}
+										
+										//Menu
+										desenhaMenu(li, ArrayIds, iMax, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+										
+										//Controle
+										controleAnimacao ++;
+										animacao = false;
 										
 										//Torna visivel a pagina de desenho.
 										setvisualpage(PG);
