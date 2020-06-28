@@ -159,6 +159,9 @@ int main()
 	//Lista dos peronagens, inimigos e itens
 	Personagens *li = lista_cria(),
 				*mob = lista_cria();
+	
+	Consumivel *lista_consumiveis;
+	
 	Item item[5];
 	Consumivel itemconsumivel[4];
 	
@@ -189,24 +192,30 @@ int main()
     
     // Carregando propriedades dos itens consumiveis em structs
     strcpy(itemconsumivel[POCAO].nome, "Pocao");
-    itemconsumivel[0].id = POCAO + 1;
-	itemconsumivel[0].tipo = POCAO;
-	itemconsumivel[0].qtd = 1;
+    itemconsumivel[POCAO].id = POCAO + 1;
+	itemconsumivel[POCAO].tipo = POCAO;
+	itemconsumivel[POCAO].qtd = 1;
 	
 	strcpy(itemconsumivel[POCAO2].nome, "Pocao S.");
-    itemconsumivel[0].id = POCAO2 + 1;
-	itemconsumivel[0].tipo = POCAO2;
-	itemconsumivel[0].qtd = 1;
+    itemconsumivel[POCAO2].id = POCAO2 + 1;
+	itemconsumivel[POCAO2].tipo = POCAO2;
+	itemconsumivel[POCAO2].qtd = 1;
 	
 	strcpy(itemconsumivel[POCAO3].nome, "Pocao M.");
-    itemconsumivel[0].id = POCAO3 + 1;
-	itemconsumivel[0].tipo = POCAO3;
-	itemconsumivel[0].qtd = 1;
+    itemconsumivel[POCAO3].id = POCAO3 + 1;
+	itemconsumivel[POCAO3].tipo = POCAO3;
+	itemconsumivel[POCAO3].qtd = 1;
 	
 	strcpy(itemconsumivel[CAFE].nome, "Cafe");
-    itemconsumivel[0].id = CAFE + 1;
-	itemconsumivel[0].tipo = CAFE;
-	itemconsumivel[0].qtd = 1;
+    itemconsumivel[CAFE].id = CAFE + 1;
+	itemconsumivel[CAFE].tipo = CAFE;
+	itemconsumivel[CAFE].qtd = 1;
+	
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO2]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
     
 	//Definindo personagens e seus status
 	char lily [5]  = "Lily";
@@ -284,8 +293,8 @@ int main()
 	int *Baus;
 	Baus = (int *)malloc(sizeof(int) * NumeroDeBaus);
 	
-	Baus[0] = POCAO2;
-	Baus[1] = POCAO;
+	Baus[0] = CAFE;
+	Baus[1] = POCAO3;
 	
 	int Bau_AreaDeInteracao = 10;
 	
@@ -474,7 +483,7 @@ int main()
 	printf("\nAntes da batalha:\n");
 	detalhaStatus(li);
 	
-	li = iniciarBatalha(li, mob, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+	iniciarBatalha(li, mob, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
 	
 	printf("\nDepois da bataçha:\n");
 	detalhaStatus(li);
@@ -633,6 +642,9 @@ int main()
 			if(AdicionarItem == true)
 			{
 				//Codigo de adicionar item.
+				lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[AdicionarItemIndice]);
+				AdicionarItem = false;
+				detalhaConsumiveis(lista_consumiveis);
 			}
 			
 			//Caixa de Texto
