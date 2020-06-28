@@ -160,7 +160,9 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 		 atacando = false,
 		 animacao = false,
 		 personagensMortos = false,
-		 monstrosMortos = false;
+		 monstrosMortos = false,
+		 escapou = false, // Controla se o player conseguiu fugir da luta
+		 fugindo = false; // Caso o player selecione a opcao de fugir
 	
 	int id = 0,
 		i = 0,
@@ -180,9 +182,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 		MenuID = 0,
 		qtd_exp = 0,
 		controleAnimacao = 0,
-		randNum, // guarda o numero aleatorio gerado para fugir ou nao da batalha
-		escapou = 0, // controla se o player conseguir fugir da luta
-		fugindo = 0; // caso o player selecione a opcao de fugir
+		randNum; // Guarda o numero aleatorio gerado para fugir ou nao da batalha
 	
 	int MobPosXInicial = 0,
 		MobPosYInicial = 31,
@@ -678,24 +678,26 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				}
 			}
 			
-			// verifica se o player conseguiu fugir do confronto
-			if(fugindo == 1)
+			// Verifica se o player conseguiu fugir do confronto
+			if(fugindo == true)
 			{
 				randNum = rand()%(99-0 + 1) + 1;
 			
 				if(randNum > 60)
 				{
-					escapou = 1;
+					escapou = true;
 				}
 				else
 				{
-					escapou = 0;
+					escapou = false;
+					turnoDosMonstros = true;
+					Turno = 0;
 				}
 				
-				fugindo = 0;
+				fugindo = false;
 			}
 			
-			if(turnoDosMonstros == true && escapou == 0)
+			if(turnoDosMonstros == true)
 			{
 				for(i=0; i < iMaxMob; i++)
 				{
@@ -743,7 +745,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				}
 			}
 			
-			if(atacando == true && escapou == 0)
+			if(atacando == true)
 			{
 				for(i=0; i < ListaDosTurnosTamanho; i++)
 				{
@@ -1254,7 +1256,22 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 								}
 								
 								//Verifica se tem o item disponivel para usar
-								lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]);
+								if(ListaDosTurnos[i].Acao == BPOCAO)
+								{
+									lcAux = lista_consumiveis_busca(lista_consumiveis, POCAO);
+								}
+								else if(ListaDosTurnos[i].Acao == BPOCAO2)
+								{
+									lcAux = lista_consumiveis_busca(lista_consumiveis, POCAO2);
+								}
+								else if(ListaDosTurnos[i].Acao == BPOCAO3)
+								{
+									lcAux = lista_consumiveis_busca(lista_consumiveis, POCAO3);
+								}
+								else if(ListaDosTurnos[i].Acao == BCAFE)
+								{
+									lcAux = lista_consumiveis_busca(lista_consumiveis, CAFE);
+								}
 								
 								if(lcAux == NULL)
 								{
@@ -1401,7 +1418,11 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 												}
 											}
 										}
-										else if(controleAnimacao < 46)
+										else if(controleAnimacao < 50)
+										{
+											//Nada
+										}
+										else if(controleAnimacao < 51)
 										{	
 											a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
 											
@@ -1439,7 +1460,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 											
 											itoa(danoCausado, Texto, 10);
 										}
-										else if(controleAnimacao < 60)
+										else if(controleAnimacao < 65)
 										{
 											settextstyle(1, 0, 2);
 											setbkcolor(RGB(255, 255, 255));
