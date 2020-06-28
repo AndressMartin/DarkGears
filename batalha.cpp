@@ -634,6 +634,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 							}
 							else if(SelecaoItem == CAFE)
 							{
+								a = lista_busca(li, ArrayIds[Selecao]);
+								
 								if(a->hp <= 0)
 								{
 									ListaDosTurnosTamanho ++;
@@ -763,6 +765,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 									}
 								}
 								
+								//Arruma as variaveis para a animacao
 								if(ListaDosTurnos[i].IndiceRecebedor != -1)
 								{
 									dano = calcular_dano(li, ListaDosTurnos[i].IndiceAtacante);
@@ -967,6 +970,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 									}
 								}
 								
+								//Arruma as variaveis para a animacao
 								if(ListaDosTurnos[i].IndiceRecebedor != -1)
 								{
 									dano = calcular_dano(mob, ListaDosTurnos[i].IndiceAtacante);
@@ -1193,27 +1197,39 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 								}
 							}
 						}
-						if(ListaDosTurnos[i].Acao == BPOCAO || ListaDosTurnos[i].Acao == BPOCAO2 || ListaDosTurnos[i].Acao == BPOCAO3) // Se for uma pocao
+						if(ListaDosTurnos[i].Acao == BPOCAO || ListaDosTurnos[i].Acao == BPOCAO2 || ListaDosTurnos[i].Acao == BPOCAO3 || ListaDosTurnos[i].Acao == BCAFE) // Se for uma pocao ou cafe
 						{
 							if(ListaDosTurnos[i].Tipo == PERSONAGEM)
 							{
 								a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
 								
-								// Verifica se o HP do aliado já foi zerado e escolhe um novo alvo da lista
-								if(a->hp <= 0)
+								// Verifica se o HP do aliado já foi zerado (no caso das pocoes) e escolhe um novo alvo da lista
+								if(ListaDosTurnos[i].Acao == BPOCAO || ListaDosTurnos[i].Acao == BPOCAO2 || ListaDosTurnos[i].Acao == BPOCAO3)
 								{
-									ListaDosTurnos[i].IndiceRecebedor = -1;
-									
-									for(p = 0; p < iMax; p++)
+									if(a->hp <= 0)
 									{
-										a = lista_busca(li, ArrayIds[p]);
+										ListaDosTurnos[i].IndiceRecebedor = -1;
 										
-										if(a->hp > 0)
+										for(p = 0; p < iMax; p++)
 										{
-											ListaDosTurnos[i].IndiceRecebedor = ArrayIds[p];
+											a = lista_busca(li, ArrayIds[p]);
 											
-											break;
+											if(a->hp > 0)
+											{
+												ListaDosTurnos[i].IndiceRecebedor = ArrayIds[p];
+												
+												break;
+											}
 										}
+									}
+								}
+								
+								// Verifica se o HP do aliado esta zerado (no caso do cafe), e se nao estiver, pula o turno.
+								if(ListaDosTurnos[i].Acao == BCAFE)
+								{
+									if(a->hp > 0)
+									{
+										ListaDosTurnos[i].IndiceRecebedor = -1;
 									}
 								}
 								
@@ -1225,11 +1241,9 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 									ListaDosTurnos[i].IndiceRecebedor = -1;
 								}
 								
+								//Arruma as variaveis para a animacao
 								if(ListaDosTurnos[i].IndiceRecebedor != -1)
-								{					
-									danoCausado = a->hp; //Usar para ver quanto HP foi curado
-									danoCausado -= a->hp;
-									
+								{													
 									animacao = true;
 									controleAnimacao = 0;
 								}
@@ -1276,9 +1290,172 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										//Menu
 										desenhaMenu(li, ArrayIds, iMax, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
 										
+										if(controleAnimacao < 30)
+										{
+											//Nada
+										}
+										else if(controleAnimacao < 35)
+										{
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													if(ListaDosTurnos[i].Acao == BPOCAO)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA1_1], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA1_1], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BPOCAO2)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA2_1], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA2_1], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BPOCAO3)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA3_1], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA3_1], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BCAFE)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[REVIVER1], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[REVIVER1], OR_PUT);
+													}
+												}
+											}
+										}
+										else if(controleAnimacao < 40)
+										{
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													if(ListaDosTurnos[i].Acao == BPOCAO)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA1_2], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA1_2], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BPOCAO2)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA2_2], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA2_2], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BPOCAO3)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA3_2], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA3_2], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BCAFE)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[REVIVER2], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[REVIVER2], OR_PUT);
+													}
+												}
+											}
+										}
+										else if(controleAnimacao < 45)
+										{
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													if(ListaDosTurnos[i].Acao == BPOCAO)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA1_3], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA1_3], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BPOCAO2)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA2_3], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA2_3], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BPOCAO3)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[CURA3_3], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[CURA3_3], OR_PUT);
+													}
+													else if(ListaDosTurnos[i].Acao == BCAFE)
+													{
+														putimage(537, 337 + (73 * q), Sprites_Efeitos_Mascaras[REVIVER3], AND_PUT);
+														putimage(537, 337 + (73 * q), Sprites_Efeitos[REVIVER3], OR_PUT);
+													}
+												}
+											}
+										}
+										else if(controleAnimacao < 46)
+										{	
+											a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
+											
+											//Usado para ver quanto HP foi curado
+											danoCausado = a->hp;
+											
+											if(ListaDosTurnos[i].Acao == BPOCAO)
+											{
+												utilizar_consumivel(lista_consumiveis, POCAO, li, ListaDosTurnos[i].IndiceRecebedor);
+											}
+											else if(ListaDosTurnos[i].Acao == BPOCAO2)
+											{
+												utilizar_consumivel(lista_consumiveis, POCAO2, li, ListaDosTurnos[i].IndiceRecebedor);
+											}
+											else if(ListaDosTurnos[i].Acao == BPOCAO3)
+											{
+												utilizar_consumivel(lista_consumiveis, POCAO3, li, ListaDosTurnos[i].IndiceRecebedor);
+											}
+											else if(ListaDosTurnos[i].Acao == BCAFE)
+											{
+												utilizar_consumivel(lista_consumiveis, CAFE, li, ListaDosTurnos[i].IndiceRecebedor);
+											}
+											
+											danoCausado = a->hp - danoCausado;
+											
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													PosYTexto = 337 + (73 * q) + 10;
+												}
+											}
+														
+											Texto = (char *)realloc(Texto, sizeof(char) * 15);
+											
+											itoa(danoCausado, Texto, 10);
+										}
+										else if(controleAnimacao < 60)
+										{
+											settextstyle(1, 0, 2);
+											setbkcolor(RGB(255, 255, 255));
+											setcolor(RGB(34, 177, 76));
+											setlinestyle(0, 0, 1);
+											
+											outtextxy(754 + 65, PosYTexto, Texto);
+											
+											for(q = 0; q < iMax; q++)
+											{
+												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
+												{
+													if(PosYTexto > 337 + (73 * q) - 10)
+													{
+														PosYTexto --;
+													}
+												}
+											}
+										}
+										else
+										{
+											animacao = false;
+										}
+										
+										for(q = 0; q < iMax; q++)
+										{
+											if(ArrayIds[q] == ListaDosTurnos[i].IndiceAtacante)
+											{
+												setlinestyle(0, 0, 2);
+												setcolor(RGB(255, 242, 0));
+												rectangle(537, 337 + (73 * q), 537 + 85, 337 + (73 * q) + 74);
+											}
+										}
+										
 										//Controle
 										controleAnimacao ++;
-										animacao = false;
 										
 										//Torna visivel a pagina de desenho.
 										setvisualpage(PG);

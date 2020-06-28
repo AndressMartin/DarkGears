@@ -31,6 +31,6 @@ enum AcoesDeBatalha {ATAQUE, BPOCAO, BPOCAO2, BPOCAO3, BCAFE};
 enum ImagensInimigosBatalha {BGOLEM, BWUMPUS};
 
 //Enumera as imagens dos efeitos
-enum ImagensEfeitos {GOLPE};
+enum ImagensEfeitos {GOLPE, CURA1_1, CURA1_2, CURA1_3, CURA2_1, CURA2_2, CURA2_3, CURA3_1, CURA3_2, CURA3_3, REVIVER1, REVIVER2, REVIVER3};
 
 #endif

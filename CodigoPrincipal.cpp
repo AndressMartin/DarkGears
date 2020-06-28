@@ -58,7 +58,7 @@ const int Sprites_MobsQ = 2;
 void* Sprites_Mobs[Sprites_MobsQ];
 void* Sprites_Mobs_Mascaras[Sprites_MobsQ];
 
-const int Sprites_EfeitosQ = 1;
+const int Sprites_EfeitosQ = 13;
 void* Sprites_Efeitos[Sprites_EfeitosQ];
 void* Sprites_Efeitos_Mascaras[Sprites_EfeitosQ];
 
@@ -100,7 +100,19 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
 											  "Sprites/Mobs/wumpus"};
 
-char Sprites_Efeitos_Nomes[Sprites_EfeitosQ][22] = {"Sprites/Efeitos/golpe"};
+char Sprites_Efeitos_Nomes[Sprites_EfeitosQ][25] = {"Sprites/Efeitos/golpe",
+													"Sprites/Efeitos/cura1-1",
+													"Sprites/Efeitos/cura1-2",
+													"Sprites/Efeitos/cura1-3",
+													"Sprites/Efeitos/cura2-1",
+													"Sprites/Efeitos/cura2-2",
+													"Sprites/Efeitos/cura2-3",
+													"Sprites/Efeitos/cura3-1",
+													"Sprites/Efeitos/cura3-2",
+													"Sprites/Efeitos/cura3-3",
+													"Sprites/Efeitos/reviver1",
+													"Sprites/Efeitos/reviver2",
+													"Sprites/Efeitos/reviver3"};
 
 //Organizacao = {Bau01 fechado, Bau01 aberto, Bau02 fechado, Bau02 aberto, ...}
 char Sprites_Baus_Nomes[Sprites_BausQ][16] = {"Sprites/bau01-F",
@@ -146,7 +158,19 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
 											   {275, 275}};
 
-int Sprites_Efeitos_Tamanhos[Sprites_EfeitosQ][2] = {{150, 150}};
+int Sprites_Efeitos_Tamanhos[Sprites_EfeitosQ][2] = {{150, 150},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74},
+													 {85, 74}};
 
 //Definicao das funcoes, as funcoes em si estao depois do main.
 void CarregarImagens(int Imagem);
@@ -227,7 +251,7 @@ int main()
 	char golem[] = "Golem";
 	char wumpus[] = "Wumpus";
 	
-	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 100, 0);
+	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 10, 0);
 	li = lista_insere(li, 2, cueio, 30, 6, 80, 12, 15, 5, 200, 0);
 	li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999, 0);
 	
@@ -237,9 +261,9 @@ int main()
 	li = equipa_item(li, 1, &item[2]);
 	
 	//Insere inimigos na lista
-	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 20, 10);
-	mob = lista_insere(mob, 1, golem, 20, 18, 50, 6, 5, 1, 30, 15);
-	mob = lista_insere(mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 20, 10);
+	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 200, 10);
+	mob = lista_insere(mob, 1, golem, 20, 18, 50, 6, 5, 1, 300, 15);
+	mob = lista_insere(mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 200, 10);
 	
 	//mob = inserir_inimigo(mob, 1);
 	

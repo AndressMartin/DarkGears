@@ -39,5 +39,4 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 void detalhaStatus(Personagens *item);
 void detalhaConsumiveis(Consumivel *consumiveis);
 
-
 #endif

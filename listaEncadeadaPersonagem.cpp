@@ -420,7 +420,6 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 			{
 				li_cons = lista_consumiveis_retira(li_cons, tipo_consumivel);
 			}
-			
 		}
 	}
 	
