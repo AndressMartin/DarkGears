@@ -8,9 +8,10 @@
 #include "enums.h"
 #include "listasDoMapa.h"
 #include "desenhosDoMapa.h"
-#include "ListaEncadeadaPersonagem.h"
+#include "listaEncadeadaPersonagem.h"
 #include "batalha.h"
 #include "caixaDeDialogo.h"
+#include "reproduzirSons.h"
 
 #define LEFT   	75
 #define RIGHT  	77
@@ -220,22 +221,22 @@ int main()
     strcpy(itemconsumivel[POCAO].nome, "Pocao");
     itemconsumivel[POCAO].id = POCAO + 1;
 	itemconsumivel[POCAO].tipo = POCAO;
-	itemconsumivel[POCAO].qtd = 30;
+	itemconsumivel[POCAO].qtd = 1;
 	
 	strcpy(itemconsumivel[POCAO2].nome, "Pocao S.");
     itemconsumivel[POCAO2].id = POCAO2 + 1;
 	itemconsumivel[POCAO2].tipo = POCAO2;
-	itemconsumivel[POCAO2].qtd = 30;
+	itemconsumivel[POCAO2].qtd = 1;
 	
 	strcpy(itemconsumivel[POCAO3].nome, "Pocao M.");
     itemconsumivel[POCAO3].id = POCAO3 + 1;
 	itemconsumivel[POCAO3].tipo = POCAO3;
-	itemconsumivel[POCAO3].qtd = 30;
+	itemconsumivel[POCAO3].qtd = 1;
 	
 	strcpy(itemconsumivel[CAFE].nome, "Cafe");
     itemconsumivel[CAFE].id = CAFE + 1;
 	itemconsumivel[CAFE].tipo = CAFE;
-	itemconsumivel[CAFE].qtd = 30;
+	itemconsumivel[CAFE].qtd = 1;
 	
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
@@ -251,7 +252,7 @@ int main()
 	char golem[] = "Golem";
 	char wumpus[] = "Wumpus";
 	
-	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 100, 0);
+	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 10, 0);
 	li = lista_insere(li, 2, cueio, 30, 6, 80, 12, 15, 5, 200, 0);
 	li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999, 0);
 	
@@ -261,9 +262,9 @@ int main()
 	li = equipa_item(li, 1, &item[2]);
 	
 	//Insere inimigos na lista
-	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 999, 10);
-	mob = lista_insere(mob, 1, golem, 20, 18, 50, 6, 5, 1, 999, 15);
-	mob = lista_insere(mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 999, 10);
+	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 200, 10);
+	mob = lista_insere(mob, 1, golem, 20, 18, 50, 6, 5, 1, 300, 15);
+	mob = lista_insere(mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 200, 10);
 	
 	//mob = inserir_inimigo(mob, 1);
 	
@@ -510,7 +511,10 @@ int main()
 	printf("\nAntes da batalha:\n");
 	detalhaStatus(li);
 	
-	iniciarBatalha(li, mob, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+	reproduzirSom(VOLUME3);
+	reproduzirSom(MUSICABATALHA);
+	iniciarBatalha(li, mob, lista_consumiveis, true, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+	reproduzirSom(PARARMUSICA);
 	
 	printf("\nDepois da batalha:\n");
 	detalhaStatus(li);

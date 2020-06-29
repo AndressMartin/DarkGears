@@ -1,6 +1,7 @@
 #include "structs.h"
 #include "enums.h"
-#include "ListaEncadeadaPersonagem.h"
+#include "listaEncadeadaPersonagem.h"
+#include "reproduzirSons.h"
 
 #include<stdio.h>
 #include<graphics.h>
@@ -145,7 +146,7 @@ void desenhaMenu(Personagens* li, int ArrayIds[], int iMax, void* Sprites_Retrat
 	}
 }
 
-void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumiveis, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
+void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumiveis, bool podeFugir, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
 {	
 	srand(time(0));
 	
@@ -159,11 +160,9 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 		 animacao = false,
 		 personagensMortos = false,
 		 monstrosMortos = false,
-		 escapou = false, // Controla se o player conseguiu fugir da luta
 		 fugindo = false; // Caso o player selecione a opcao de fugir
 	
-	int id = 0,
-		i = 0,
+	int i = 0,
 		p = 0,
 		q = 0,
 		itensScroll = 0,
@@ -180,6 +179,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 		MenuID = 0,
 		qtd_exp = 0,
 		controleAnimacao = 0,
+		escapou = 0, // Controla se o player conseguiu fugir da luta
 		randNum; // Guarda o numero aleatorio gerado para fugir ou nao da batalha
 	
 	int MobPosXInicial = 0,
@@ -206,9 +206,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 	//Variável usada para percorrer a lista
 	Personagens *a = lista_cria();
 	Consumivel *lcAux = lista_consumiveis_cria();
-	
-	turnoDosPersonagens = true;
-	id = 0;
 	
 	int PG = 0;
 	char Tecla = 0;
@@ -242,6 +239,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
+  	
+  	reproduzirSom(CURSORPRONTO);
+	turnoDosPersonagens = true;
+	q = 0;
 	
 	while(!(batalhaFinalizada) && Tecla != ESC)
 	{
@@ -392,6 +393,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					strcpy(Texto, "S - Itens");
 					outtextxy(358, 370, Texto);
 					
+					if(q > 0 || podeFugir == false)
+					{
+						setcolor(RGB(200, 200, 200));
+					}
 					strcpy(Texto, "X - Dar no pe!");
 					outtextxy(358, 483, Texto);
 				}
@@ -440,7 +445,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					{
 						if((i >= itensScroll) && (i - itensScroll < 3))
 						{
-							lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]); //Pode ser a causa do bug.
+							lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]);
 					
 						    putimage(27, 337 + (73 * itensScroll2), Sprites_HUD_Mascaras[MENUBATALHA4], AND_PUT);
 							putimage(27, 337 + (73 * itensScroll2), Sprites_HUD[MENUBATALHA4], OR_PUT);
@@ -503,6 +508,18 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				}
 			}
 			
+			if(escapou == 1)
+			{
+				strcpy(Texto, "Nao conseguiu escapar.");
+				outtextxy(27 + 180, 337 + 103, Texto);
+			}
+			
+			if(escapou == 2)
+			{
+				strcpy(Texto, "Conseguiu escapar!");
+				outtextxy(27 + 180, 337 + 103, Texto);
+			}
+			
 			//Torna visivel a pagina de desenho.
 			setvisualpage(PG);
 			
@@ -525,33 +542,57 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					{
 						if(Tecla == TECLAA)
 						{
+							reproduzirSom(CURSORMOVE);
+							
 							MenuID = 1;
 							Selecao = 0;
 						}
 						if(Tecla == TECLAS)
 						{
+							reproduzirSom(CURSORMOVE);
+							
 							SelecaoItem = 0;
 							MenuID = 2;
 							itensScroll = 0;
 							Selecao = 0;
+						}
+						if(Tecla == TECLAX )
+						{
+							if(q <= 0 && podeFugir == true)
+							{
+								reproduzirSom(CURSORMOVE);
+							
+								turnoDosPersonagens = false;
+								fugindo = true;
+								Selecao = 0;
+							}
+							else
+							{
+								reproduzirSom(CURSORERRO);
+							}
 						}
 					}
 					if(MenuID == 1)
 					{
 						if(Tecla == TECLABACKSPACE)
 						{
+							reproduzirSom(CURSORVOLTA);
 							MenuID = 0;
 						}
 						if((Tecla == UP || Tecla == LEFT) && (Selecao > 0))
 						{
+							reproduzirSom(CURSORMOVE);
 							Selecao --;
 						}
 						if((Tecla == DOWN || Tecla == RIGHT) && (Selecao < iMaxMob - 1))
 						{
+							reproduzirSom(CURSORMOVE);
 							Selecao ++;
 						}
 						if(Tecla == TECLAENTER)
 						{
+							reproduzirSom(CURSORMOVE);
+							
 							ListaDosTurnosTamanho ++;
 							ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
 							
@@ -564,6 +605,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 							ListaDosTurnos[ListaDosTurnosTamanho - 1].Vel = a->vel;
 							
 							Turno ++;
+							q ++;
 							MenuID = 0;
 						}
 					}
@@ -571,10 +613,13 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					{
 						if(Tecla == TECLABACKSPACE)
 						{
+							reproduzirSom(CURSORVOLTA);
 							MenuID = 0;
 						}
 						if((Tecla == UP || Tecla == LEFT) && (Selecao > 0))
 						{
+							reproduzirSom(CURSORMOVE);
+							
 							Selecao --;
 							if(Selecao < itensScroll)
 							{
@@ -583,6 +628,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 						}
 						if((Tecla == DOWN || Tecla == RIGHT) && (Selecao < iMaxItens - 1))
 						{
+							reproduzirSom(CURSORMOVE);
+							
 							Selecao ++;
 							if(Selecao - itensScroll > 2)
 							{
@@ -590,28 +637,50 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 							}
 						}
 						if(Tecla == TECLAENTER)
-						{						
-							SelecaoItem = ArrayIdsItens[Selecao];
-							MenuID = 21;
-							Selecao = 0;
-							
-							Tecla = 0;
+						{				
+							if(lista_consumiveis != NULL)
+							{
+								lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[Selecao]);
+								
+								if(lcAux->qtd > 0)
+								{
+									reproduzirSom(CURSORMOVE);
+									
+									SelecaoItem = ArrayIdsItens[Selecao];
+									MenuID = 21;
+									Selecao = 0;
+									
+									Tecla = 0;
+								}
+								else
+								{
+									reproduzirSom(CURSORERRO);
+								}
+							}
+							else
+							{
+								reproduzirSom(CURSORERRO);
+							}
 						}
 					}
 					if(MenuID == 21)
 					{
 						if(Tecla == TECLABACKSPACE)
 						{
+							reproduzirSom(CURSORVOLTA);
+							
 							MenuID = 2;
 							itensScroll = 0;
 							Selecao = 0;
 						}
 						if((Tecla == UP || Tecla == LEFT) && (Selecao > 0))
 						{
+							reproduzirSom(CURSORMOVE);
 							Selecao --;
 						}
 						if((Tecla == DOWN || Tecla == RIGHT) && (Selecao < iMax - 1))
 						{
+							reproduzirSom(CURSORMOVE);
 							Selecao ++;
 						}
 						if(Tecla == TECLAENTER)
@@ -622,6 +691,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 								
 								if(a->hp > 0)
 								{
+									reproduzirSom(CURSORMOVE);
+									
 									ListaDosTurnosTamanho ++;
 									ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
 									
@@ -645,11 +716,12 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 									ListaDosTurnos[ListaDosTurnosTamanho - 1].Vel = a->vel;
 									
 									Turno ++;
+									q ++;
 									MenuID = 0;
 								}
 								else
 								{
-									//Tocar efeito sonoro
+									reproduzirSom(CURSORERRO);
 								}
 							}
 							else if(SelecaoItem == CAFE)
@@ -658,6 +730,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 								
 								if(a->hp <= 0)
 								{
+									reproduzirSom(CURSORMOVE);
+									
 									ListaDosTurnosTamanho ++;
 									ListaDosTurnos = (ListaDosTurnosS *)realloc(ListaDosTurnos, sizeof(ListaDosTurnosS) * ListaDosTurnosTamanho);
 									
@@ -670,11 +744,12 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 									ListaDosTurnos[ListaDosTurnosTamanho - 1].Vel = a->vel;
 									
 									Turno ++;
+									q ++;
 									MenuID = 0;
 								}
 								else
 								{
-									//Tocar efeito sonoro
+									reproduzirSom(CURSORERRO);
 								}
 							}
 						}
@@ -682,8 +757,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				}
 				else
 				{
-					printf("\n\n%d", a->hp);
-					
 					Turno ++;
 				}
 				
@@ -700,18 +773,39 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			{
 				randNum = rand()%(99-0 + 1) + 1;
 			
-				if(randNum > 60)
+				if(randNum <= 60)
 				{
-					escapou = true;
+					escapou = 2;
 				}
 				else
 				{
-					escapou = false;
-					turnoDosMonstros = true;
-					Turno = 0;
+					escapou = 1;
 				}
 				
 				fugindo = false;
+			}
+			
+			if(escapou == 1)
+			{
+				if(Tecla == TECLAENTER)
+				{
+					reproduzirSom(CURSORMOVE);
+					
+					turnoDosMonstros = true;
+					Turno = 0;
+					escapou = 0;
+				}
+			}
+			
+			if(escapou == 2)
+			{
+				if(Tecla == TECLAENTER)
+				{
+					reproduzirSom(SOMCORREBATALHA);
+					
+					batalhaFinalizada = true;
+					escapou = 0;
+				}
 			}
 			
 			if(turnoDosMonstros == true)
@@ -780,9 +874,9 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					
 					if(a->hp > 0)
 					{
-						if(ListaDosTurnos[i].Acao == ATAQUE) // Se for ataque
+						if(ListaDosTurnos[i].Acao == ATAQUE) //Se for ataque
 						{
-							if(ListaDosTurnos[i].Tipo == PERSONAGEM)
+							if(ListaDosTurnos[i].Tipo == PERSONAGEM) //Se for ataque dos personagens
 							{
 								a = lista_busca(mob, ListaDosTurnos[i].IndiceRecebedor);
 								
@@ -870,6 +964,18 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 													}
 													else if(controleAnimacao < 35)
 													{
+														if(controleAnimacao < 31)
+														{
+															if(dano <= 0)
+															{
+																reproduzirSom(SOMERROUATAQUE);
+															}
+															else
+															{
+																reproduzirSom(SOMDEATAQUE2);
+															}
+														}
+														
 														putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
 														putimage(MobPosXInicial + (MobPosXDistancia * p) + 5, ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
 														
@@ -937,6 +1043,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 														}
 														else
 														{
+															if (controleAnimacao < 61)
+															{
+																reproduzirSom(SOMINIMIGOMORTO);
+															}
 															ArrayMobPosY[p] += 20;
 															if(ArrayMobPosY[p] > 580)
 															{
@@ -984,7 +1094,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 									}
 								}
 							}
-							else // Se for ataque do mob
+							else //Se for ataque dos mobs
 							{
 								a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
 								
@@ -1056,15 +1166,29 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 												}
 												else
 												{
-													if(controleAnimacao < 30)
+													if(controleAnimacao < 25)
 													{
 														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
 														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
+													}
+													else if(controleAnimacao < 30)
+													{
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p] - 5, Sprites_Mobs_Mascaras[a->levels - 1], AND_PUT);
+														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p] - 5, Sprites_Mobs[a->levels - 1], OR_PUT);
 													}
 													else if(controleAnimacao < 35)
 													{
 														if(controleAnimacao < 31)
 														{
+															if(dano <= 0)
+															{
+																reproduzirSom(SOMERROUATAQUE);
+															}
+															else
+															{
+																reproduzirSom(SOMDEATAQUE);
+															}
+															
 															a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
 															
 															danoCausado = a->hp;
@@ -1286,6 +1410,13 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 								{
 									ListaDosTurnos[i].IndiceRecebedor = -1;
 								}
+								else
+								{
+									if(lcAux->qtd <= 0)
+									{
+										ListaDosTurnos[i].IndiceRecebedor = -1;
+									}
+								}
 								
 								//Arruma as variaveis para a animacao
 								if(ListaDosTurnos[i].IndiceRecebedor != -1)
@@ -1342,6 +1473,18 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										}
 										else if(controleAnimacao < 35)
 										{
+											if(controleAnimacao < 31)
+											{
+												if(ListaDosTurnos[i].Acao == BPOCAO || ListaDosTurnos[i].Acao == BPOCAO2 || ListaDosTurnos[i].Acao == BPOCAO3)
+												{
+													reproduzirSom(SOMDECURA);
+												}
+												else if(ListaDosTurnos[i].Acao == BCAFE)
+												{
+													reproduzirSom(SOMDEREVIVER);
+												}
+											}
+											
 											for(q = 0; q < iMax; q++)
 											{
 												if(ArrayIds[q] == ListaDosTurnos[i].IndiceRecebedor)
@@ -1487,7 +1630,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 												}
 											}
 										}
-										else
+										else if(controleAnimacao >= 75)
 										{
 											animacao = false;
 										}
@@ -1529,6 +1672,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				atacando = false;
 				Turno = 0;
 				ListaDosTurnosTamanho = 0;
+				q = 0;
 				turnoDosPersonagens = true;
 				
 				printf("\n\n");
@@ -1555,6 +1699,11 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					{
 						personagensMortos = false;
 					}
+				}
+				
+				if(personagensMortos == false && monstrosMortos == false)
+				{
+					reproduzirSom(CURSORPRONTO);
 				}
 			}
 			
@@ -1584,15 +1733,19 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 	}
 	printf("\n\nExp: %d", qtd_exp);
 	
+	reproduzirSom(PARARMUSICA);
 	if(personagensMortos == false)
 	{
 		li = aplicar_experiencia(li, qtd_exp);
+		if(monstrosMortos == true)
+		{
+			reproduzirSom(MUSICAVITORIA);
+		}
 	}
 	else
 	{
 		gameOver = true;
 	}
-	
 	while(resultados == true && Tecla != ESC)
 	{	
 		Gt2 = GetTickCount();
@@ -1694,9 +1847,9 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					
 				//settextstyle(1, 0, 3);
 				setcolor(RGB(0, 0, 0));
-				//strcpy(Texto, "Resultados");
+				strcpy(Texto, "Resultados");
 				
-				outtextxy(199 + 230, 140 + 30, Texto);
+				outtextxy(199 + 230 + 45, 140 + 30, Texto);
 				
 				for(int i = 0; i < iMax; i++)
 				{
@@ -1738,6 +1891,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			//Acoes
 			if(Tecla == TECLAENTER)
 			{
+				reproduzirSom(CURSORMOVE);
 				resultados = false;
 			}
 			
@@ -1751,6 +1905,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			}
 		}
 	}
+	
 	free(ArrayIds);
 	free(ArrayIdsMob);
 	free(ArrayIdsMobInicial);
