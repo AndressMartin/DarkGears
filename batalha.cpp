@@ -22,7 +22,7 @@
 
 #define ESC     27
 
-void retratoDeBatalha(int PosX, int PosY, char *Texto, int Tipo, int i, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[])
+void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[])
 {
 	int Imagem = 0;
 	
@@ -98,13 +98,13 @@ void retratoDeBatalha(int PosX, int PosY, char *Texto, int Tipo, int i, void* Sp
 	}
 }
 
-void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
+void desenhaMenu(Personagens* li, int ArrayIds[], int iMax, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
 {
-	char *Texto = NULL,
+	char Texto[30] = "Texto",
 		 HpTexto[4] = "999";
-	Personagens *a;
+	Personagens *a = lista_cria();
 	
-	settextstyle(0, 0, 0);
+	//settextstyle(0, 0, 0);
 	setbkcolor(RGB(159, 79, 51));
 	setcolor(RGB(0, 0, 0));
 	setlinestyle(0, 0, 1);
@@ -119,7 +119,6 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 	    putimage(537, 337 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHA2], AND_PUT);
 		putimage(537, 337 + (73 * i), Sprites_HUD[MENUBATALHA2], OR_PUT);
 		
-		Texto = (char *)realloc(Texto, sizeof(char) * 10);
 		strcpy(Texto, a->nome);
 		
 		if(a->hp > 0)
@@ -133,7 +132,6 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 		
 		outtextxy(622 + 10, 337 + (73 * i) + 30, Texto);
 		
-		Texto = (char *)realloc(Texto, sizeof(char) * 20);
 		strcpy(Texto, "HP: ");
 		
 		itoa(a->hp, HpTexto, 10);
@@ -145,8 +143,6 @@ void desenhaMenu(Personagens* li, int *ArrayIds, int iMax, void* Sprites_Retrato
 		
 		outtextxy(754 + 10, 337 + (73 * i) + 30, Texto);
 	}
-	
-	free(Texto);
 }
 
 void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumiveis, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
@@ -201,15 +197,15 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 	ListaDosTurnosS ListaDosTurnosTemp;
 	int ListaDosTurnosTamanho = 0;
 	
-	char *Texto = NULL,
-		 *Texto2 = NULL,
+	char Texto[30] = "Texto",
+		 Texto2[30] = "Texto 2",
 		 HpTexto[4] = "999";
 	
 	int PosYTexto;
 	
 	//Variável usada para percorrer a lista
-	Personagens *a;
-	Consumivel *lcAux;
+	Personagens *a = lista_cria();
+	Consumivel *lcAux = lista_consumiveis_cria();
 	
 	turnoDosPersonagens = true;
 	id = 0;
@@ -387,12 +383,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				
 				if(MenuID == 0)
 				{
-					Texto = (char *)realloc(Texto, sizeof(char) * 15);
-				
-					strcpy(Texto, "A -Ataque");
+					strcpy(Texto, "A - Ataque");
 					outtextxy(96, 370, Texto);
 					
-					strcpy(Texto, "Z -Habilidades");
+					strcpy(Texto, "Z - Habilidades");
 					outtextxy(96, 483, Texto);
 					
 					strcpy(Texto, "S - Itens");
@@ -401,6 +395,21 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					strcpy(Texto, "X - Dar no pe!");
 					outtextxy(358, 483, Texto);
 				}
+				
+				/*
+				printf("\n\nTurno: %d", Turno);
+				printf("\niMax:  %d", iMax);
+				printf("\nArrayIds: ");
+				for(i=0; i < iMax; i++)
+				{
+					printf("%d, ", ArrayIds[i]);
+				}
+				printf("\nSelec:  %d", Selecao);
+				printf("\nitScr:  %d", itensScroll);
+				printf("\nitSc2:  %d", itensScroll2);
+				printf("\nTexto:  %s", Texto);
+				printf("\nImagem:  %c", Sprites_HUD[MENUBATALHA1]);
+				*/
 				
 				if(MenuID == 1)
 				{
@@ -412,7 +421,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					    putimage(27, 337 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHA3], AND_PUT);
 						putimage(27, 337 + (73 * i), Sprites_HUD[MENUBATALHA3], OR_PUT);
 						
-						Texto = (char *)realloc(Texto, sizeof(char) * 10);
 						strcpy(Texto, a->nome);
 						
 						retratoDeBatalha(27, 337, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
@@ -432,22 +440,22 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					{
 						if((i >= itensScroll) && (i - itensScroll < 3))
 						{
-							lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]);
+							lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]); //Pode ser a causa do bug.
 					
 						    putimage(27, 337 + (73 * itensScroll2), Sprites_HUD_Mascaras[MENUBATALHA4], AND_PUT);
 							putimage(27, 337 + (73 * itensScroll2), Sprites_HUD[MENUBATALHA4], OR_PUT);
 							
-							Texto = (char *)realloc(Texto, sizeof(char) * 10);
 							strcpy(Texto, lcAux->nome);
 							
 							retratoDeBatalha(27, 337, Texto, RETRATOBATALHANORMAL, itensScroll2, Sprites_Retratos, Sprites_Retratos_Mascaras);
 							
-							settextstyle(0, 0, 0);
+							// ! - O settextstyle faz o jogo bugar depois de um tempo.
+							//settextstyle(0, 0, 0);
 							outtextxy(112 + 10, 337 + (73 * itensScroll2) + 30, Texto);
 							
 							itoa(lcAux->qtd, Texto, 10);
 							
-							settextstyle(1, 0, 3);
+							//settextstyle(1, 0, 3);
 							outtextxy(27 + 325 + 15, 337 + (73 * itensScroll2) + 30, Texto);
 							
 							itensScroll2 ++;
@@ -457,11 +465,13 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					putimage(27 + 410, 337 + (73 * (Selecao - itensScroll)), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
 					putimage(27 + 410, 337 + (73 * (Selecao - itensScroll)), Sprites_HUD[SELECAOM], OR_PUT);
 					
+					/*
 					printf("\n");
 					for(i=0; i < iMaxItens; i++)
 					{
 						printf("%d", ArrayIdsItens[i]);
 					}
+					*/
 				}
 				
 				if(MenuID == 21)
@@ -474,7 +484,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					    putimage(27, 337 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHA3], AND_PUT);
 						putimage(27, 337 + (73 * i), Sprites_HUD[MENUBATALHA3], OR_PUT);
 						
-						Texto = (char *)realloc(Texto, sizeof(char) * 10);
 						strcpy(Texto, a->nome);
 						
 						if(a->hp > 0)
@@ -890,8 +899,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 														
 														PosYTexto = ArrayMobPosY[p] + 20;
 														
-														Texto = (char *)realloc(Texto, sizeof(char) * 15);
-														
 														if(dano <= 0)
 														{
 															strcpy(Texto, "Errou");
@@ -907,7 +914,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 														putimage(MobPosXInicial + (MobPosXDistancia * p), ArrayMobPosY[p], Sprites_Mobs[a->levels - 1], OR_PUT);
 														
 														
-														settextstyle(1, 0, 2);
+														//settextstyle(1, 0, 2);
 														setbkcolor(RGB(255, 255, 255));
 														setcolor(RGB(0, 0, 0));
 														setlinestyle(0, 0, 1);
@@ -953,7 +960,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 												{
 													a = lista_busca(li, ListaDosTurnos[i].IndiceAtacante);
 													
-													Texto2 = (char *)realloc(Texto2, sizeof(char) * 10);
 													strcpy(Texto2, a->nome);
 													
 													retratoDeBatalha(537, 337, Texto2, RETRATOBATALHAATACANDO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
@@ -1121,7 +1127,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 												{
 													a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
 													
-													Texto = (char *)realloc(Texto, sizeof(char) * 10);
 													strcpy(Texto, a->nome);
 													
 													retratoDeBatalha(537, 337, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
@@ -1139,7 +1144,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 												{
 													a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
 													
-													Texto = (char *)realloc(Texto, sizeof(char) * 10);
 													strcpy(Texto, a->nome);
 													
 													retratoDeBatalha(537, 337, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
@@ -1157,7 +1161,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 												{
 													a = lista_busca(li, ListaDosTurnos[i].IndiceRecebedor);
 													
-													Texto = (char *)realloc(Texto, sizeof(char) * 10);
 													strcpy(Texto, a->nome);
 													
 													retratoDeBatalha(537, 337, Texto, RETRATOBATALHADANO, q, Sprites_Retratos, Sprites_Retratos_Mascaras);
@@ -1177,8 +1180,6 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 												}
 											}
 											
-											Texto = (char *)realloc(Texto, sizeof(char) * 15);
-											
 											if(dano <= 0)
 											{
 												strcpy(Texto, "Errou");
@@ -1190,7 +1191,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										}
 										else if(controleAnimacao < 60)
 										{
-											settextstyle(1, 0, 2);
+											//settextstyle(1, 0, 2);
 											setbkcolor(RGB(255, 255, 255));
 											setcolor(RGB(0, 0, 0));
 											setlinestyle(0, 0, 1);
@@ -1463,14 +1464,12 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 													PosYTexto = 337 + (73 * q) + 10;
 												}
 											}
-														
-											Texto = (char *)realloc(Texto, sizeof(char) * 15);
 											
 											itoa(danoCausado, Texto, 10);
 										}
 										else if(controleAnimacao < 65)
 										{
-											settextstyle(1, 0, 2);
+											//settextstyle(1, 0, 2);
 											setbkcolor(RGB(255, 255, 255));
 											setcolor(RGB(34, 177, 76));
 											setlinestyle(0, 0, 1);
@@ -1572,6 +1571,8 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				Tecla = getch();
 				//printf("%d", Tecla);
 			}
+			//printf("\n\nTecla Int:     %d", Tecla);
+			//printf("\nSize of Tecla: %d", sizeof(Tecla));
 		}
 	}
 	
@@ -1683,19 +1684,17 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			
 			if(gameOver == false)
 			{
-				settextstyle(0, 0, 0);
+				//settextstyle(0, 0, 0);
 				setbkcolor(RGB(159, 79, 51));
 				setcolor(RGB(0, 0, 0));
 				setlinestyle(0, 0, 1);
 				
 				putimage(199, 140, Sprites_HUD_Mascaras[MENUBATALHAR], AND_PUT);
 				putimage(199, 140, Sprites_HUD[MENUBATALHAR], OR_PUT);
-				
-				Texto = (char *)realloc(Texto, sizeof(char) * 11);
 					
-				settextstyle(1, 0, 3);
+				//settextstyle(1, 0, 3);
 				setcolor(RGB(0, 0, 0));
-				strcpy(Texto, "Resultados");
+				//strcpy(Texto, "Resultados");
 				
 				outtextxy(199 + 230, 140 + 30, Texto);
 				
@@ -1706,17 +1705,15 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				    putimage(199, 140 + 75 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHAR2], AND_PUT);
 					putimage(199, 140 + 75 + (73 * i), Sprites_HUD[MENUBATALHAR2], OR_PUT);
 					
-					settextstyle(0, 0, 0);
+					//settextstyle(0, 0, 0);
 					setcolor(RGB(0, 0, 0));
 					
-					Texto = (char *)realloc(Texto, sizeof(char) * 10);
 					strcpy(Texto, a->nome);
 					
 					retratoDeBatalha(199, 140 + 75, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
 					
 					outtextxy(199 + 85 + 10, 140 + 75 + (73 * i) + 30, Texto);
 					
-					Texto = (char *)realloc(Texto, sizeof(char) * 20);
 					strcpy(Texto, "Nivel: ");
 					
 					itoa(a->levels, HpTexto, 10);
@@ -1761,6 +1758,4 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 	free(ArrayIdsAux);
 	free(ArrayMobPosY);
 	free(ListaDosTurnos);
-	free(Texto);
-	free(Texto2);
 }

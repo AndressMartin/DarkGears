@@ -22,7 +22,7 @@ void ReadDialogue(int posx, int posy, int partToStart, int partToStop, char *txt
 	FILE * fPointer;
 	fPointer = fopen(Arquivo, "r");	
 	
-	settextstyle(0, 0, 0);
+	//settextstyle(0, 0, 0);
 	setbkcolor(RGB(159, 79, 51));
 	setcolor(RGB(0, 0, 0));
 	setlinestyle(0, 0, 1);
