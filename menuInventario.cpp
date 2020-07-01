@@ -65,7 +65,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 		 HpTexto[4] = "999";
 	
 	bool Voltar = false;
-	
+	int resultQuadrado;
 	//Variável usada para percorrer a lista
 	Personagens *a = lista_cria();
 	Consumivel *lcAux = lista_consumiveis_cria();
@@ -122,7 +122,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			}
 			
 			//Fundo e cenario
-			setbkcolor(RGB(50, 50, 50));
+//			setbkcolor(RGB(50, 50, 50));
 			cleardevice();
 			
 			setbkcolor(RGB(233, 200, 70));
@@ -136,18 +136,18 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 				x = 83.5;
 				c = 166.5;
 				
-				circle(60, 60, 40);
-				line(60, 20, 310, 20);
-			 	line(60, 100, 310, 100);
-			  	line(310, 20, 310, 100);
-			  	circle(400, 60, 40);
-			 	line(400, 20, 650, 20);
-			  	line(400, 100, 650, 100);
-			  	line(650, 20, 650, 100);
-			  	circle(740, 60, 40);
-			  	line(740, 20, 990, 20);
-			  	line(740, 100, 990, 100);
-			  	line(990, 20, 990, 100);
+//				circle(60, 60, 40);
+//				line(60, 20, 310, 20);
+//			 	line(60, 100, 310, 100);
+//			  	line(310, 20, 310, 100);
+//			  	circle(400, 60, 40);
+//			 	line(400, 20, 650, 20);
+//			  	line(400, 100, 650, 100);
+//			  	line(650, 20, 650, 100);
+//			  	circle(740, 60, 40);
+//			  	line(740, 20, 990, 20);
+//			  	line(740, 100, 990, 100);
+//			  	line(990, 20, 990, 100);
 		    
 			  	for (i; i <= 4; i++)
 				{
@@ -155,6 +155,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			  		circle (c, (y + 160), 12);
 			  		itoa(i+1, btn, 10);
 			  		outtextxy(c-5, y + 153, btn);
+			  		resultQuadrado = c-5;
 			  		x += 166.5;
 			  		c += 166.5;
 				}
@@ -163,10 +164,26 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			  	rectangle(60, 340, 500, 530);
 			  	rectangle(500, 340, 960, 530);
 			  	
-			  	//1st Char
+			  	//Nomes dos personagens e HPs
 			  	for(int i = 0; i < iMax; i++)
 				{
 					a = lista_busca(li, ArrayIds[i]);
+					
+					putimage(20+(340*i), 20, Sprites_HUD_Mascaras[MENUBATALHA3], AND_PUT);
+					putimage(20+(340*i), 20, Sprites_HUD[MENUBATALHA3], OR_PUT);
+					
+					strcpy(Texto, a->nome);
+					
+					if(a->hp > 0)
+					{
+						retratoDeBatalha(20+(340*i), 20+(-73*i), Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+					}
+					else
+					{
+						retratoDeBatalha(20+(340*i), 20+(-73*i), Texto, RETRATOBATALHANOCAUTEADO, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+					}
+					
+//					outtextxy(70 + 85 + 10, 50 + (73 * i) + 30, Texto);
 					
 					strcpy(Texto, a->nome);
 					
@@ -184,16 +201,17 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 					outtextxy(150 + (340*i), 50, Texto);
 				}
 				
-			  	circle (132, 38, 10);
-			  	circle (80, 100, 13);
-			  	
-			  	//2nd Char
-			  	circle (472, 38, 10);
-			  	circle (422, 100, 13);
-			  	
-			  	//3rd Char
-			  	circle (812, 38, 10);
-			  	circle (762, 100, 13);
+//				//1st Char
+//			  	circle (132, 38, 10);
+//			  	circle (80, 100, 13);
+//			  	
+//			  	//2nd Char
+//			  	circle (472, 38, 10);
+//			  	circle (422, 100, 13);
+//			  	
+//			  	//3rd Char
+//			  	circle (812, 38, 10);
+//			  	circle (762, 100, 13);
 				
 				memset(btn, 0, sizeof btn);
 			}
