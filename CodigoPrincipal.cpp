@@ -56,7 +56,7 @@ const int Sprites_RetratosQ = 10;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
-const int Sprites_HUDQ = 13;
+const int Sprites_HUDQ = 14;
 void* Sprites_HUD[Sprites_HUDQ];
 void* Sprites_HUD_Mascaras[Sprites_HUDQ];
 
@@ -106,7 +106,8 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/jogar",
 											"Sprites/HUD/creditos",
 											"Sprites/HUD/sair",
-											"Sprites/HUD/telaDeCreditos"};
+											"Sprites/HUD/telaDeCreditos",
+											"Sprites/HUD/menuInventario_1"};
 											
 char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
 											  "Sprites/Mobs/wumpus"};
@@ -169,7 +170,8 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 											 {230, 45},
 											 {230, 45},
 											 {230, 45},
-											 {1024, 576}};
+											 {1024, 576},
+											 {280, 74}};
 											 
 int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
 											   {275, 275}};
