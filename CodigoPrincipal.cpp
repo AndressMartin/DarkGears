@@ -12,12 +12,14 @@
 #include "batalha.h"
 #include "caixaDeDialogo.h"
 #include "reproduzirSons.h"
+#include "menuInventario.h"
 
 #define LEFT   	75
 #define RIGHT  	77
 #define UP     	72
 #define DOWN   	80
 #define ESC     27
+#define MENU 	112
 
 #define PRETO 0
 						  
@@ -240,9 +242,9 @@ int main()
 	
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
-	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
-	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO2]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
     
 	//Definindo personagens e seus status
@@ -511,7 +513,7 @@ int main()
 	printf("\nAntes da batalha:\n");
 	detalhaStatus(li);
 	
-	reproduzirSom(VOLUME3);
+	reproduzirSom(VOLUME1);
 	reproduzirSom(MUSICABATALHA);
 	iniciarBatalha(li, mob, lista_consumiveis, true, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
 	reproduzirSom(PARARMUSICA);
@@ -668,6 +670,12 @@ int main()
 
 			//Torna visivel a pagina de desenho.
 			setvisualpage(PG);
+			
+			//Menu
+			if(Tecla == MENU)
+			{
+				DrawMenu(li, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+			}
 			
 			//Adicionar itens dos baus
 			if(AdicionarItem == true)
