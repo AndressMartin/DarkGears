@@ -61,7 +61,8 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 		*ArrayIdsItens = NULL,
 		*ArrayIdsAux = NULL;
 	
-	char Texto[30] = "Texto";
+	char Texto[30] = "Texto",
+		 HpTexto[4] = "999";
 	
 	bool Voltar = false;
 	
@@ -163,20 +164,34 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			  	rectangle(500, 340, 960, 530);
 			  	
 			  	//1st Char
-			  	outtextxy(150, 30, "12/30");
-			  	outtextxy(140, 50, "EXP: 148");
+			  	for(int i = 0; i < iMax; i++)
+				{
+					a = lista_busca(li, ArrayIds[i]);
+					
+					strcpy(Texto, a->nome);
+					
+					outtextxy(150 + (340*i), 30, Texto);
+					
+					strcpy(Texto, "HP: ");
+					
+					itoa(a->hp, HpTexto, 10);
+					strcat(Texto, HpTexto);
+					strcat(Texto, " / ");
+					
+					itoa(a->hpmax, HpTexto, 10);
+					strcat(Texto, HpTexto);
+					
+					outtextxy(150 + (340*i), 50, Texto);
+				}
+				
 			  	circle (132, 38, 10);
 			  	circle (80, 100, 13);
 			  	
 			  	//2nd Char
-			  	outtextxy(490, 30, "24/45");
-			  	outtextxy(480, 50, "EXP: 383");
 			  	circle (472, 38, 10);
 			  	circle (422, 100, 13);
 			  	
 			  	//3rd Char
-			  	outtextxy(830, 30, "999/999");
-			  	outtextxy(820, 50, "EXP: ¨@#$!@#");
 			  	circle (812, 38, 10);
 			  	circle (762, 100, 13);
 				
