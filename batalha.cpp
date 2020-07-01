@@ -106,7 +106,7 @@ void desenhaMenu(Personagens* li, int ArrayIds[], int iMax, void* Sprites_Retrat
 	Personagens *a = lista_cria();
 	
 	//settextstyle(0, 0, 0);
-	setbkcolor(RGB(159, 79, 51));
+	setbkcolor(RGB(233, 200, 70));
 	setcolor(RGB(0, 0, 0));
 	setlinestyle(0, 0, 1);
 	
@@ -353,7 +353,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			}
 			
 			//Fundo e cenario
-			setbkcolor(RGB(255, 255, 255));
+			setbkcolor(RGB(240, 240, 240));
 			cleardevice();
 			
 			//Mostrar os mobs
@@ -374,7 +374,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			if(turnoDosPersonagens == true)
 			{
 				setlinestyle(0, 0, 2);
-				setcolor(RGB(255, 242, 0));
+				setcolor(RGB(133, 144, 246));
 				rectangle(537, 337 + (73 * Turno),537 + 460, 337 + (73 * Turno) + 74);
 			}
 			
@@ -395,7 +395,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					
 					if(q > 0 || podeFugir == false)
 					{
-						setcolor(RGB(200, 200, 200));
+						setcolor(RGB(100, 100, 100));
 					}
 					strcpy(Texto, "X - Dar no pe!");
 					outtextxy(358, 483, Texto);
@@ -941,7 +941,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										//Desenhos
 										
 										//Fundo e cenario
-										setbkcolor(RGB(255, 255, 255));
+										setbkcolor(RGB(240, 240, 240));
 										cleardevice();
 										
 										for(p = 0; p < iMaxMobInicial; p++)
@@ -1150,7 +1150,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										//Desenhos
 										
 										//Fundo e cenario
-										setbkcolor(RGB(255, 255, 255));
+										setbkcolor(RGB(240, 240, 240));
 										cleardevice();
 										
 										for(p = 0; p < iMaxMobInicial; p++)
@@ -1316,7 +1316,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										else if(controleAnimacao < 60)
 										{
 											//settextstyle(1, 0, 2);
-											setbkcolor(RGB(255, 255, 255));
+											setbkcolor(RGB(233, 200, 70));
 											setcolor(RGB(0, 0, 0));
 											setlinestyle(0, 0, 1);
 											
@@ -1450,7 +1450,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										//Desenhos
 										
 										//Fundo e cenario
-										setbkcolor(RGB(255, 255, 255));
+										setbkcolor(RGB(240, 240, 240));
 										cleardevice();
 										
 										for(p = 0; p < iMaxMobInicial; p++)
@@ -1613,7 +1613,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 										else if(controleAnimacao < 65)
 										{
 											//settextstyle(1, 0, 2);
-											setbkcolor(RGB(255, 255, 255));
+											setbkcolor(RGB(233, 200, 70));
 											setcolor(RGB(34, 177, 76));
 											setlinestyle(0, 0, 1);
 											
@@ -1640,7 +1640,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 											if(ArrayIds[q] == ListaDosTurnos[i].IndiceAtacante)
 											{
 												setlinestyle(0, 0, 2);
-												setcolor(RGB(255, 242, 0));
+												setcolor(RGB(133, 144, 246));
 												rectangle(537, 337 + (73 * q), 537 + 85, 337 + (73 * q) + 74);
 											}
 										}
@@ -1817,7 +1817,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			}
 			
 			//Fundo e cenario
-			setbkcolor(RGB(255, 255, 255));
+			setbkcolor(RGB(240, 240, 240));
 			cleardevice();
 			
 			//Mostrar os mobs
@@ -1838,7 +1838,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			if(gameOver == false)
 			{
 				//settextstyle(0, 0, 0);
-				setbkcolor(RGB(159, 79, 51));
+				setbkcolor(RGB(233, 200, 70));
 				setcolor(RGB(0, 0, 0));
 				setlinestyle(0, 0, 1);
 				

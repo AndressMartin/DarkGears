@@ -404,7 +404,7 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 					aux_li->hp = aux_li->hpmax;
 				}	
 			}
-			else if(aux->tipo = CAFE && vivo == 0)
+			else if(aux->tipo == CAFE && vivo == 0)
 			{
 				aux->qtd -= 1;
 				
@@ -416,10 +416,12 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 				}
 			}
 			
+			/*
 			if(aux->qtd <= 0) // Se a quantidade for menor ou igual a 0, o item sera removido da lista
 			{
 				li_cons = lista_consumiveis_retira(li_cons, tipo_consumivel);
 			}
+			*/
 		}
 	}
 	
