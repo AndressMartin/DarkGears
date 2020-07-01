@@ -556,7 +556,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 							
 							if(a->hp > 0)
 							{
-								reproduzirSom(CURSORMOVE);
+								reproduzirSom(SOMDECURA2);
 								
 								lcAux = lista_consumiveis_busca(lista_consumiveis, SelecaoItem);
 								
@@ -585,7 +585,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 							
 							if(a->hp <= 0)
 							{
-								reproduzirSom(CURSORMOVE);
+								reproduzirSom(SOMDECURA2);
 								
 								lcAux = lista_consumiveis_busca(lista_consumiveis, SelecaoItem);
 								

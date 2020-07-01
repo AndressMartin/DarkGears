@@ -21,6 +21,9 @@
 #define ESC     27
 #define MENU 	112
 
+#define TECLAENTER		13
+#define TECLABACKSPACE	8
+
 #define PRETO 0
 						  
 //Ponteiros com as imagens
@@ -53,7 +56,7 @@ const int Sprites_RetratosQ = 10;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
-const int Sprites_HUDQ = 8;
+const int Sprites_HUDQ = 13;
 void* Sprites_HUD[Sprites_HUDQ];
 void* Sprites_HUD_Mascaras[Sprites_HUDQ];
 
@@ -98,7 +101,12 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/selecao_monstros",
 											"Sprites/HUD/menuDeBatalha_resultados",
 											"Sprites/HUD/menuDeBatalha_resultados2",
-											"Sprites/HUD/menuDeBatalha_4"};
+											"Sprites/HUD/menuDeBatalha_4",
+											"Sprites/HUD/telaDeTitulo",
+											"Sprites/HUD/jogar",
+											"Sprites/HUD/creditos",
+											"Sprites/HUD/sair",
+											"Sprites/HUD/telaDeCreditos"};
 											
 char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
 											  "Sprites/Mobs/wumpus"};
@@ -156,7 +164,12 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 											 {85, 74},
 											 {625, 295},
 											 {625, 74},
-											 {410, 74}};
+											 {410, 74},
+											 {1024, 576},
+											 {230, 45},
+											 {230, 45},
+											 {230, 45},
+											 {1024, 576}};
 											 
 int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
 											   {275, 275}};
@@ -254,8 +267,8 @@ int main()
 	char golem[] = "Golem";
 	char wumpus[] = "Wumpus";
 	
-	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 10, 0);
-	li = lista_insere(li, 2, cueio, 30, 6, 80, 12, 15, 5, 20, 0);
+	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 100, 0);
+	li = lista_insere(li, 2, cueio, 30, 6, 80, 12, 15, 5, 200, 0);
 	li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999, 0);
 	
 	//Equipando os itens nos personagens, é preciso passar a party, o indice do personagem da party e o item que deseja equipar
@@ -290,6 +303,11 @@ int main()
 	char Tecla = 0;
 	long long unsigned Gt1, Gt2;
 	int FPS = 60;
+	
+	bool fecharJogo = false;
+	int telaDoJogo = MENUINICIAL,
+		Selecao = 0,
+		MenuID = 0;
 	
 	bool PodeFazerInteracao = true,
 		 CaixaDeTexto = false,
@@ -510,369 +528,483 @@ int main()
 	
 	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
 	
-	printf("\nAntes da batalha:\n");
-	detalhaStatus(li);
-	
-	reproduzirSom(VOLUME1);
-	reproduzirSom(MUSICABATALHA);
-	iniciarBatalha(li, mob, lista_consumiveis, true, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
-	reproduzirSom(PARARMUSICA);
-	
-	printf("\nDepois da batalha:\n");
-	detalhaStatus(li);
-	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
-	while(Tecla != ESC)
+	while(fecharJogo == false)
 	{
-		Gt2 = GetTickCount();
-		if(Gt2 < Gt1)
+		//Menu inicial
+		while(telaDoJogo == MENUINICIAL && fecharJogo == false)
 		{
-			Gt1 = Gt2;
-		}
-		if (Gt2 - Gt1 > 1000/FPS)
-		{
-			Gt1 = Gt2;
-			
-			//Esse codigo foi movido para o inicio da parte de colisao do personagem com o cenario.
-			//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
-			//if(PG == 1)
-			//{
-				//PG = 2;
-			//}
-			//else
-			//{
-				//PG = 1;
-			//}
-			//setactivepage(PG);
-			
-			//Desenhos
-	        
-	        setbkcolor(RGB(200, 200, 200));
-	        setfillstyle(1, RGB(133, 144, 200));
-	        cleardevice();
-			
-			//Vai ser substituido pela funcao de desenhar o cenario em si depois.
-	        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual);
-	        
-	        //Cria a lista com os retangulos de colisao.
-	        criarListaRetangulosDeColisao(CenarioAtual, RetanguloTeste, PosicaoBaus, &TamanhoListaRetangulosDeColisao, &ListaRetangulosDeColisao);
-	        
-			//Teste
-			setfillstyle(0, RGB(130, 45, 70));
-        	for(i = 0; i < TamanhoListaRetangulosDeColisao; i++)
+			Gt2 = GetTickCount();
+			if(Gt2 < Gt1)
 			{
-				bar(ListaRetangulosDeColisao[i].DisX + CPosX, ListaRetangulosDeColisao[i].DisY + CPosY, ListaRetangulosDeColisao[i].DisX + ListaRetangulosDeColisao[i].LarX + CPosX, ListaRetangulosDeColisao[i].DisY + ListaRetangulosDeColisao[i].LarY + CPosY);
+				Gt1 = Gt2;
 			}
-			
-			//Arrumar a ordem (quem fica na frente de quem) dos objetos e da personagem, e desenha-los no mapa.
-			//Cria a lista e a coloca em um ponteiro.
-			criarListaObjetosC(CenarioAtual, CPosY, PosY, PersonagemD, ObjetosCenaDesenho, BausCenaDesenho, &TamanhoListaOC, &listaObjetosC);
-			
-			//Ordenar a lista
-			for(i=0; i < TamanhoListaOC - 1; i++)
+			if (Gt2 - Gt1 > 1000/FPS)
 			{
-				for(j=i+1; j < TamanhoListaOC; j++)
+				Gt1 = Gt2;
+				
+				//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
+				if(PG == 1)
 				{
-					if(listaObjetosC[i].PosY > listaObjetosC[j].PosY)
+					PG = 2;
+				}
+				else
+				{
+					PG = 1;
+				}
+				setactivepage(PG);
+				
+				//Desenhos
+				
+				setbkcolor(RGB(0, 0, 0));
+		        cleardevice();
+		        
+		        if(MenuID == 0)
+		        {
+		        	putimage(0, 0, Sprites_HUD_Mascaras[TELADETITULO], AND_PUT);
+					putimage(0, 0, Sprites_HUD[TELADETITULO], OR_PUT);
+		        	
+		        	putimage(690, 220 + (45 * 0), Sprites_HUD_Mascaras[BOTAOJOGAR], AND_PUT);
+					putimage(690, 220 + (45 * 0), Sprites_HUD[BOTAOJOGAR], OR_PUT);
+					
+					putimage(690, 220 + (45 * 1), Sprites_HUD_Mascaras[BOTAOCREDITOS], AND_PUT);
+					putimage(690, 220 + (45 * 1), Sprites_HUD[BOTAOCREDITOS], OR_PUT);
+					
+					putimage(690, 220 + (45 * 2), Sprites_HUD_Mascaras[BOTAOSAIR], AND_PUT);
+					putimage(690, 220 + (45 * 2), Sprites_HUD[BOTAOSAIR], OR_PUT);
+		        	
+		        	putimage(690 + 230, 210 + (45 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
+					putimage(690 + 230, 210 + (45 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
+				}
+				
+				if(MenuID == 1)
+				{
+					putimage(0, 0, Sprites_HUD_Mascaras[TELADECREDITOS], AND_PUT);
+					putimage(0, 0, Sprites_HUD[TELADECREDITOS], OR_PUT);
+				}
+				
+				//Torna visivel a pagina de desenho.
+				setvisualpage(PG);
+				
+				//Acoes
+				
+				if(MenuID == 0)
+				{
+					if((Tecla == UP) && (Selecao > 0))
 					{
-						ListaObjCenaTemp = listaObjetosC[i];
-						listaObjetosC[i] = listaObjetosC[j];
-						listaObjetosC[j] = ListaObjCenaTemp;
+						reproduzirSom(CURSORMOVE);
+						Selecao --;
+					}
+					if((Tecla == DOWN) && (Selecao < 2))
+					{
+						reproduzirSom(CURSORMOVE);
+						Selecao ++;
+					}
+					if((Tecla == TECLAENTER))
+					{
+						reproduzirSom(CURSORMOVE);
 						
-						//printf("\n\nEndereco de ListaOCT         = %p", &ListaObjCenaTemp);
-						//printf("\nEndereco de listaObjetosC[j] = %p", &listaObjetosC[j]);
+						if(Selecao == 0)
+						{
+							telaDoJogo = EXPLORACAO;
+						}
+						if(Selecao == 1)
+						{
+							MenuID = 1;
+						}
+						if(Selecao == 2)
+						{
+							 fecharJogo = true;
+						}
 					}
 				}
-			}
-			
-			/*
-			printf("\n\n");
-			for(i=0; i < TamanhoListaOC; i++)
-			{
-				if(listaObjetosC[i].Tipo == PER)
+				if(MenuID == 1)
 				{
-					printf("Per %d, ", listaObjetosC[i].Ind);
-				}
-				if(listaObjetosC[i].Tipo == OBJ)
-				{
-					printf("Obj %d, ", listaObjetosC[i].Ind);
-				}
-				if(listaObjetosC[i].Tipo == BAU)
-				{
-					printf("Bau %d, ", listaObjetosC[i].Ind);
-				}
-			}
-			*/
-			
-			//Desenhar os objetos e a personagem
-			
-			if(CenarioAtual == 0)
-			{
-				i = 0;
-				setfillstyle(4, RGB(23, 47, 180));
-				bar(Portas[i].DisX + CPosX, Portas[i].DisY + CPosY, Portas[i].DisX + CPosX + Portas[i].LarX, Portas[i].DisY + CPosY + Portas[i].LarY);
-			}
-			
-			if(CenarioAtual == 1)
-			{
-				i = 1;
-				setfillstyle(4, RGB(23, 47, 180));
-				bar(Portas[i].DisX + CPosX, Portas[i].DisY + CPosY, Portas[i].DisX + CPosX + Portas[i].LarX, Portas[i].DisY + CPosY + Portas[i].LarY);
-			}
-			
-			//printf("\nPosX = %d, PosY = %d", PosX, PosY);
-			//printf("\nCPosX = %d, CPosY = %d", CPosX, CPosY);
-			
-			for(i=0; i < TamanhoListaOC; i++)
-			{
-				if(listaObjetosC[i].Tipo == PER)
-				{
-					setfillstyle(1, RGB(133, 144, 200));
-					bar(PosX, PosY, PosX + PLarX, PosY + PLarY);
-					//setfillstyle(1, RGB(255, 242, 0));
-					//bar(PosX - 50, PosY - 80, PosX + PLarX + 50, PosY + PLarY - 80);
-					//putimage(PosX, PosY, Sprites_Mascaras[LILY], AND_PUT); //Primeiro a mascara.
-					//putimage(PosX, PosY, Sprites[LILY], OR_PUT); //Depois a imagem normal.
-					//putimage(PosX - 30, PosY - 60, Sprites_Mascaras[CHADDRIT], AND_PUT);
-					//putimage(PosX - 30, PosY - 60, Sprites[CHADDRIT], OR_PUT);
-					putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites_Mascaras[LILY3D], AND_PUT);
-					putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites[LILY3D], OR_PUT);
-				}
-				
-				if(listaObjetosC[i].Tipo == OBJ)
-				{
-					if(((CPosX + ObjetosC[listaObjetosC[i].Ind].DisX >= (0 - Cenario_Objetos_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + ObjetosC[listaObjetosC[i].Ind].DisX <= TelaLarX)) && ((CPosY + ObjetosC[listaObjetosC[i].Ind].DisY >= (0 - Cenario_Objetos_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + ObjetosC[listaObjetosC[i].Ind].DisY <= TelaLarY)))
+					if(Tecla == TECLABACKSPACE)
 					{
-						putimage(CPosX + ObjetosC[listaObjetosC[i].Ind].DisX, CPosY + ObjetosC[listaObjetosC[i].Ind].DisY, Cenario_Objetos_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
-						putimage(CPosX + ObjetosC[listaObjetosC[i].Ind].DisX, CPosY + ObjetosC[listaObjetosC[i].Ind].DisY, Cenario_Objetos[listaObjetosC[i].IndIm], OR_PUT);
+						reproduzirSom(CURSORVOLTA);
+						MenuID = 0;
+						Selecao = 0;
 					}
 				}
 				
-				if(listaObjetosC[i].Tipo == BAU)
+				//Variavel Tecla
+				fflush(stdin); //Aparentemente limpa algum endereco de memoria.
+				Tecla = 0;
+				if(kbhit())
 				{
+					Tecla = getch();
+					//printf("%d", Tecla);
+				}
+			}
+		}
+		
+		
+		reproduzirSom(VOLUME2);
+		reproduzirSom(MUSICABATALHA);
+		iniciarBatalha(li, mob, lista_consumiveis, true, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+		reproduzirSom(PARARMUSICA);
+		//Tela de exploracao
+		while(telaDoJogo == EXPLORACAO && fecharJogo == false)
+		{
+			Gt2 = GetTickCount();
+			if(Gt2 < Gt1)
+			{
+				Gt1 = Gt2;
+			}
+			if (Gt2 - Gt1 > 1000/FPS)
+			{
+				Gt1 = Gt2;
+				
+				/*
+				//Esse codigo foi movido para o inicio da parte de colisao do personagem com o cenario.
+				//Alterna a pagina de desenho ativa (para fazer o Buffer Duplo).
+				if(PG == 1)
+				{
+					PG = 2;
+				}
+				else
+				{
+					PG = 1;
+				}
+				setactivepage(PG);
+				*/
+				
+				//Desenhos
+		        
+		        setbkcolor(RGB(200, 200, 200));
+		        setfillstyle(1, RGB(133, 144, 200));
+		        cleardevice();
+				
+				//Vai ser substituido pela funcao de desenhar o cenario em si depois.
+		        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual);
+		        
+		        //Cria a lista com os retangulos de colisao.
+		        criarListaRetangulosDeColisao(CenarioAtual, RetanguloTeste, PosicaoBaus, &TamanhoListaRetangulosDeColisao, &ListaRetangulosDeColisao);
+		        
+				//Teste
+				setfillstyle(0, RGB(130, 45, 70));
+	        	for(i = 0; i < TamanhoListaRetangulosDeColisao; i++)
+				{
+					bar(ListaRetangulosDeColisao[i].DisX + CPosX, ListaRetangulosDeColisao[i].DisY + CPosY, ListaRetangulosDeColisao[i].DisX + ListaRetangulosDeColisao[i].LarX + CPosX, ListaRetangulosDeColisao[i].DisY + ListaRetangulosDeColisao[i].LarY + CPosY);
+				}
+				
+				//Arrumar a ordem (quem fica na frente de quem) dos objetos e da personagem, e desenha-los no mapa.
+				//Cria a lista e a coloca em um ponteiro.
+				criarListaObjetosC(CenarioAtual, CPosY, PosY, PersonagemD, ObjetosCenaDesenho, BausCenaDesenho, &TamanhoListaOC, &listaObjetosC);
+				
+				//Ordenar a lista
+				for(i=0; i < TamanhoListaOC - 1; i++)
+				{
+					for(j=i+1; j < TamanhoListaOC; j++)
+					{
+						if(listaObjetosC[i].PosY > listaObjetosC[j].PosY)
+						{
+							ListaObjCenaTemp = listaObjetosC[i];
+							listaObjetosC[i] = listaObjetosC[j];
+							listaObjetosC[j] = ListaObjCenaTemp;
 							
-					if(((CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX  <= TelaLarX)) && ((CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + ObjetosC[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem <= TelaLarY)))
-					{
-						if(Baus[listaObjetosC[i].Ind] == NADA)
-						{
-							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm + 1], AND_PUT);
-							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm + 1], OR_PUT);
-						}
-						else
-						{
-							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
-							putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm], OR_PUT);
+							//printf("\n\nEndereco de ListaOCT         = %p", &ListaObjCenaTemp);
+							//printf("\nEndereco de listaObjetosC[j] = %p", &listaObjetosC[j]);
 						}
 					}
 				}
-			}
-
-			//Torna visivel a pagina de desenho.
-			setvisualpage(PG);
-			
-			//Menu
-			if(Tecla == MENU)
-			{
-				DrawMenu(li, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
-			}
-			
-			//Adicionar itens dos baus
-			if(AdicionarItem == true)
-			{
-				//Codigo de adicionar item.
-				lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[AdicionarItemIndice]);
-				AdicionarItem = false;
-				detalhaConsumiveis(lista_consumiveis);
-			}
-			
-			//Caixa de Texto
-			if(CaixaDeTexto == true)
-			{
-				ReadDialogue(DialogoPosX, DialogoPosY, DialogoPartToStart, DialogoPartToStop, MudancaDeTexto, Arquivo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
-				CaixaDeTexto = false;
-				PodeFazerInteracao = true;
-			}
-			
-			//Mexendo com a posicao da personagem
-			if(PG == 1)
-			{
-				PG = 2;
-			}
-			else
-			{
-				PG = 1;
-			}
-			setactivepage(PG);
-			
-			setbkcolor(RGB(255, 255, 255));
-	        cleardevice();
-	        
-	        //Vai chamar a funcao para desenhar a colisao do cenario.
-	        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual);
-			
-			// MovX mexe com o movimento no eixo X e MovY com o movimento no eixo Y.
-			// Caso um deles um deles seja diferente de 0, o valor sera adicionado a posicao correspondente do personagem,
-			// mas antes o codigo confere se ha colisao com a posicao que essa adicao ira resultar (ou se ela sai da tela),
-			// se houver, o valor do MovX ou MovY sera diminuido ou aumentado (depende se o valor e menor ou maior que 0)
-			// ate que nao haja mais colisao (ou que a posicao nao faca o personagem sair da tela, se for a razao do codigo
-			// ter sido ativado), e entao ele sera adicionado a posicao do personagem.
-			if(MovX > 0)
-			{
-				while(hitTestCenario(PosX + PLarX + MovX, PosY)||hitTestCenario(PosX + PLarX + MovX, PosY + PLarY/2)||hitTestCenario(PosX + PLarX + MovX, PosY + PLarY)||(PosX + PLarX + MovX) >= TelaLarX)
+				
+				/*
+				printf("\n\n");
+				for(i=0; i < TamanhoListaOC; i++)
 				{
-					MovX --;
+					if(listaObjetosC[i].Tipo == PER)
+					{
+						printf("Per %d, ", listaObjetosC[i].Ind);
+					}
+					if(listaObjetosC[i].Tipo == OBJ)
+					{
+						printf("Obj %d, ", listaObjetosC[i].Ind);
+					}
+					if(listaObjetosC[i].Tipo == BAU)
+					{
+						printf("Bau %d, ", listaObjetosC[i].Ind);
+					}
+				}
+				*/
+				
+				//Desenhar os objetos e a personagem
+				
+				if(CenarioAtual == 0)
+				{
+					i = 0;
+					setfillstyle(4, RGB(23, 47, 180));
+					bar(Portas[i].DisX + CPosX, Portas[i].DisY + CPosY, Portas[i].DisX + CPosX + Portas[i].LarX, Portas[i].DisY + CPosY + Portas[i].LarY);
 				}
 				
-				while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
+				if(CenarioAtual == 1)
 				{
-					MovX --;
+					i = 1;
+					setfillstyle(4, RGB(23, 47, 180));
+					bar(Portas[i].DisX + CPosX, Portas[i].DisY + CPosY, Portas[i].DisX + CPosX + Portas[i].LarX, Portas[i].DisY + CPosY + Portas[i].LarY);
 				}
 				
-				//Confere se o jogo vai fazer o scroll da tela ou nao.
-				if((PosX > (TelaLarX/2 + 20) - PLarX/2) && (CPosX > Cenario[CenarioAtual].LimiteEsquerda))
+				//printf("\nPosX = %d, PosY = %d", PosX, PosY);
+				//printf("\nCPosX = %d, CPosY = %d", CPosX, CPosY);
+				
+				for(i=0; i < TamanhoListaOC; i++)
 				{
-					CPosX -= MovX;
+					if(listaObjetosC[i].Tipo == PER)
+					{
+						setfillstyle(1, RGB(133, 144, 200));
+						bar(PosX, PosY, PosX + PLarX, PosY + PLarY);
+						//setfillstyle(1, RGB(255, 242, 0));
+						//bar(PosX - 50, PosY - 80, PosX + PLarX + 50, PosY + PLarY - 80);
+						//putimage(PosX, PosY, Sprites_Mascaras[LILY], AND_PUT); //Primeiro a mascara.
+						//putimage(PosX, PosY, Sprites[LILY], OR_PUT); //Depois a imagem normal.
+						//putimage(PosX - 30, PosY - 60, Sprites_Mascaras[CHADDRIT], AND_PUT);
+						//putimage(PosX - 30, PosY - 60, Sprites[CHADDRIT], OR_PUT);
+						putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites_Mascaras[LILY3D], AND_PUT);
+						putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites[LILY3D], OR_PUT);
+					}
+					
+					if(listaObjetosC[i].Tipo == OBJ)
+					{
+						if(((CPosX + ObjetosC[listaObjetosC[i].Ind].DisX >= (0 - Cenario_Objetos_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + ObjetosC[listaObjetosC[i].Ind].DisX <= TelaLarX)) && ((CPosY + ObjetosC[listaObjetosC[i].Ind].DisY >= (0 - Cenario_Objetos_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + ObjetosC[listaObjetosC[i].Ind].DisY <= TelaLarY)))
+						{
+							putimage(CPosX + ObjetosC[listaObjetosC[i].Ind].DisX, CPosY + ObjetosC[listaObjetosC[i].Ind].DisY, Cenario_Objetos_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
+							putimage(CPosX + ObjetosC[listaObjetosC[i].Ind].DisX, CPosY + ObjetosC[listaObjetosC[i].Ind].DisY, Cenario_Objetos[listaObjetosC[i].IndIm], OR_PUT);
+						}
+					}
+					
+					if(listaObjetosC[i].Tipo == BAU)
+					{
+								
+						if(((CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX  <= TelaLarX)) && ((CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem >= (0 - Sprites_Baus_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + ObjetosC[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem <= TelaLarY)))
+						{
+							if(Baus[listaObjetosC[i].Ind] == NADA)
+							{
+								putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm + 1], AND_PUT);
+								putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm + 1], OR_PUT);
+							}
+							else
+							{
+								putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
+								putimage(CPosX + PosicaoBaus[listaObjetosC[i].Ind].DisX, CPosY + PosicaoBaus[listaObjetosC[i].Ind].DisY - BausCenaDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_Baus[listaObjetosC[i].IndIm], OR_PUT);
+							}
+						}
+					}
+				}
+	
+				//Torna visivel a pagina de desenho.
+				setvisualpage(PG);
+				
+				//Menu
+				if(Tecla == MENU)
+				{
+					DrawMenu(li, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+				}
+				
+				//Adicionar itens dos baus
+				if(AdicionarItem == true)
+				{
+					//Codigo de adicionar item.
+					lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[AdicionarItemIndice]);
+					AdicionarItem = false;
+					detalhaConsumiveis(lista_consumiveis);
+				}
+				
+				//Caixa de Texto
+				if(CaixaDeTexto == true)
+				{
+					ReadDialogue(DialogoPosX, DialogoPosY, DialogoPartToStart, DialogoPartToStop, MudancaDeTexto, Arquivo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+					CaixaDeTexto = false;
+					PodeFazerInteracao = true;
+				}
+				
+				//Mexendo com a posicao da personagem
+				if(PG == 1)
+				{
+					PG = 2;
 				}
 				else
 				{
-					PosX += MovX;
+					PG = 1;
 				}
-			}
-			if(MovX < 0)
-			{
-				while(hitTestCenario(PosX + MovX, PosY)||hitTestCenario(PosX + MovX, PosY + PLarY/2)||hitTestCenario(PosX + MovX, PosY + PLarY)||(PosX + MovX) <= 0)
+				setactivepage(PG);
+				
+				setbkcolor(RGB(255, 255, 255));
+		        cleardevice();
+		        
+		        //Vai chamar a funcao para desenhar a colisao do cenario.
+		        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual);
+				
+				// MovX mexe com o movimento no eixo X e MovY com o movimento no eixo Y.
+				// Caso um deles um deles seja diferente de 0, o valor sera adicionado a posicao correspondente do personagem,
+				// mas antes o codigo confere se ha colisao com a posicao que essa adicao ira resultar (ou se ela sai da tela),
+				// se houver, o valor do MovX ou MovY sera diminuido ou aumentado (depende se o valor e menor ou maior que 0)
+				// ate que nao haja mais colisao (ou que a posicao nao faca o personagem sair da tela, se for a razao do codigo
+				// ter sido ativado), e entao ele sera adicionado a posicao do personagem.
+				if(MovX > 0)
 				{
-					MovX ++;
+					while(hitTestCenario(PosX + PLarX + MovX, PosY)||hitTestCenario(PosX + PLarX + MovX, PosY + PLarY/2)||hitTestCenario(PosX + PLarX + MovX, PosY + PLarY)||(PosX + PLarX + MovX) >= TelaLarX)
+					{
+						MovX --;
+					}
+					
+					while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
+					{
+						MovX --;
+					}
+					
+					//Confere se o jogo vai fazer o scroll da tela ou nao.
+					if((PosX > (TelaLarX/2 + 20) - PLarX/2) && (CPosX > Cenario[CenarioAtual].LimiteEsquerda))
+					{
+						CPosX -= MovX;
+					}
+					else
+					{
+						PosX += MovX;
+					}
+				}
+				if(MovX < 0)
+				{
+					while(hitTestCenario(PosX + MovX, PosY)||hitTestCenario(PosX + MovX, PosY + PLarY/2)||hitTestCenario(PosX + MovX, PosY + PLarY)||(PosX + MovX) <= 0)
+					{
+						MovX ++;
+					}
+					
+					while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
+					{
+						MovX ++;
+					}
+					
+					if((PosX < (TelaLarX/2 - 20) - PLarX/2) && (CPosX < Cenario[CenarioAtual].LimiteDireita))
+					{
+						CPosX -= MovX;
+					}
+					else
+					{
+						PosX += MovX;
+					}
+				}
+				if(MovY > 0)
+				{
+					while(hitTestCenario(PosX, PosY + PLarY + MovY)||hitTestCenario(PosX + PLarX/2, PosY + PLarY + MovY)||hitTestCenario(PosX + PLarX, PosY + PLarY + MovY)||(PosY + PLarY + MovY) >= TelaLarY)
+					{
+						MovY --;
+					}
+					
+					while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
+					{
+						MovY --;
+					}
+					
+					if((PosY > (TelaLarY/2 + 10) - PLarY/2) && (CPosY > Cenario[CenarioAtual].LimiteCima))
+					{
+						CPosY -= MovY;
+					}
+					else
+					{
+						PosY += MovY;
+					}
+				}
+				if(MovY < 0)
+				{
+					while(hitTestCenario(PosX, PosY + MovY)||hitTestCenario(PosX + PLarX/2, PosY + MovY)||hitTestCenario(PosX + PLarX, PosY + MovY)||(PosY + MovY) <= 0)
+					{
+						MovY ++;
+					}
+					
+					while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
+					{
+						MovY ++;
+					}
+					
+					if((PosY < (TelaLarY/2 - 10) - PLarY/2) && (CPosY < Cenario[CenarioAtual].LimiteBaixo))
+					{
+						CPosY -= MovY;
+					}
+					else
+					{
+						PosY += MovY;
+					}
 				}
 				
-				while(colisaoComRetangulos(CPosX, CPosY, PosX + MovX, PosY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
+				// Caso nenhuma das teclas esteja sendo pressionada, deixa o MovX ou Y igual a 0,
+				// dependendo de qual conjunto de teclas nao estiver pressionado.
+				if(!((GetKeyState(VK_RIGHT)&0x80) && (GetKeyState(VK_LEFT)&0x80)))
 				{
-					MovX ++;
+					MovX = 0;
+				}
+				if(!((GetKeyState(VK_UP)&0x80) && (GetKeyState(VK_DOWN)&0x80)))
+				{
+					MovY = 0;
 				}
 				
-				if((PosX < (TelaLarX/2 - 20) - PLarX/2) && (CPosX < Cenario[CenarioAtual].LimiteDireita))
+				//Interacoes com o mapa.
+				interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &MudancaDeTexto, &AdicionarItem, &AdicionarItemIndice);
+				
+				//Transicoes de mapas.
+				if(MudancaDeCenario == true)
 				{
-					CPosX -= MovX;
-				}
-				else
-				{
-					PosX += MovX;
-				}
-			}
-			if(MovY > 0)
-			{
-				while(hitTestCenario(PosX, PosY + PLarY + MovY)||hitTestCenario(PosX + PLarX/2, PosY + PLarY + MovY)||hitTestCenario(PosX + PLarX, PosY + PLarY + MovY)||(PosY + PLarY + MovY) >= TelaLarY)
-				{
-					MovY --;
+					TransicaoDeMapa(MudancaDeCenarioNumero, &CenarioAtual, &PosX, &PosY, &CPosX, &CPosY);
+					MudancaDeCenario = false;
+					PodeFazerInteracao = true;
 				}
 				
-				while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
+				//Comandos
+				
+				//Movimento
+				//Tem como colocar aceleracao se quiser.
+				//Muda o valor das variaveis que alteram a posicao da personagem.
+				if(GetKeyState(VK_RIGHT)&0x80)
 				{
-					MovY --;
+					MovX = PVel;
+				}
+			    else if(GetKeyState(VK_LEFT)&0x80)
+			    {
+			    	MovX = -PVel;
+				}
+			    if(GetKeyState(VK_UP)&0x80)
+			    {
+			    	MovY = -PVel;
+				}
+			    else if(GetKeyState(VK_DOWN)&0x80)
+			    {
+			    	MovY = PVel;
 				}
 				
-				if((PosY > (TelaLarY/2 + 10) - PLarY/2) && (CPosY > Cenario[CenarioAtual].LimiteCima))
-				{
-					CPosY -= MovY;
+				if((GetKeyState(VK_SPACE)&0x80))
+			    {
+			    	SpacePress = true;
 				}
-				else
-				{
-					PosY += MovY;
-				}
-			}
-			if(MovY < 0)
-			{
-				while(hitTestCenario(PosX, PosY + MovY)||hitTestCenario(PosX + PLarX/2, PosY + MovY)||hitTestCenario(PosX + PLarX, PosY + MovY)||(PosY + MovY) <= 0)
-				{
-					MovY ++;
+				if(!(GetKeyState(VK_SPACE)&0x80))
+		      	{
+		      		SpacePress = false;
 				}
 				
-				while(colisaoComRetangulos(CPosX, CPosY, PosX, PosY + MovY, PLarX, PLarY, TamanhoListaRetangulosDeColisao, ListaRetangulosDeColisao))
+				if(Tecla == ESC)
 				{
-					MovY ++;
+					fecharJogo = true;
 				}
 				
-				if((PosY < (TelaLarY/2 - 10) - PLarY/2) && (CPosY < Cenario[CenarioAtual].LimiteBaixo))
+				fflush(stdin); //Aparentemente limpa algum endereco de memoria.
+				
+				//Se alguma tecla for pressionada, coloca o valor dela na variavel Tecla.
+				// Com essa funcao, ela so pode ter um valor por vez que o laco e rodado, entao pode ser
+				// usada em alguma ocasiao em que duas teclas nao podem ser pressionadas de uma vez.
+				Tecla = 0;
+				if(kbhit())
 				{
-					CPosY -= MovY;
+					Tecla = getch();
 				}
-				else
-				{
-					PosY += MovY;
-				}
-			}
-			
-			// Caso nenhuma das teclas esteja sendo pressionada, deixa o MovX ou Y igual a 0,
-			// dependendo de qual conjunto de teclas nao estiver pressionado.
-			if(!((GetKeyState(VK_RIGHT)&0x80) && (GetKeyState(VK_LEFT)&0x80)))
-			{
-				MovX = 0;
-			}
-			if(!((GetKeyState(VK_UP)&0x80) && (GetKeyState(VK_DOWN)&0x80)))
-			{
-				MovY = 0;
-			}
-			
-			//Interacoes com o mapa.
-			interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &MudancaDeTexto, &AdicionarItem, &AdicionarItemIndice);
-			
-			//Transicoes de mapas.
-			if(MudancaDeCenario == true)
-			{
-				TransicaoDeMapa(MudancaDeCenarioNumero, &CenarioAtual, &PosX, &PosY, &CPosX, &CPosY);
-				MudancaDeCenario = false;
-				PodeFazerInteracao = true;
-			}
-			
-			//Comandos
-			
-			//Movimento
-			//Tem como colocar aceleracao se quiser.
-			//Muda o valor das variaveis que alteram a posicao da personagem.
-			if(GetKeyState(VK_RIGHT)&0x80)
-			{
-				MovX = PVel;
-			}
-		    else if(GetKeyState(VK_LEFT)&0x80)
-		    {
-		    	MovX = -PVel;
-			}
-		    if(GetKeyState(VK_UP)&0x80)
-		    {
-		    	MovY = -PVel;
-			}
-		    else if(GetKeyState(VK_DOWN)&0x80)
-		    {
-		    	MovY = PVel;
-			}
-			
-			if((GetKeyState(VK_SPACE)&0x80))
-		    {
-		    	SpacePress = true;
-			}
-			if(!(GetKeyState(VK_SPACE)&0x80))
-	      	{
-	      		SpacePress = false;
-			}
-			
-			fflush(stdin); //Aparentemente limpa algum endereco de memoria.
-			
-			//Se alguma tecla for pressionada, coloca o valor dela na variavel Tecla.
-			// Com essa funcao, ela so pode ter um valor por vez que o laco e rodado, entao pode ser
-			// usada em alguma ocasiao em que duas teclas nao podem ser pressionadas de uma vez.
-			Tecla = 0;
-			if(kbhit())
-			{
-				Tecla = getch();
 			}
 		}
 	}
 	
-	//Nao precisa usar free com esse ponteiro, por alguma razao (o C++ relata algum erro).
+	//Dar free separadamente em casa indice dos ponteiros de imagens.
 	//free(Sprites);
 	
 	//Liberar a memoria dos ponteiros.
+	//Dar free separadamente em cada um dos itens do li, mob e lista_consumiveis.
 	free(li);
 	free(mob);
 	free(lista_consumiveis);
@@ -1325,7 +1457,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						*MudancaDeCenario = true;
 						*MudancaDeCenarioNumero = InteracaoN;
 						*PodeFazerInteracao = false;
-					}	
+					}
 				}
 				
 				break;
@@ -1345,7 +1477,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						*MudancaDeCenario = true;
 						*MudancaDeCenarioNumero = InteracaoN;
 						*PodeFazerInteracao = false;
-					}	
+					}
 				}
 				
 				break;
