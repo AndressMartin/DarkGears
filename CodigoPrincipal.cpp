@@ -255,7 +255,7 @@ int main()
 	char wumpus[] = "Wumpus";
 	
 	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 10, 0);
-	li = lista_insere(li, 2, cueio, 30, 6, 80, 12, 15, 5, 200, 0);
+	li = lista_insere(li, 2, cueio, 30, 6, 80, 12, 15, 5, 20, 0);
 	li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999, 0);
 	
 	//Equipando os itens nos personagens, é preciso passar a party, o indice do personagem da party e o item que deseja equipar
