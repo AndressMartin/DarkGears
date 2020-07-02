@@ -7,7 +7,7 @@
 #include<conio.h>
 #include<string.h>
 
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int NumeroDeBaus, int **Baus, int BausCopia[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto, bool *AdicionarItem, int *AdicionarItemIndice, int NInimigos, bool **InimigosVivos, bool InimigosVivosCopia[], RetangulosDeColisao InimigosPosicoes[], Personagens **mob, bool *IniciarBatalha, int *MusicaDoCenario, int *MusicaDaBatalha)
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int Baus[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto, bool *AdicionarItem, int *AdicionarItemIndice, int *InimigoIndice, bool InimigosVivos[], RetangulosDeColisao InimigosPosicoes[], Personagens **mob, bool *IniciarBatalha, int *MusicaDoCenario, int *MusicaDaBatalha)
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
@@ -25,26 +25,15 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 				//Baus no mapa.
 				
 				InteracaoN = 0;
-				if(!(BausCopia[InteracaoN] == NADA) && *PodeFazerInteracao == true)
+				if(!(Baus[InteracaoN] == NADA) && *PodeFazerInteracao == true)
 				{
 					if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
 					{
 						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
 					    {
-					    	int *BausTemp;
-					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
-					    	
 					    	*AdicionarItem = true;
-					    	*AdicionarItemIndice = BausCopia[InteracaoN];
-					    	BausCopia[InteracaoN] = NADA;
-					    	
-					    	for(int i=0; i < NumeroDeBaus; i++)
-					    	{
-					    		BausTemp[i] = BausCopia[i];
-							}
+					    	*AdicionarItemIndice = InteracaoN;
 							
-							free(*Baus);
-							*Baus = BausTemp;
 							*Arquivo = (char *)malloc(sizeof(char) * 17);
 					    	strcpy(*Arquivo, "Textos/Teste.txt");
 					    	
@@ -63,29 +52,15 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 				}
 				
 				InteracaoN = 1;
-				if(!(BausCopia[InteracaoN] == NADA) && *PodeFazerInteracao == true)
+				if(!(Baus[InteracaoN] == NADA) && *PodeFazerInteracao == true)
 				{
 					if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
 					{
 						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
 					    {
-					    	int *BausTemp;
-					    	BausTemp = (int *)malloc(sizeof(int) * NumeroDeBaus);
-					    	
 					    	*AdicionarItem = true;
-					    	*AdicionarItemIndice = BausCopia[InteracaoN];
-					    	BausCopia[InteracaoN] = NADA;
-					    	
-					    	for(int i=0; i < NumeroDeBaus; i++)
-					    	{
-					    		BausTemp[i] = BausCopia[i];
-							}
+					    	*AdicionarItemIndice = InteracaoN;
 							
-							free(*Baus);
-							*Baus = BausTemp;
-							
-							free(*Baus);
-							*Baus = BausTemp;
 							*Arquivo = (char *)malloc(sizeof(char) * 17);
 					    	strcpy(*Arquivo, "Textos/Teste.txt");
 					    	
@@ -105,12 +80,13 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 				
 				//Inimigos
 				InteracaoN = 0;
-				if(InimigosVivosCopia[InteracaoN] == true && *PodeFazerInteracao == true)
+				if(InimigosVivos[InteracaoN] == true && *PodeFazerInteracao == true)
 				{
 					if((PosX < InimigosPosicoes[InteracaoN].DisX + InimigosPosicoes[InteracaoN].LarX + CPosX) && (PosX + PLarX > InimigosPosicoes[InteracaoN].DisX + CPosX) && (PosY < InimigosPosicoes[InteracaoN].DisY + InimigosPosicoes[InteracaoN].LarY + CPosY) && (PosY + PLarY > InimigosPosicoes[InteracaoN].DisY + CPosY))
 					{
-						printf("\nAntes:");
-						detalhaStatus(*mob);
+						//printf("\nAntes:");
+						//detalhaStatus(*mob);
+						
 						//Tirar os itens da lista de mobs.
 						while(*mob != NULL)
 						{
@@ -121,24 +97,12 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						//Adicionar os novos mobs
 						*mob = lista_insere(*mob, 1, golem, 20, 18, 50, 6, 5, 1, 400, 15);
 						
-						printf("\nDepois:");
-						detalhaStatus(*mob);
+						//printf("\nDepois:");
+						//detalhaStatus(*mob);
 						
 						*MusicaDaBatalha = MUSICABATALHA;
 						
-						//Deixar o inimigo "morto"
-						bool *InimigosVivosTemp;
-				    	InimigosVivosTemp = (bool *)malloc(sizeof(bool) * NInimigos);
-				    	
-				    	InimigosVivosCopia[InteracaoN] = false;
-				    	
-				    	for(int i=0; i < NInimigos; i++)
-				    	{
-				    		InimigosVivosTemp[i] = InimigosVivosCopia[i];
-						}
-						
-						free(*InimigosVivos);
-						*InimigosVivos = InimigosVivosTemp;
+						*InimigoIndice = InteracaoN;
 						
 						*PodeFazerInteracao = false;
 						*IniciarBatalha = true;
@@ -146,12 +110,10 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 				}
 				
 				InteracaoN = 1;
-				if(InimigosVivosCopia[InteracaoN] == true && *PodeFazerInteracao == true)
+				if(InimigosVivos[InteracaoN] == true && *PodeFazerInteracao == true)
 				{
 					if((PosX < InimigosPosicoes[InteracaoN].DisX + InimigosPosicoes[InteracaoN].LarX + CPosX) && (PosX + PLarX > InimigosPosicoes[InteracaoN].DisX + CPosX) && (PosY < InimigosPosicoes[InteracaoN].DisY + InimigosPosicoes[InteracaoN].LarY + CPosY) && (PosY + PLarY > InimigosPosicoes[InteracaoN].DisY + CPosY))
 					{
-						printf("\nAntes:");
-						detalhaStatus(*mob);
 						//Tirar os itens da lista de mobs.
 						while(*mob != NULL)
 						{
@@ -164,24 +126,9 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						*mob = lista_insere(*mob, 1, golem, 20, 18, 50, 6, 5, 1, 300, 15);
 						*mob = lista_insere(*mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 200, 10);
 						
-						printf("\nDepois:");
-						detalhaStatus(*mob);
-						
 						*MusicaDaBatalha = MUSICABATALHA;
 						
-						//Deixar o inimigo "morto"
-						bool *InimigosVivosTemp;
-				    	InimigosVivosTemp = (bool *)malloc(sizeof(bool) * NInimigos);
-				    	
-				    	InimigosVivosCopia[InteracaoN] = false;
-				    	
-				    	for(int i=0; i < NInimigos; i++)
-				    	{
-				    		InimigosVivosTemp[i] = InimigosVivosCopia[i];
-						}
-						
-						free(*InimigosVivos);
-						*InimigosVivos = InimigosVivosTemp;
+						*InimigoIndice = InteracaoN;
 						
 						*PodeFazerInteracao = false;
 						*IniciarBatalha = true;

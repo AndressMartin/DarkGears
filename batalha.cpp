@@ -846,6 +846,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					}
 				}
 				
+				/*
 				for(i=0; i < ListaDosTurnosTamanho; i++)
 				{
 					printf("\n\nAcao:    %d", ListaDosTurnos[i].Acao);
@@ -854,6 +855,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					printf("\nTipo:      %d", ListaDosTurnos[i].Tipo);
 					printf("\nVel:       %d", ListaDosTurnos[i].Vel);
 				}
+				*/
 			}
 			
 			if(atacando == true)
@@ -1675,12 +1677,12 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 				q = 0;
 				turnoDosPersonagens = true;
 				
-				printf("\n\n");
+				//printf("\n\n");
 				monstrosMortos = true;
 				for(i = 0; i < iMaxMob; i++)
 				{
 					a = lista_busca(mob, ArrayIdsMob[i]);
-					printf("HP: %d, ", a->hp);
+					//printf("HP: %d, ", a->hp);
 					
 					if(a->hp > 0)
 					{
@@ -1688,12 +1690,12 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					}
 				}
 				
-				printf("\n");
+				//printf("\n");
 				personagensMortos = true;
 				for(i = 0; i < iMax; i++)
 				{
 					a = lista_busca(li, ArrayIds[i]);
-					printf("HP: %d, ", a->hp);
+					//printf("HP: %d, ", a->hp);
 					
 					if(a->hp > 0)
 					{
@@ -1725,6 +1727,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 		}
 	}
 	
+	/*
 	for(i = 0; i < iMaxMobInicial; i++)
 	{
 		a = lista_busca(mob, ArrayIdsMobInicial[i]);
@@ -1732,6 +1735,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 		printf("\nExp[%d]: %d .", i, a->exp);
 	}
 	printf("\n\nExp: %d", qtd_exp);
+	*/
 	
 	reproduzirSom(PARARMUSICA);
 	if(personagensMortos == false)

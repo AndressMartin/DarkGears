@@ -359,10 +359,13 @@ Consumivel* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Person
 	Personagens *aux_li = lista_cria();
 	Consumivel *aux = lista_consumiveis_cria();
 	int vivo;
+	
+	/*
 	printf(" %d ", tipo_consumivel);
 	printf("Entrando na funcao: +++++++++\n");
 	detalhaConsumiveis(li_cons);
 	printf("++++++++++\n");
+	*/
 	
 	aux_li = lista_busca(li, id_personagem);
 	
@@ -422,15 +425,19 @@ Consumivel* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Person
 				}
 			}
 			
+			/*
 			if(aux->qtd <= 0) // Se a quantidade for menor ou igual a 0, o item sera removido da lista
 			{
 				li_cons = lista_consumiveis_retira(li_cons, aux->tipo);
 			}
+			*/
 		}
 	}
+	/*
 	printf("Saindo da funcao: +++++++++\n");
 	detalhaConsumiveis(li_cons);
 	printf("++++++++++\n");
+	*/
 	
 	return li_cons;
 }

@@ -265,7 +265,7 @@ int main()
 	itemconsumivel[CAFE].qtd = 1;
 	
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
-	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
+	//lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO2]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
@@ -351,6 +351,7 @@ int main()
 	 	 SpacePress = false;
 	
 	int AdicionarItemIndice = 0,
+		InimigoIndice = 0,
 		MusicaDoCenario = 0,
 		MusicaDaBatalha = 0;
 	
@@ -374,7 +375,7 @@ int main()
 	//Ponteiro para a lista de retangulos de colisao.
 	RetangulosDeColisao *ListaRetangulosDeColisao = NULL;
 	
-	//Baus
+	//Baus -------------------------------------------------------------------------------------------------------------------
 	int NumeroDeBaus = 2;
 	int *Baus;
 	Baus = (int *)malloc(sizeof(int) * NumeroDeBaus);
@@ -767,19 +768,6 @@ int main()
 				setactivepage(PG);
 				*/
 				
-				//Iniciar a batalha
-				if(IniciarBatalha == true)
-				{
-					reproduzirSom(PARARMUSICA);
-					reproduzirSom(MusicaDaBatalha);
-					iniciarBatalha(li, mob, lista_consumiveis, true, &fecharJogo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
-					reproduzirSom(PARARMUSICA);
-					//reproduzirSom(MusicaDoCenario);
-					
-					IniciarBatalha = false;
-					PodeFazerInteracao = true;
-				}
-				
 				//Desenhos
 		        
 		        setbkcolor(RGB(200, 200, 200));
@@ -918,28 +906,38 @@ int main()
 				//Torna visivel a pagina de desenho.
 				setvisualpage(PG);
 				
-				//Menu
-				if(Tecla == MENU)
-				{
-					reproduzirSom(CURSORPRONTO);
-					DrawMenu(li, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
-				}
-				
-				//Adicionar itens dos baus
-				if(AdicionarItem == true)
-				{
-					//Codigo de adicionar item.
-					lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[AdicionarItemIndice]);
-					AdicionarItem = false;
-					detalhaConsumiveis(lista_consumiveis);
-				}
-				
 				//Caixa de Texto
 				if(CaixaDeTexto == true)
 				{
 					ReadDialogue(DialogoPosX, DialogoPosY, DialogoPartToStart, DialogoPartToStop, MudancaDeTexto, Arquivo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
 					CaixaDeTexto = false;
 					PodeFazerInteracao = true;
+				}
+				
+				//Iniciar a batalha
+				if(IniciarBatalha == true)
+				{
+					reproduzirSom(PARARMUSICA);
+					reproduzirSom(MusicaDaBatalha);
+					iniciarBatalha(li, mob, lista_consumiveis, true, &fecharJogo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+					reproduzirSom(PARARMUSICA);
+					//reproduzirSom(MusicaDoCenario);
+					
+					//Deixar o inimigo "morto".
+					InimigosVivos[InimigoIndice] = false;
+					
+					MovX = 0;
+					MovY = 0;
+					
+					IniciarBatalha = false;
+					PodeFazerInteracao = true;
+				}
+				
+				//Menu
+				if(Tecla == MENU)
+				{
+					//reproduzirSom(CURSORPRONTO);
+					DrawMenu(li, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
 				}
 				
 				//Mexendo com a posicao da personagem
@@ -1063,7 +1061,27 @@ int main()
 				}
 				
 				//Interacoes com o mapa.
-				interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, NumeroDeBaus, &Baus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &MudancaDeTexto, &AdicionarItem, &AdicionarItemIndice, NInimigos, &InimigosVivos, InimigosVivos, InimigosPosicoes, &mob, &IniciarBatalha, &MusicaDoCenario, &MusicaDaBatalha);
+				interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &MudancaDeTexto, &AdicionarItem, &AdicionarItemIndice, &InimigoIndice, InimigosVivos, InimigosPosicoes, &mob, &IniciarBatalha, &MusicaDoCenario, &MusicaDaBatalha);
+				
+				//Adicionar itens dos baus
+				if(AdicionarItem == true)
+				{
+					//Codigo de adicionar item.
+					lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[Baus[AdicionarItemIndice]]);
+					
+					//Tirar o item do bau
+					Baus[AdicionarItemIndice] = NADA;
+					
+					AdicionarItem = false;
+					
+					detalhaConsumiveis(lista_consumiveis);
+					
+					printf("\n");
+					for(i=0; i < NumeroDeBaus; i++)
+					{
+						printf("%d", Baus[i]);
+					}
+				}
 				
 				//Transicoes de mapas.
 				if(MudancaDeCenario == true)
@@ -1136,6 +1154,7 @@ int main()
 	free(listaObjetosC);
 	free(ListaRetangulosDeColisao);
 	free(Baus);
+	free(InimigosVivos);
 			
 	closegraph();	
 	return 0; 
