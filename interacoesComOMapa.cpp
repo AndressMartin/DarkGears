@@ -145,49 +145,6 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					}
 				}
 				
-				InteracaoN = 1;
-				if(InimigosVivosCopia[InteracaoN] == true && *PodeFazerInteracao == true)
-				{
-					if((PosX < InimigosPosicoes[InteracaoN].DisX + InimigosPosicoes[InteracaoN].LarX + CPosX) && (PosX + PLarX > InimigosPosicoes[InteracaoN].DisX + CPosX) && (PosY < InimigosPosicoes[InteracaoN].DisY + InimigosPosicoes[InteracaoN].LarY + CPosY) && (PosY + PLarY > InimigosPosicoes[InteracaoN].DisY + CPosY))
-					{
-						printf("\nAntes:");
-						detalhaStatus(*mob);
-						//Tirar os itens da lista de mobs.
-						while(*mob != NULL)
-						{
-							a = *mob;
-							*mob = lista_retira(*mob, a->id);
-						}
-						
-						//Adicionar os novos mobs
-						*mob = lista_insere(*mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 200, 10);
-						*mob = lista_insere(*mob, 1, golem, 20, 18, 50, 6, 5, 1, 300, 15);
-						*mob = lista_insere(*mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 200, 10);
-						
-						printf("\nDepois:");
-						detalhaStatus(*mob);
-						
-						*MusicaDaBatalha = MUSICABATALHA;
-						
-						//Deixar o inimigo "morto"
-						bool *InimigosVivosTemp;
-				    	InimigosVivosTemp = (bool *)malloc(sizeof(bool) * NInimigos);
-				    	
-				    	InimigosVivosCopia[InteracaoN] = false;
-				    	
-				    	for(int i=0; i < NInimigos; i++)
-				    	{
-				    		InimigosVivosTemp[i] = InimigosVivosCopia[i];
-						}
-						
-						free(*InimigosVivos);
-						*InimigosVivos = InimigosVivosTemp;
-						
-						*PodeFazerInteracao = false;
-						*IniciarBatalha = true;
-					}
-				}
-				
 				
 				//Dialogos
 				InteracaoN = 0;
