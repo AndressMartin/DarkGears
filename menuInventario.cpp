@@ -217,17 +217,6 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 //					outtextxy(199 + 85 + 132 + 142 + 170 + 10, 140 + 75 + (73 * i) + 30, Texto);
 				}
 				
-//				//1st Char
-//			  	circle (132, 38, 10);
-//			  	circle (80, 100, 13);
-//			  	
-//			  	//2nd Char
-//			  	circle (472, 38, 10);
-//			  	circle (422, 100, 13);
-//			  	
-//			  	//3rd Char
-//			  	circle (812, 38, 10);
-//			  	circle (762, 100, 13);
 				
 				memset(btn, 0, sizeof btn);
 			}
@@ -285,6 +274,29 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 							outtextxy(70 + 325 + 15, 50 + (73 * itensScroll2) + 30, Texto);
 							
 							itensScroll2 ++;
+							
+														
+							switch (ArrayIdsItens[Selecao])
+							{
+								case POCAO:
+						            outtextxy(540, 60, "Recupera 80 de vida.");
+						            outtextxy(540, 80, "N?o revive um personagem morto.");
+						            break;
+						        case POCAO2:
+						            outtextxy(540, 60, "Recupera 200 de vida.");
+						            outtextxy(540, 80, "N?o revive um personagem morto.");
+						            break;
+					            case POCAO3:
+					            	outtextxy(540, 60, "Recupera 500 de vida.");
+					            	outtextxy(540, 80, "N?o revive um personagem morto.");
+					            	break;
+					            case CAFE:
+					            	outtextxy(540, 60, "Revive um personagem morto ");
+					            	outtextxy(540, 80, "com metade de sua vida m?xima.");
+					            	break;
+						        default:
+						            printf("\n");
+							}
 						}
 					}
 					
@@ -422,24 +434,49 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 				putimage(70 + 326, 50 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
 				putimage(70 + 326, 50 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
 				
-				/*
-				personCont = 0;
-				yPerson = 50;
 				
-				//Itens Disponiveis
-				for (personCont; personCont < qntPersons; personCont++)
+				switch (ArrayIds[Selecao])
 				{
-					if (yPerson+50 < 530)
-					{
-						rectangle(70, yPerson, 470, yPerson+50);
-						line(150, yPerson, 150, yPerson+50);
-						outtextxy(150+20, yPerson+20, (personNames[personCont]));
-						yPerson+= 55;
-					}
+					case 1:
+			            outtextxy(540, 60, "Esta sou eu, Lily. Eu vim lá de cima,");
+			            outtextxy(540, 80, "de um vilarejo rodeado por campos de flores.");
+			            outtextxy(540, 100, "Não há muito o que falar da minha casa. Resumo: Lá");
+			            outtextxy(540, 120, "se planta muita cenoura e batata-doce. Acho que é isso.");
+			            outtextxy(540, 140, "Como toda boa raposa, eu sou muito curiosa.");
+			            outtextxy(540, 160, "Portanto, do começo do dia até o fim dele, eu estou");
+			            outtextxy(540, 180, "correndo e explorando por aí.");
+			            outtextxy(540, 220, "Em um dia qualquer, eu acabei indo meio longe");
+			            outtextxy(540, 240, "na floresta. Lá encontrei um coelho de características...");
+			            outtextxy(540, 260, "Peculiares. Eu o persegui até cair em um buraco profundo,");
+			            outtextxy(540, 280, "e agora estava presa em uma caverna.");
+			            outtextxy(540, 300, "Até hoje é difícil acreditar no que eu vi:");
+			            outtextxy(540, 320, "A caverna era tão grande que não dava para ver o outro lado,"); 
+						outtextxy(540, 340, "e uma cidade subterrânea cintilava no horizonte.");
+						outtextxy(540, 360, "Casas e monumentos pontudos que alcançam o topo.");
+						outtextxy(540, 380, "Máquinas se mexem por toda parte, poluindo o ar com fumaças.");
+						outtextxy(540, 400, "Criaturas negras, prateadas e douradas andando pelas ruas.");
+			            outtextxy(580, 500, "Foi assim que cheguei à cidade de Dark Gears.");
+			            
+			            break;
+			        case 2:
+			            outtextxy(540, 60, "Este é Chaddrit.");
+			            outtextxy(540, 80, "Eu não sei muito sobre ele não, mas pelo que sei,");
+			            outtextxy(540, 100, "Ele também é parte metal, parte animal, como todo mundo");
+			            outtextxy(540, 120, "aqui em Dark Gears.");
+			            outtextxy(540, 160, "Será que ele é amigo? Parece ser. Ele tentou me");
+			            outtextxy(540, 180, "ajudar a voltar para casa, mas fomos atacados por um");
+			            outtextxy(540, 200, "morcego que parecia odiar muito a gente.");
+			            outtextxy(540, 220, "Estranho, eu nunca nem vi ele na vida.");
+			            outtextxy(540, 240, "Ganhamos a batalha mas Chaddrit ficou machucado demais,");
+			            outtextxy(540, 260, "e agora sinto que preciso ajudá-lo.");
+			            break;
+		            case 3:
+		            	outtextxy(540, 60, "");
+		            	outtextxy(540, 80, "");
+		            	break;
+			        default:
+			            printf("\n");
 				}
-				
-				printf("4.");
-				*/
 			}
 			//Bestiário
 			if(MenuID == 5)
