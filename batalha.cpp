@@ -1583,19 +1583,19 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 											
 											if(ListaDosTurnos[i].Acao == BPOCAO)
 											{
-												li = utilizar_consumivel(lista_consumiveis, POCAO, li, ListaDosTurnos[i].IndiceRecebedor);
+												lista_consumiveis = utilizar_consumivel(lista_consumiveis, POCAO, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BPOCAO2)
 											{
-												li = utilizar_consumivel(lista_consumiveis, POCAO2, li, ListaDosTurnos[i].IndiceRecebedor);
+												lista_consumiveis = utilizar_consumivel(lista_consumiveis, POCAO2, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BPOCAO3)
 											{
-												li = utilizar_consumivel(lista_consumiveis, POCAO3, li, ListaDosTurnos[i].IndiceRecebedor);
+												lista_consumiveis = utilizar_consumivel(lista_consumiveis, POCAO3, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BCAFE)
 											{
-												li = utilizar_consumivel(lista_consumiveis, CAFE, li, ListaDosTurnos[i].IndiceRecebedor);
+												lista_consumiveis = utilizar_consumivel(lista_consumiveis, CAFE, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											
 											danoCausado = a->hp - danoCausado;

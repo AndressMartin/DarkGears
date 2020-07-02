@@ -6,6 +6,8 @@
 #include <conio.h>
 #include <string.h>
 
+void detalhaConsumiveis(Consumivel *consumiveis);
+
 Personagens * lista_cria()
 {
     return NULL;
@@ -352,11 +354,15 @@ int personagem_vivo(int hp)
 }
 
 // Funcao para realizar a utilizacao de um item consumivel
-Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Personagens *li, int id_personagem)
+Consumivel* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Personagens *li, int id_personagem)
 {
 	Personagens *aux_li = lista_cria();
 	Consumivel *aux = lista_consumiveis_cria();
 	int vivo;
+	printf(" %d ", tipo_consumivel);
+	printf("Entrando na funcao: +++++++++\n");
+	detalhaConsumiveis(li_cons);
+	printf("++++++++++\n");
 	
 	aux_li = lista_busca(li, id_personagem);
 	
@@ -370,7 +376,7 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 		{
 			if(aux->tipo == POCAO && vivo == 1)
 			{
-				aux->qtd -= 1;
+				aux->qtd = aux->qtd - 1;
 				
 				aux_li->hp += 30;
 				
@@ -382,7 +388,7 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 			}
 			else if(aux->tipo == POCAO2 && vivo == 1)
 			{
-				aux->qtd -= 1;
+				aux->qtd = aux->qtd - 1;
 				
 				aux_li->hp += 60;
 				
@@ -394,7 +400,7 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 			}
 			else if(aux->tipo == POCAO3 && vivo == 1)
 			{
-				aux->qtd -= 1;
+				aux->qtd = aux->qtd - 1;
 				
 				aux_li->hp += 150;
 				
@@ -406,7 +412,7 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 			}
 			else if(aux->tipo == CAFE && vivo == 0)
 			{
-				aux->qtd -= 1;
+				aux->qtd = aux->qtd - 1;
 				
 				aux_li->hp += aux_li->hpmax / 2;
 				// Verifica se o valor do HP ultrapassou o maximo e trava este valor
@@ -416,16 +422,17 @@ Personagens* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Perso
 				}
 			}
 			
-			/*
 			if(aux->qtd <= 0) // Se a quantidade for menor ou igual a 0, o item sera removido da lista
 			{
-				li_cons = lista_consumiveis_retira(li_cons, tipo_consumivel);
+				li_cons = lista_consumiveis_retira(li_cons, aux->tipo);
 			}
-			*/
 		}
 	}
+	printf("Saindo da funcao: +++++++++\n");
+	detalhaConsumiveis(li_cons);
+	printf("++++++++++\n");
 	
-	return li;
+	return li_cons;
 }
 
 void detalhaStatus(Personagens *item)
@@ -456,6 +463,6 @@ void detalhaConsumiveis(Consumivel *consumiveis)
 	
 	for(consumivel_aux = consumiveis; consumivel_aux != NULL; consumivel_aux = consumivel_aux->prox)
 	{
-		printf("\nDescricao: %s / qtd: %d", consumivel_aux->nome, consumivel_aux->qtd);
+		printf("\nDescricao: %s / qtd: %d / tipo: %d", consumivel_aux->nome, consumivel_aux->qtd, consumivel_aux->tipo);
 	}
 }
