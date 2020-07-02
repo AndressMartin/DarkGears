@@ -222,7 +222,7 @@ int main()
     // Carregando propriedades dos itens consumiveis em structs
     strcpy(itemconsumivel[POCAO].nome, "Pocao");
     itemconsumivel[POCAO].id = POCAO + 1;
-	itemconsumivel[POCAO].tipo = POCAO;
+	itemconsumivel[POCAO].tipo = 0;
 	itemconsumivel[POCAO].qtd = 1;
 	
 	strcpy(itemconsumivel[POCAO2].nome, "Pocao S.");
@@ -262,6 +262,31 @@ int main()
 	li = equipa_item(li, 1, &item[0]);
 	li = equipa_item(li, 1, &item[1]);
 	li = equipa_item(li, 1, &item[2]);
+	
+	/*
+	detalhaConsumiveis(lista_consumiveis);
+	system("pause");
+	
+	lista_consumiveis = utilizar_consumivel(lista_consumiveis, 2, li, 1);
+	
+	detalhaConsumiveis(lista_consumiveis);
+	system("pause");
+	
+	lista_consumiveis = utilizar_consumivel(lista_consumiveis, 2, li, 1);
+	
+	detalhaConsumiveis(lista_consumiveis);
+	system("pause");
+	
+	lista_consumiveis = utilizar_consumivel(lista_consumiveis, 0, li, 1);
+	
+	detalhaConsumiveis(lista_consumiveis);
+	system("pause");
+	
+	lista_consumiveis = utilizar_consumivel(lista_consumiveis, 1, li, 1);
+	
+	detalhaConsumiveis(lista_consumiveis);
+	system("pause");*/
+	
 	
 	//Insere inimigos na lista
 	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 200, 10);

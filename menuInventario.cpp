@@ -583,7 +583,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 									Voltar = true;
 								}
 								
-								li = utilizar_consumivel(lista_consumiveis, SelecaoItem, li, ArrayIds[Selecao]);
+								lista_consumiveis = utilizar_consumivel(lista_consumiveis, SelecaoItem, li, ArrayIds[Selecao]);
 								
 								if(Voltar == true)
 								{
@@ -612,7 +612,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 									Voltar = true;
 								}
 								
-								li = utilizar_consumivel(lista_consumiveis, SelecaoItem, li, ArrayIds[Selecao]);
+								lista_consumiveis = utilizar_consumivel(lista_consumiveis, SelecaoItem, li, ArrayIds[Selecao]);
 								
 								if(Voltar == true)
 								{
