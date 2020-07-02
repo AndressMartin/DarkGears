@@ -246,7 +246,7 @@ int main()
     // Carregando propriedades dos itens consumiveis em structs
     strcpy(itemconsumivel[POCAO].nome, "Pocao");
     itemconsumivel[POCAO].id = POCAO + 1;
-	itemconsumivel[POCAO].tipo = 0;
+	itemconsumivel[POCAO].tipo = POCAO;
 	itemconsumivel[POCAO].qtd = 1;
 	
 	strcpy(itemconsumivel[POCAO2].nome, "Pocao S.");
@@ -310,7 +310,6 @@ int main()
 	
 	detalhaConsumiveis(lista_consumiveis);
 	system("pause");*/
-	
 	
 	//Insere inimigos na lista
 	mob = lista_insere(mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 200, 10);
@@ -905,11 +904,13 @@ int main()
 					
 					if(listaObjetosC[i].Tipo == INIMIGO)
 					{
-								
-						if(((CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX >= (0 - Sprites_InimigosMapa_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX  <= TelaLarX)) && ((CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem >= (0 - Sprites_InimigosMapa_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem <= TelaLarY)))
+						if(InimigosVivos[listaObjetosC[i].Ind] == true)
 						{
-							putimage(CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX, CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_InimigosMapa_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
-							putimage(CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX, CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_InimigosMapa[listaObjetosC[i].IndIm], OR_PUT);
+							if(((CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX >= (0 - Sprites_InimigosMapa_Tamanhos[listaObjetosC[i].IndIm][0])) && (CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX  <= TelaLarX)) && ((CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem >= (0 - Sprites_InimigosMapa_Tamanhos[listaObjetosC[i].IndIm][1])) && (CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem <= TelaLarY)))
+							{
+								putimage(CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX, CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_InimigosMapa_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
+								putimage(CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX, CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_InimigosMapa[listaObjetosC[i].IndIm], OR_PUT);
+							}
 						}
 					}
 				}
