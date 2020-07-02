@@ -216,6 +216,7 @@ int main()
 				*mob = lista_cria();
 	
 	Consumivel *lista_consumiveis = lista_consumiveis_cria();
+	Consumivel *lcAux = lista_consumiveis_cria();
 	
 	Item item[5];
 	Consumivel itemconsumivel[4];
@@ -358,7 +359,7 @@ int main()
 		MusicaDaBatalha = 0;
 	
 	char *Arquivo = NULL,
-		 *MudancaDeTexto = NULL;
+		 MudancaDeTexto[20] = "Mudanca";
 	int DialogoPosX = 0,
 		DialogoPosY = 0,
 		DialogoPartToStart = 0,
@@ -382,8 +383,8 @@ int main()
 	int *Baus;
 	Baus = (int *)malloc(sizeof(int) * NumeroDeBaus);
 	
-	Baus[0] = CAFE;
-	Baus[1] = POCAO3;
+	Baus[0] = POCAO;
+	Baus[1] = CAFE;
 	
 	int Bau_AreaDeInteracao = 10;
 	
@@ -1063,13 +1064,17 @@ int main()
 				}
 				
 				//Interacoes com o mapa.
-				interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &MudancaDeTexto, &AdicionarItem, &AdicionarItemIndice, &InimigoIndice, InimigosVivos, InimigosPosicoes, &mob, &IniciarBatalha, &MusicaDoCenario, &MusicaDaBatalha);
+				interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &AdicionarItem, &AdicionarItemIndice, &InimigoIndice, InimigosVivos, InimigosPosicoes, &mob, &IniciarBatalha, &MusicaDoCenario, &MusicaDaBatalha);
 				
 				//Adicionar itens dos baus
 				if(AdicionarItem == true)
 				{
 					//Codigo de adicionar item.
 					lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[Baus[AdicionarItemIndice]]);
+					
+					//Alterar o MudancaDeTexto
+					lcAux = lista_consumiveis_busca(lista_consumiveis, Baus[AdicionarItemIndice]);
+					strcpy(MudancaDeTexto, lcAux->nome);
 					
 					//Tirar o item do bau
 					Baus[AdicionarItemIndice] = NADA;
@@ -1152,7 +1157,6 @@ int main()
 	free(mob);
 	free(lista_consumiveis);
 	free(Arquivo);
-	free(MudancaDeTexto);
 	free(listaObjetosC);
 	free(ListaRetangulosDeColisao);
 	free(Baus);

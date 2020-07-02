@@ -7,7 +7,7 @@
 #include<conio.h>
 #include<string.h>
 
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int Baus[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, char **MudancaDeTexto, bool *AdicionarItem, int *AdicionarItemIndice, int *InimigoIndice, bool InimigosVivos[], RetangulosDeColisao InimigosPosicoes[], Personagens **mob, bool *IniciarBatalha, int *MusicaDoCenario, int *MusicaDaBatalha)
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int Baus[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, bool *AdicionarItem, int *AdicionarItemIndice, int *InimigoIndice, bool InimigosVivos[], RetangulosDeColisao InimigosPosicoes[], Personagens **mob, bool *IniciarBatalha, int *MusicaDoCenario, int *MusicaDaBatalha)
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
@@ -35,15 +35,15 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					    	*AdicionarItemIndice = InteracaoN;
 							
 							*Arquivo = (char *)malloc(sizeof(char) * 17);
-					    	strcpy(*Arquivo, "Textos/Teste.txt");
+					    	strcpy(*Arquivo, "Textos/MensagensDosBaus.txt");
 					    	
-					    	*MudancaDeTexto = (char *)malloc(sizeof(char) * 40);
-					    	strcpy(*MudancaDeTexto, "Poção!");
+					    	//*MudancaDeTexto = (char *)malloc(sizeof(char) * 40);
+					    	//strcpy(*MudancaDeTexto, "Poção!");
 					    	
 					    	*DialogoPosX = 169,
 							*DialogoPosY = 435,
-							*DialogoPartToStart = 36,
-							*DialogoPartToStop = 37;
+							*DialogoPartToStart = 2,
+							*DialogoPartToStop = 3;
 							
 					    	*PodeFazerInteracao = false;
 					    	*CaixaDeTexto = true;
@@ -62,15 +62,12 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					    	*AdicionarItemIndice = InteracaoN;
 							
 							*Arquivo = (char *)malloc(sizeof(char) * 17);
-					    	strcpy(*Arquivo, "Textos/Teste.txt");
-					    	
-					    	*MudancaDeTexto = (char *)malloc(sizeof(char) * 40);
-					    	strcpy(*MudancaDeTexto, "Poção!");
+					    	strcpy(*Arquivo, "Textos/MensagensDosBaus.txt");
 					    	
 					    	*DialogoPosX = 169,
 							*DialogoPosY = 30,
-							*DialogoPartToStart = 38,
-							*DialogoPartToStop = 40;
+							*DialogoPartToStart = 10,
+							*DialogoPartToStop = 13;
 							
 					    	*PodeFazerInteracao = false;
 					    	*CaixaDeTexto = true;
