@@ -87,4 +87,8 @@ void reproduzirSom(int Comando)
 	{
 		sndPlaySound(".\\Sons\\chrono_trigger_miss.wav", SND_ASYNC);
 	}
+	else if (Comando == SOMDECURA2)
+	{
+		sndPlaySound(".\\Sons\\chrono_trigger_cura_mapa2.wav", SND_ASYNC);
+	}
 }

@@ -169,8 +169,8 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 				{
 					a = lista_busca(li, ArrayIds[i]);
 					
-					putimage(20+(340*i), 20, Sprites_HUD_Mascaras[MENUBATALHA3], AND_PUT);
-					putimage(20+(340*i), 20, Sprites_HUD[MENUBATALHA3], OR_PUT);
+					putimage(20+(340*i), 20, Sprites_HUD_Mascaras[MENUINVENTARIO1], AND_PUT);
+					putimage(20+(340*i), 20, Sprites_HUD[MENUINVENTARIO1], OR_PUT);
 					
 					strcpy(Texto, a->nome);
 					
@@ -574,7 +574,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 							
 							if(a->hp > 0)
 							{
-								reproduzirSom(CURSORMOVE);
+								reproduzirSom(SOMDECURA2);
 								
 								lcAux = lista_consumiveis_busca(lista_consumiveis, SelecaoItem);
 								
@@ -603,7 +603,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 							
 							if(a->hp <= 0)
 							{
-								reproduzirSom(CURSORMOVE);
+								reproduzirSom(SOMDECURA2);
 								
 								lcAux = lista_consumiveis_busca(lista_consumiveis, SelecaoItem);
 								
