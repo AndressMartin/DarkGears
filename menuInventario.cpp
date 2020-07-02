@@ -199,6 +199,22 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 					strcat(Texto, HpTexto);
 					
 					outtextxy(150 + (340*i), 50, Texto);
+					
+					strcpy(Texto, "Nivel: ");
+					
+					itoa(a->levels, HpTexto, 10);
+					strcat(Texto, HpTexto);
+					
+					outtextxy(150 + (340*i), 70, Texto);
+//					
+//					strcpy(Texto, "Exp para o");
+//					outtextxy(190 + (340*i), 70, Texto);
+//					
+//					strcpy(Texto, "proximo nivel:");
+//					outtextxy(210 + (340*i), 70, Texto);
+//					
+//					itoa((((a->levels * 10) + (a->levels + 1) * 10) - a->exp), Texto, 10);
+//					outtextxy(199 + 85 + 132 + 142 + 170 + 10, 140 + 75 + (73 * i) + 30, Texto);
 				}
 				
 //				//1st Char
