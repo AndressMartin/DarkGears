@@ -102,9 +102,9 @@ Consumivel* lista_consumiveis_busca(Consumivel* li, int tipo)
 }
 
 /* retorna o novo inicio ou a lista original*/
-Personagens* lista_retira(Personagens* li, int tipo_item){
+Personagens* lista_retira(Personagens* li, int id){
  	//procura o elemento na lista usando a função busca
-    Personagens* aux=lista_busca(li, tipo_item);
+    Personagens* aux=lista_busca(li, id);
     if (aux==NULL) //não achou o elemento
         return li; 
     //retira o elemento encadeado

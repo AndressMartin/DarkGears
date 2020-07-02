@@ -493,7 +493,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			{
 				if(MenuID2 == 0)
 				{
-					if(Tecla == ESC)
+					if(Tecla == TECLABACKSPACE)
 					{	
 						reproduzirSom(CURSORVOLTA);
 						MenuID = 0;
@@ -548,7 +548,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 				}
 				if(MenuID2 == 1)
 				{
-					if(Tecla == ESC)
+					if(Tecla == TECLABACKSPACE)
 					{
 						reproduzirSom(CURSORVOLTA);
 						
@@ -632,7 +632,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			//Menu de habilidades
 			if(MenuID == 2)
 			{
-				if(Tecla == ESC)
+				if(Tecla == TECLABACKSPACE)
 				{	
 					MenuID = 0;
 				}
@@ -660,7 +660,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			//Menu de equipamentos
 			if(MenuID == 3)
 			{
-				if(Tecla == ESC)
+				if(Tecla == TECLABACKSPACE)
 				{	
 					MenuID = 0;
 				}
@@ -668,7 +668,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			//Menu de personagens
 			if(MenuID == 4)
 			{
-				if(Tecla == ESC)
+				if(Tecla == TECLABACKSPACE)
 				{	
 					reproduzirSom(CURSORVOLTA);
 					MenuID = 0;
@@ -687,7 +687,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			//Bestiário
 			if(MenuID == 5)
 			{
-				if(Tecla == ESC)
+				if(Tecla == TECLABACKSPACE)
 				{	
 					MenuID = 0;
 				}
@@ -702,6 +702,8 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			}
 		}
 	}
+	
+	reproduzirSom(CURSORVOLTA);
 	
 	free(ArrayIds);
 	free(ArrayIdsItens);

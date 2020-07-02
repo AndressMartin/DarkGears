@@ -18,7 +18,7 @@ Item* lista_itens_busca(Item* li, int tipo_item);
 Consumivel* lista_consumiveis_busca(Consumivel* li, int tipo);
 
 // Exclusão
-Personagens* lista_retira(Personagens* li, int tipo_item);
+Personagens* lista_retira(Personagens* li, int id);
 Item* lista_itens_retira(Item* li, int tipo_item);
 Consumivel* lista_consumiveis_retira(Consumivel* li, int tipo);
 

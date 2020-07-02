@@ -4,7 +4,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCenaDesenho[], PosicoesD BausCenaDesenho[], int *TamanhoListaOC, PosicoesD **listaObjetosC)
+void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD PersonagemD, PosicoesD ObjetosCenaDesenho[], PosicoesD BausCenaDesenho[], PosicoesD InimigosDesenho[], int *TamanhoListaOC, PosicoesD **listaObjetosC)
 {
 	//Muda a lista (ponteiro) que ordena os objetos e a personagem no mapa (quem aparece na frente de quem), baseado no cenario atual.
 	// ! - > Apesar do Ponteiro ObjetosCenaDesenho[] na funcao ser outro, as structs dentro dos indices sao as mesmas, entao elas nao podem ser modificadas.
@@ -13,7 +13,7 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 		case 0:
 			{
 				//Preciso colocar as chaves para limitar o escopo da variavel local que e declarada (ListaT), se nao da erro.
-				*TamanhoListaOC = 6;
+				*TamanhoListaOC = 8;
 				
 				PersonagemD.PosY = PosY - PersonagemD.VTroca;
 				
@@ -28,6 +28,8 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 				ListaT[3] = ObjetosCenaDesenho[OTESTE_01_3];
 				ListaT[4] = BausCenaDesenho[0];
 				ListaT[5] = BausCenaDesenho[1];
+				ListaT[6] = InimigosDesenho[0];
+				ListaT[7] = InimigosDesenho[1];
 				
 				// O valor de X e Y que os objetos guardam e a distancia deles em relacao ao X e Y do cenario,
 				// aqui na lista, e necessario o valor real da posicao na tela, por isso a soma.
@@ -36,6 +38,8 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 				ListaT[3].PosY += CPosY;
 				ListaT[4].PosY += CPosY;
 				ListaT[5].PosY += CPosY;
+				ListaT[6].PosY += CPosY;
+				ListaT[7].PosY += CPosY;
 				
 				//Libero o ponteiro que vai ser usado no main.
 				free(*listaObjetosC);

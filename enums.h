@@ -8,13 +8,13 @@ enum Sprites {LILY, CHADDRIT, LILY3D};
 //ObjetosCEnum {O + AREA_Mapa_NumeroDoObjeto}
 enum ObjetosCenaEnum {OTESTE_01_1, OTESTE_01_2, OTESTE_01_3, OTESTE_02_1_p1, OTESTE_02_1_p2};
 
-enum Tipos {PER, OBJ, BAU}; //Enumera os tipos que as structs de PosisoesC podem ter.
+enum Tipos {PER, OBJ, BAU, INIMIGO}; //Enumera os tipos que as structs de PosisoesC podem ter.
 
 //Enumero os indices dos itens do jogo.
 enum IndiceItens {POCAO, POCAO2, POCAO3, CAFE, NADA};
 
 //Enumera o indice das imagens a serem carregadas.
-enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD, MOBS, EFEITOS};
+enum ImagensIndice {STESTE, CCENTESTE, OCENTESTE, BAUS, RETRATOS, HUD, MOBS, EFEITOS, INIMIGOSMAPA};
 
 //Enumera os indices das imagens de HUD.
 enum ImagensHUD {CAIXADETEXTO, MENUBATALHA1, MENUBATALHA2, MENUBATALHA3, SELECAOM, MENUBATALHAR, MENUBATALHAR2, MENUBATALHA4, TELADETITULO, BOTAOJOGAR, BOTAOCREDITOS, BOTAOSAIR, TELADECREDITOS, MENUINVENTARIO1};
