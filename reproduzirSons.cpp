@@ -29,6 +29,9 @@ void reproduzirSom(int Comando)
 	{
 		mciSendString("open .\\Sons\\ff6_battle_theme_teste.mp3 type MPEGVideo alias musica", NULL, 0, 0); 
       	mciSendString("play musica", NULL, 0, 0);
+      	
+      	//Versao com looping
+      	//mciSendString("play musica repeat", NULL, 0, 0);
 	}
 	else if(Comando == MUSICAVITORIA)
 	{

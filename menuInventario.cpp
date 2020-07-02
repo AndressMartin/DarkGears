@@ -24,7 +24,7 @@
 #define TECLAENTER		13
 #define TECLABACKSPACE	8
 
-void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
+void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[])
 {
 	int i = 0;
 
@@ -64,7 +64,8 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 	char Texto[30] = "Texto",
 		 HpTexto[4] = "999";
 	
-	bool Voltar = false;
+	bool Voltar = false,
+		 SairDoMenu = false;
 	int resultQuadrado;
 	//Variável usada para percorrer a lista
 	Personagens *a = lista_cria();
@@ -78,7 +79,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
 			
-	while(Tecla != MENU)
+	while(SairDoMenu == false)
 	{	
 		Gt2 = GetTickCount();
 		if(Gt2 < Gt1)
@@ -225,7 +226,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			{
 				//Cria a lista com os tipos dos itens
 				iMaxItens = 0;
-				for(lcAux = lista_consumiveis; lcAux != NULL; lcAux = lcAux->prox)
+				for(lcAux = *lista_consumiveis; lcAux != NULL; lcAux = lcAux->prox)
 				{
 					iMaxItens ++;
 					ArrayIdsItens = (int *)realloc(ArrayIdsItens, sizeof(int) * iMaxItens);
@@ -255,7 +256,7 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 					{
 						if((i >= itensScroll) && (i - itensScroll < 6))
 						{
-							lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]);
+							lcAux = lista_consumiveis_busca(*lista_consumiveis, ArrayIdsItens[i]);
 							
 						    putimage(70, 50 + (73 * itensScroll2), Sprites_HUD_Mascaras[MENUBATALHA4], AND_PUT);
 							putimage(70, 50 + (73 * itensScroll2), Sprites_HUD[MENUBATALHA4], OR_PUT);
@@ -509,8 +510,16 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 			setvisualpage(PG);
 			
 			//Acoes
+			if(Tecla == MENU)
+			{	
+				SairDoMenu = true;
+			}
 			if (MenuID == 0)
 			{
+				if(Tecla == TECLABACKSPACE)
+				{	
+					SairDoMenu = true;
+				}
 			  	if(Tecla == One)
 				{	
 					reproduzirSom(CURSORMOVE);
@@ -573,9 +582,9 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 					}
 					if(Tecla == TECLAENTER)
 					{				
-						if(lista_consumiveis != NULL)
+						if(*lista_consumiveis != NULL)
 						{
-							lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[Selecao]);
+							lcAux = lista_consumiveis_busca(*lista_consumiveis, ArrayIdsItens[Selecao]);
 							
 							if(lcAux->qtd > 0)
 							{
@@ -629,14 +638,14 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 							{
 								reproduzirSom(SOMDECURA2);
 								
-								lcAux = lista_consumiveis_busca(lista_consumiveis, SelecaoItem);
+								lcAux = lista_consumiveis_busca(*lista_consumiveis, SelecaoItem);
 								
 								if(lcAux->qtd <= 1)
 								{
 									Voltar = true;
 								}
 								
-								lista_consumiveis = utilizar_consumivel(lista_consumiveis, SelecaoItem, li, ArrayIds[Selecao]);
+								*lista_consumiveis = utilizar_consumivel(*lista_consumiveis, SelecaoItem, li, ArrayIds[Selecao]);
 								
 								if(Voltar == true)
 								{
@@ -658,14 +667,14 @@ void DrawMenu(Personagens* li, Consumivel* lista_consumiveis, void* Sprites_Retr
 							{
 								reproduzirSom(SOMDECURA2);
 								
-								lcAux = lista_consumiveis_busca(lista_consumiveis, SelecaoItem);
+								lcAux = lista_consumiveis_busca(*lista_consumiveis, SelecaoItem);
 								
 								if(lcAux->qtd <= 1)
 								{
 									Voltar = true;
 								}
 								
-								lista_consumiveis = utilizar_consumivel(lista_consumiveis, SelecaoItem, li, ArrayIds[Selecao]);
+								*lista_consumiveis = utilizar_consumivel(*lista_consumiveis, SelecaoItem, li, ArrayIds[Selecao]);
 								
 								if(Voltar == true)
 								{

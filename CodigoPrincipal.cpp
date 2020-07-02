@@ -54,7 +54,7 @@ const int Sprites_BausQ = 2;
 void* Sprites_Baus[Sprites_BausQ];
 void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
-const int Sprites_RetratosQ = 10;
+const int Sprites_RetratosQ = 11;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
@@ -98,7 +98,8 @@ char Sprites_Retratos_Nomes[Sprites_RetratosQ][46] = {"Sprites/Retratos/lily",
 													  "Sprites/Retratos/chaddrit_batalha",
 													  "Sprites/Retratos/chaddrit_batalha_atacando",
 													  "Sprites/Retratos/chaddrit_batalha_levandoDano",
-													  "Sprites/Retratos/chaddrit_batalha_semHP"};
+													  "Sprites/Retratos/chaddrit_batalha_semHP",
+													  "Sprites/Retratos/cafeMarrom_Pequeno"};
 									 				
 char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_1",
@@ -158,6 +159,7 @@ int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
 
 int Sprites_Retratos_Tamanhos[Sprites_RetratosQ][2] = {{180, 220},
 											   		   {180, 220},
+													   {85, 74},
 													   {85, 74},
 													   {85, 74},
 													   {85, 74},
@@ -265,7 +267,7 @@ int main()
 	itemconsumivel[CAFE].qtd = 1;
 	
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO]);
-	//lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
+	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[CAFE]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO2]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
 	lista_consumiveis = lista_consumiveis_insere(lista_consumiveis, &itemconsumivel[POCAO3]);
@@ -919,7 +921,7 @@ int main()
 				{
 					reproduzirSom(PARARMUSICA);
 					reproduzirSom(MusicaDaBatalha);
-					iniciarBatalha(li, mob, lista_consumiveis, true, &fecharJogo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+					iniciarBatalha(li, mob, &lista_consumiveis, true, &fecharJogo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
 					reproduzirSom(PARARMUSICA);
 					//reproduzirSom(MusicaDoCenario);
 					
@@ -937,7 +939,7 @@ int main()
 				if(Tecla == MENU)
 				{
 					//reproduzirSom(CURSORPRONTO);
-					DrawMenu(li, lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
+					DrawMenu(li, &lista_consumiveis, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras);
 				}
 				
 				//Mexendo com a posicao da personagem

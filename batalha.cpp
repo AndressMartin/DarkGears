@@ -28,7 +28,8 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 	int Imagem = 0;
 	
 	char Lily[5] = "Lily",
-		 Chaddrit[9] = "Chaddrit";
+		 Chaddrit[9] = "Chaddrit",
+		 Cafe[5] = "Cafe";
 	
 	if(strcmp(Texto, Lily) == 0)
 	{
@@ -40,59 +41,69 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 		Imagem = RBCHADDRIT;
 	}
 	
+	if(strcmp(Texto, Cafe) == 0)
+	{
+		Imagem = RBCAFE;
+	}
+	
 	switch(Imagem)
 	{
 		case RBLILY:
 			if(Tipo == RETRATOBATALHANORMAL)
 			{
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[2], AND_PUT);
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos[2], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BLILYNORMAL], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[BLILYNORMAL], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHAATACANDO)
 			{
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[3], AND_PUT);
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos[3], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BLILYATACANDO], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[BLILYATACANDO], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHADANO)
 			{
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[4], AND_PUT);
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos[4], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BLILYLEVANDODANO], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[BLILYLEVANDODANO], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHANOCAUTEADO)
 			{
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[5], AND_PUT);
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos[5], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BLILYSEMHP], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[BLILYSEMHP], OR_PUT);
 				break;
 			}
 		
 		case RBCHADDRIT:
 			if(Tipo == RETRATOBATALHANORMAL)
 			{
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[6], AND_PUT);
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos[6], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BCHADDRITNORMAL], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[BCHADDRITNORMAL], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHAATACANDO)
 			{
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[7], AND_PUT);
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos[7], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BCHADDRITATACANDO], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[BCHADDRITATACANDO], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHADANO)
 			{
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[8], AND_PUT);
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos[8], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BCHADDRITLEVANDODANO], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[BCHADDRITLEVANDODANO], OR_PUT);
 				break;	
 			}
 			if(Tipo == RETRATOBATALHANOCAUTEADO)
 			{
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[9], AND_PUT);
-				putimage(PosX, PosY + (73 * i), Sprites_Retratos[9], OR_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BCHADDRITSEMHP], AND_PUT);
+				putimage(PosX, PosY + (73 * i), Sprites_Retratos[BCHADDRITSEMHP], OR_PUT);
 				break;	
 			}
+		
+		case RBCAFE:
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BCAFERETRATO], AND_PUT);
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BCAFERETRATO], OR_PUT);
+			break;
 		
 		default:
 			printf("\nRaios multiplos! O operador esta incorreto.");
@@ -146,7 +157,7 @@ void desenhaMenu(Personagens* li, int ArrayIds[], int iMax, void* Sprites_Retrat
 	}
 }
 
-void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumiveis, bool podeFugir, bool *fecharJogo, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
+void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consumiveis, bool podeFugir, bool *fecharJogo, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
 {	
 	srand(time(0));
 	
@@ -270,7 +281,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 			
 			//Cria a lista com os tipos dos itens
 			iMaxItens = 0;
-			for(lcAux = lista_consumiveis; lcAux != NULL; lcAux = lcAux->prox)
+			for(lcAux = *lista_consumiveis; lcAux != NULL; lcAux = lcAux->prox)
 			{
 				iMaxItens ++;
 				ArrayIdsItens = (int *)realloc(ArrayIdsItens, sizeof(int) * iMaxItens);
@@ -445,7 +456,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 					{
 						if((i >= itensScroll) && (i - itensScroll < 3))
 						{
-							lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[i]);
+							lcAux = lista_consumiveis_busca(*lista_consumiveis, ArrayIdsItens[i]);
 					
 						    putimage(27, 337 + (73 * itensScroll2), Sprites_HUD_Mascaras[MENUBATALHA4], AND_PUT);
 							putimage(27, 337 + (73 * itensScroll2), Sprites_HUD[MENUBATALHA4], OR_PUT);
@@ -638,9 +649,9 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 						}
 						if(Tecla == TECLAENTER)
 						{				
-							if(lista_consumiveis != NULL)
+							if(*lista_consumiveis != NULL)
 							{
-								lcAux = lista_consumiveis_busca(lista_consumiveis, ArrayIdsItens[Selecao]);
+								lcAux = lista_consumiveis_busca(*lista_consumiveis, ArrayIdsItens[Selecao]);
 								
 								if(lcAux->qtd > 0)
 								{
@@ -1393,19 +1404,19 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 								//Verifica se tem o item disponivel para usar
 								if(ListaDosTurnos[i].Acao == BPOCAO)
 								{
-									lcAux = lista_consumiveis_busca(lista_consumiveis, POCAO);
+									lcAux = lista_consumiveis_busca(*lista_consumiveis, POCAO);
 								}
 								else if(ListaDosTurnos[i].Acao == BPOCAO2)
 								{
-									lcAux = lista_consumiveis_busca(lista_consumiveis, POCAO2);
+									lcAux = lista_consumiveis_busca(*lista_consumiveis, POCAO2);
 								}
 								else if(ListaDosTurnos[i].Acao == BPOCAO3)
 								{
-									lcAux = lista_consumiveis_busca(lista_consumiveis, POCAO3);
+									lcAux = lista_consumiveis_busca(*lista_consumiveis, POCAO3);
 								}
 								else if(ListaDosTurnos[i].Acao == BCAFE)
 								{
-									lcAux = lista_consumiveis_busca(lista_consumiveis, CAFE);
+									lcAux = lista_consumiveis_busca(*lista_consumiveis, CAFE);
 								}
 								
 								if(lcAux == NULL)
@@ -1585,19 +1596,19 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel* lista_consumi
 											
 											if(ListaDosTurnos[i].Acao == BPOCAO)
 											{
-												lista_consumiveis = utilizar_consumivel(lista_consumiveis, POCAO, li, ListaDosTurnos[i].IndiceRecebedor);
+												*lista_consumiveis = utilizar_consumivel(*lista_consumiveis, POCAO, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BPOCAO2)
 											{
-												lista_consumiveis = utilizar_consumivel(lista_consumiveis, POCAO2, li, ListaDosTurnos[i].IndiceRecebedor);
+												*lista_consumiveis = utilizar_consumivel(*lista_consumiveis, POCAO2, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BPOCAO3)
 											{
-												lista_consumiveis = utilizar_consumivel(lista_consumiveis, POCAO3, li, ListaDosTurnos[i].IndiceRecebedor);
+												*lista_consumiveis = utilizar_consumivel(*lista_consumiveis, POCAO3, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											else if(ListaDosTurnos[i].Acao == BCAFE)
 											{
-												lista_consumiveis = utilizar_consumivel(lista_consumiveis, CAFE, li, ListaDosTurnos[i].IndiceRecebedor);
+												*lista_consumiveis = utilizar_consumivel(*lista_consumiveis, CAFE, li, ListaDosTurnos[i].IndiceRecebedor);
 											}
 											
 											danoCausado = a->hp - danoCausado;
