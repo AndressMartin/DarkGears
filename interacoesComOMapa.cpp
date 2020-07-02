@@ -20,6 +20,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 				char golem[] = "Golem";
 				char wumpus[] = "Wumpus";
 				
+				Personagens* a = lista_cria();
+				
 				//Baus no mapa.
 				
 				InteracaoN = 0;
@@ -112,7 +114,8 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						//Tirar os itens da lista de mobs.
 						while(*mob != NULL)
 						{
-							*mob = lista_retira(*mob, *mob->id);
+							a = *mob;
+							*mob = lista_retira(*mob, a->id);
 						}
 						
 						//Adicionar os novos mobs

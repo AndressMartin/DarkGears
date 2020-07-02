@@ -378,7 +378,7 @@ Consumivel* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Person
 			{
 				aux->qtd = aux->qtd - 1;
 				
-				aux_li->hp += 30;
+				aux_li->hp += 80;
 				
 				// Verifica se o valor do HP ultrapassou o maximo e trava este valor
 				if(aux_li->hp > aux_li->hpmax)
@@ -390,7 +390,7 @@ Consumivel* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Person
 			{
 				aux->qtd = aux->qtd - 1;
 				
-				aux_li->hp += 60;
+				aux_li->hp += 200;
 				
 				// Verifica se o valor do HP ultrapassou o maximo e trava este valor
 				if(aux_li->hp > aux_li->hpmax)
@@ -402,7 +402,7 @@ Consumivel* utilizar_consumivel(Consumivel *li_cons, int tipo_consumivel, Person
 			{
 				aux->qtd = aux->qtd - 1;
 				
-				aux_li->hp += 150;
+				aux_li->hp += 500;
 				
 				// Verifica se o valor do HP ultrapassou o maximo e trava este valor
 				if(aux_li->hp > aux_li->hpmax)
