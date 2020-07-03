@@ -31,7 +31,7 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 		 Chaddrit[9] = "Chaddrit",
 		 Cafe[5] = "Cafe",
 		 Pocao[6] = "Pocao",
-		 Slime[6] = "Slime",
+		 Caracol[8] = "Caracol",
 		 Golem[6] = "Golem";
 	
 	if(strcmp(Texto, Lily) == 0)
@@ -54,9 +54,9 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 		Imagem = RBPOCAO;
 	}
 	
-	if(strcmp(Texto, Slime) == 0)
+	if(strcmp(Texto, Caracol) == 0)
 	{
-		Imagem = RBSLIME;
+		Imagem = RBCARACOL;
 	}
 	
 	if(strcmp(Texto, Golem) == 0)
@@ -123,9 +123,9 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BCAFERETRATO], OR_PUT);
 			break;
 		
-		case RBSLIME:
-			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BSLIMERETRATO], AND_PUT);
-			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BSLIMERETRATO], OR_PUT);
+		case RBCARACOL:
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BCARACOLRETRATO], AND_PUT);
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BCARACOLRETRATO], OR_PUT);
 			break;
 		
 		case RBGOLEM:
@@ -136,6 +136,7 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 		case RBPOCAO:
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BPOCAORETRATO], AND_PUT);
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BPOCAORETRATO], OR_PUT);
+			break;
 		
 		default:
 			printf("\nRaios multiplos! O operador esta incorreto.");

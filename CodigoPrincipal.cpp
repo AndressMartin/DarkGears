@@ -68,7 +68,7 @@ const int Sprites_MobsQ = 2;
 void* Sprites_Mobs[Sprites_MobsQ];
 void* Sprites_Mobs_Mascaras[Sprites_MobsQ];
 
-const int Sprites_InimigosMapaQ = 2;
+const int Sprites_InimigosMapaQ = 3;
 void* Sprites_InimigosMapa[Sprites_InimigosMapaQ];
 void* Sprites_InimigosMapa_Mascaras[Sprites_InimigosMapaQ];
 
@@ -102,7 +102,7 @@ char Sprites_Retratos_Nomes[Sprites_RetratosQ][46] = {"Sprites/Retratos/lily",
 													  "Sprites/Retratos/chaddrit_batalha_levandoDano",
 													  "Sprites/Retratos/chaddrit_batalha_semHP",
 													  "Sprites/Retratos/cafeMarrom_Pequeno",
-													  "Sprites/Retratos/slime",
+													  "Sprites/Retratos/caracol",
 													  "Sprites/Retratos/golem",
 													  "Sprites/Retratos/potionSmall"};
 									 				
@@ -124,8 +124,9 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
 											  "Sprites/Mobs/wumpus"};
 
-char Sprites_InimigosMapa_Nomes[Sprites_InimigosMapaQ][25] = {"Sprites/Mobs/golem_mapa",
-											  				  "Sprites/Mobs/wumpus_mapa"};
+char Sprites_InimigosMapa_Nomes[Sprites_InimigosMapaQ][26] = {"Sprites/Mobs/golem_mapa",
+											  				  "Sprites/Mobs/wumpus_mapa",
+															  "Sprites/Mobs/caracol_mapa"};
 
 char Sprites_Efeitos_Nomes[Sprites_EfeitosQ][25] = {"Sprites/Efeitos/golpe",
 													"Sprites/Efeitos/cura1-1",
@@ -196,7 +197,8 @@ int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
 											   {275, 275}};
 
 int Sprites_InimigosMapa_Tamanhos[Sprites_InimigosMapaQ][2] = {{200, 200},
-											   				   {100, 100}};
+											   				   {100, 100},
+															   {64, 64}};
 
 int Sprites_Efeitos_Tamanhos[Sprites_EfeitosQ][2] = {{150, 150},
 													 {85, 74},

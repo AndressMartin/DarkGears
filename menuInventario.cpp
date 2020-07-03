@@ -281,19 +281,19 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 							{
 								case POCAO:
 						            outtextxy(540, 60, "Recupera 80 de vida.");
-						            outtextxy(540, 80, "N?o revive um personagem morto.");
+						            outtextxy(540, 80, "Nao revive um personagem morto.");
 						            break;
 						        case POCAO2:
 						            outtextxy(540, 60, "Recupera 200 de vida.");
-						            outtextxy(540, 80, "N?o revive um personagem morto.");
+						            outtextxy(540, 80, "Nao revive um personagem morto.");
 						            break;
 					            case POCAO3:
 					            	outtextxy(540, 60, "Recupera 500 de vida.");
-					            	outtextxy(540, 80, "N?o revive um personagem morto.");
+					            	outtextxy(540, 80, "Nao revive um personagem morto.");
 					            	break;
 					            case CAFE:
 					            	outtextxy(540, 60, "Revive um personagem morto ");
-					            	outtextxy(540, 80, "com metade de sua vida m?xima.");
+					            	outtextxy(540, 80, "com metade de sua vida maxima.");
 					            	break;
 						        default:
 						            printf("\n");
