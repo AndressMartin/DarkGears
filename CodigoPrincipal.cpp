@@ -56,7 +56,7 @@ const int Sprites_BausQ = 2;
 void* Sprites_Baus[Sprites_BausQ];
 void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
-const int Sprites_RetratosQ = 13;
+const int Sprites_RetratosQ = 14;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
@@ -103,7 +103,8 @@ char Sprites_Retratos_Nomes[Sprites_RetratosQ][46] = {"Sprites/Retratos/lily",
 													  "Sprites/Retratos/chaddrit_batalha_semHP",
 													  "Sprites/Retratos/cafeMarrom_Pequeno",
 													  "Sprites/Retratos/slime",
-													  "Sprites/Retratos/golem"};
+													  "Sprites/Retratos/golem",
+													  "Sprites/Retratos/potionSmall"};
 									 				
 char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_1",
@@ -163,6 +164,7 @@ int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
 
 int Sprites_Retratos_Tamanhos[Sprites_RetratosQ][2] = {{180, 220},
 											   		   {180, 220},
+													   {85, 74},
 													   {85, 74},
 													   {85, 74},
 													   {85, 74},
