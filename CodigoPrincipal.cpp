@@ -32,6 +32,7 @@
 char Tipo[13] = "Nice",
 	 JPG[5] = ".jpg",
 	 BMP[5] = ".bmp",
+	 CBMP[13] = "_colisao.bmp",
 	 MBMP[13] = "_mascara.bmp",
 	 MJPG[13] = "_mascara.jpg";
 char StrcatTemp[50] = "Yes"; //O numero de caracteres tem que ser grande para ser usado no carregaento de imagens.
@@ -43,8 +44,9 @@ const int SpritesQ = 3; //Quantidade de sprites, vai ser usado nas outras listas
 void* Sprites[SpritesQ];
 void* Sprites_Mascaras[SpritesQ];
 
-const int Cenario_ColisaoQ = 2;
-void* Cenario_Colisao[Cenario_ColisaoQ];
+const int CenarioQ = 2;
+void* Sprites_Cenario[CenarioQ];
+void* Cenario_Colisao[CenarioQ];
 
 const int Cenario_ObjetosQ = 5;
 void* Cenario_Objetos[Cenario_ObjetosQ];
@@ -54,7 +56,7 @@ const int Sprites_BausQ = 2;
 void* Sprites_Baus[Sprites_BausQ];
 void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
-const int Sprites_RetratosQ = 11;
+const int Sprites_RetratosQ = 13;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
@@ -80,8 +82,8 @@ char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
 							 		"Sprites/imagem02",
 									"Sprites/fox_prototype4_2"};
 
-char Cenario_Colisao_Nomes[Cenario_ColisaoQ][38] = {"Sprites/Cenarios/Cenario01_01_Colisao",
-									 				"Sprites/Cenarios/Cenario01_02_Colisao"};
+char Cenario_Nomes[CenarioQ][30] = {"Sprites/Cenarios/area1",
+									"Sprites/Cenarios/Cenario01_02"};
 
 char Cenario_Objetos_Nomes[Cenario_ObjetosQ][38] = {"Sprites/ObjetoC_Teste_01-1",
 							 						"Sprites/ObjetoC_Teste_01-2",
@@ -99,7 +101,9 @@ char Sprites_Retratos_Nomes[Sprites_RetratosQ][46] = {"Sprites/Retratos/lily",
 													  "Sprites/Retratos/chaddrit_batalha_atacando",
 													  "Sprites/Retratos/chaddrit_batalha_levandoDano",
 													  "Sprites/Retratos/chaddrit_batalha_semHP",
-													  "Sprites/Retratos/cafeMarrom_Pequeno"};
+													  "Sprites/Retratos/cafeMarrom_Pequeno",
+													  "Sprites/Retratos/slime",
+													  "Sprites/Retratos/golem"};
 									 				
 char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_1",
@@ -145,8 +149,8 @@ int Sprites_Tamanhos[SpritesQ][2] = {{100, 50},
 							  		 {70, 50},
 									 {64, 128}};
 
-int Cenario_Colisao_Tamanhos[Cenario_ColisaoQ][2] = {{840, 560},
-													 {2000, 1000}};
+int Cenario_Tamanhos[CenarioQ][2] = {{1024, 576},
+									 {2000, 1000}};
 
 int Cenario_Objetos_Tamanhos[Cenario_ObjetosQ][2] = {{110, 115},
 							  		 				 {110, 115},
@@ -159,6 +163,8 @@ int Sprites_Baus_Tamanhos[Sprites_BausQ][2] = {{50, 60},
 
 int Sprites_Retratos_Tamanhos[Sprites_RetratosQ][2] = {{180, 220},
 											   		   {180, 220},
+													   {85, 74},
+													   {85, 74},
 													   {85, 74},
 													   {85, 74},
 													   {85, 74},
@@ -322,13 +328,13 @@ int main()
 	//mob = inserir_inimigo(mob, 1);
 	
 	//Variaveis da personagem no mapa
-	int PosX = 20,
-		PosY = 100,
+	int PosX = 8,
+		PosY = 308,
 		PLarX = 30,
 		PLarY = 14,
 		MovX = 0,
 		MovY = 0,
-		PVel = 10;
+		PVel = 5;
 	
 	//Variaveis de controle
 	int PG = 0,
@@ -445,18 +451,18 @@ int main()
 	
 	
 	//Variaveis do cenario ------------------------------------------------------------------------------------------------------------------------
-	int CPosX = -10,
-		CPosY = -10,
+	int CPosX = 0,
+		CPosY = 0,
 		CenarioAtual = 0;
 	
 	//Informacoes do Scroll
 	
 	CenarioInf Cenario[2];
 	
-	Cenario[0].LimiteCima = -10 + (PVel + 1); //Descontar um espaco equivalente a velocidade do personagem + 1, para evitar que a imagem do mapa possa sair da tela.
-	Cenario[0].LimiteBaixo = -10 - (PVel + 1);
-	Cenario[0].LimiteEsquerda = -10 + (PVel + 1);
-	Cenario[0].LimiteDireita = -10 - (PVel + 1);
+	Cenario[0].LimiteCima = 0 + (PVel + 1); //Descontar um espaco equivalente a velocidade do personagem + 1, para evitar que a imagem do mapa possa sair da tela.
+	Cenario[0].LimiteBaixo = 0 - (PVel + 1);
+	Cenario[0].LimiteEsquerda = 0 + (PVel + 1);
+	Cenario[0].LimiteDireita = 0 - (PVel + 1);
 	
 	Cenario[1].LimiteCima = -408 + (PVel + 1); //Descontar um espaco equivalente a velocidade do personagem + 1, para evitar que a imagem do mapa possa sair da tela.
 	Cenario[1].LimiteBaixo = -16 - (PVel + 1);
@@ -533,12 +539,12 @@ int main()
 	
 	RetangulosDeColisao RetanguloTeste[2];
 	
-	RetanguloTeste[0].DisX = 100;
-	RetanguloTeste[0].DisY = 80;
+	RetanguloTeste[0].DisX = 500;
+	RetanguloTeste[0].DisY = 10;
 	RetanguloTeste[0].LarX = 100;
 	RetanguloTeste[0].LarY = 100;
 	
-	RetanguloTeste[1].DisX = 300;
+	RetanguloTeste[1].DisX = 900;
 	RetanguloTeste[1].DisY = 300;
 	RetanguloTeste[1].LarX = 150;
 	RetanguloTeste[1].LarY = 50;
@@ -582,8 +588,8 @@ int main()
 	initwindow(2000, 1000, "Dark Gears - Carregamento", 0, 0);
 	
 	CarregarImagens(STESTE);
-	CarregarImagens(CCENTESTE);
-	CarregarImagens(OCENTESTE);
+	CarregarImagens(CENARIOS);
+	CarregarImagens(OBJETOSCENARIO);
 	CarregarImagens(BAUS);
 	CarregarImagens(RETRATOS);
 	CarregarImagens(HUD);
@@ -777,8 +783,8 @@ int main()
 		        setfillstyle(1, RGB(133, 144, 200));
 		        cleardevice();
 				
-				//Vai ser substituido pela funcao de desenhar o cenario em si depois.
-		        desenhaCenario(CPosX, CPosY, Cenario_Colisao, CenarioAtual);
+				//Desenha o cenario
+		        desenhaCenario(CPosX, CPosY, Sprites_Cenario, CenarioAtual);
 		        
 		        //Cria a lista com os retangulos de colisao.
 		        criarListaRetangulosDeColisao(CenarioAtual, RetanguloTeste, PosicaoBaus, &TamanhoListaRetangulosDeColisao, &ListaRetangulosDeColisao);
@@ -1079,6 +1085,7 @@ int main()
 					//Tirar o item do bau
 					Baus[AdicionarItemIndice] = NADA;
 					
+					reproduzirSom(SOMABRIRBAU);
 					AdicionarItem = false;
 					
 					detalhaConsumiveis(lista_consumiveis);
@@ -1246,8 +1253,8 @@ void CarregarImagens(int Imagem)
 			
 			break;
 		
-		case CCENTESTE:
-			//Colisao dos cenarios
+		case CENARIOS:
+			//Cenarios e colisao dos cenarios
 			
 			cleardevice();
 			setactivepage(2);
@@ -1255,13 +1262,22 @@ void CarregarImagens(int Imagem)
 			setbkcolor(RGB(255, 255, 255));
 			cleardevice();
 			
-			for(int i=0; i < Cenario_ColisaoQ; i++)
+			for(int i=0; i < CenarioQ; i++)
 			{
-				strcpy(StrcatTemp, Cenario_Colisao_Nomes[i]);
+				strcpy(StrcatTemp, Cenario_Nomes[i]);
 				
-				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Cenario_Colisao_Tamanhos[i][0]-1, Cenario_Colisao_Tamanhos[i][1]-1);
-			    Cenario_Colisao[i] = malloc(imagesize(0, 0, Cenario_Colisao_Tamanhos[i][0]-1, Cenario_Colisao_Tamanhos[i][1]-1));
-			    getimage(0, 0, Cenario_Colisao_Tamanhos[i][0]-1, Cenario_Colisao_Tamanhos[i][1]-1, Cenario_Colisao[i]);
+				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1);
+			    Sprites_Cenario[i] = malloc(imagesize(0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1));
+			    getimage(0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1, Sprites_Cenario[i]);
+			}
+			
+			for(int i=0; i < CenarioQ; i++)
+			{
+				strcpy(StrcatTemp, Cenario_Nomes[i]);
+				
+				readimagefile(strcat(StrcatTemp, CBMP), 0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1);
+			    Cenario_Colisao[i] = malloc(imagesize(0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1));
+			    getimage(0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1, Cenario_Colisao[i]);
 			}
 			
 			cleardevice();
@@ -1269,7 +1285,7 @@ void CarregarImagens(int Imagem)
 			
 			break;
 		
-		case OCENTESTE:
+		case OBJETOSCENARIO:
 			//Objetos dos cenarios
 			
 			cleardevice();

@@ -172,6 +172,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 				
 				//Portas
 				
+				/*
 				InteracaoN = 0;
 				if(*PodeFazerInteracao == true)
 				{
@@ -182,6 +183,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						*PodeFazerInteracao = false;
 					}
 				}
+				*/
 				
 				break;
 			}

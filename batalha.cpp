@@ -29,7 +29,9 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 	
 	char Lily[5] = "Lily",
 		 Chaddrit[9] = "Chaddrit",
-		 Cafe[5] = "Cafe";
+		 Cafe[5] = "Cafe",
+		 Slime[6] = "Slime",
+		 Golem[6] = "Golem";
 	
 	if(strcmp(Texto, Lily) == 0)
 	{
@@ -44,6 +46,16 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 	if(strcmp(Texto, Cafe) == 0)
 	{
 		Imagem = RBCAFE;
+	}
+	
+	if(strcmp(Texto, Slime) == 0)
+	{
+		Imagem = RBSLIME;
+	}
+	
+	if(strcmp(Texto, Golem) == 0)
+	{
+		Imagem = RBGOLEM;
 	}
 	
 	switch(Imagem)
@@ -103,6 +115,16 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 		case RBCAFE:
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BCAFERETRATO], AND_PUT);
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BCAFERETRATO], OR_PUT);
+			break;
+		
+		case RBSLIME:
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BSLIMERETRATO], AND_PUT);
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BSLIMERETRATO], OR_PUT);
+			break;
+		
+		case RBGOLEM:
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BGOLEMRETRATO], AND_PUT);
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BGOLEMRETRATO], OR_PUT);
 			break;
 		
 		default:

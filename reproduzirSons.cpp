@@ -94,4 +94,8 @@ void reproduzirSom(int Comando)
 	{
 		sndPlaySound(".\\Sons\\chrono_trigger_cura_mapa2.wav", SND_ASYNC);
 	}
+	else if (Comando == SOMABRIRBAU)
+	{
+		sndPlaySound(".\\Sons\\chrono_trigger_bau.wav", SND_ASYNC);
+	}
 }
