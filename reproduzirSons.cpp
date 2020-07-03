@@ -27,15 +27,20 @@ void reproduzirSom(int Comando)
 	}
 	else if (Comando == MUSICABATALHA)
 	{
-		mciSendString("open .\\Sons\\ff6_battle_theme_teste.mp3 type MPEGVideo alias musica", NULL, 0, 0); 
-      	mciSendString("play musica", NULL, 0, 0);
+		mciSendString("open .\\Sons\\ff6_battle_theme.mp3 type MPEGVideo alias musica", NULL, 0, 0); 
+      	mciSendString("play musica repeat", NULL, 0, 0);
       	
       	//Versao com looping
       	//mciSendString("play musica repeat", NULL, 0, 0);
 	}
 	else if(Comando == MUSICAVITORIA)
 	{
-		mciSendString("open .\\Sons\\ff6_victory_fanfare_teste.mp3 type MPEGVideo alias musica", NULL, 0, 0); 
+		mciSendString("open .\\Sons\\ff6_victory_fanfare.mp3 type MPEGVideo alias musica", NULL, 0, 0); 
+      	mciSendString("play musica", NULL, 0, 0);
+	}
+	else if(Comando == MUSICAGAMEOVER)
+	{
+		mciSendString("open .\\Sons\\ff6_rest_in_peace.mp3 type MPEGVideo alias musica", NULL, 0, 0); 
       	mciSendString("play musica", NULL, 0, 0);
 	}
 	

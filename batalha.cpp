@@ -31,6 +31,8 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 		 Chaddrit[9] = "Chaddrit",
 		 Cafe[5] = "Cafe",
 		 Pocao[6] = "Pocao",
+		 Pocao2[12] = "Super Pocao",
+		 Pocao3[11] = "Mega Pocao",
 		 Caracol[8] = "Caracol",
 		 Golem[6] = "Golem";
 	
@@ -52,6 +54,16 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 	if(strcmp(Texto, Pocao) == 0)
 	{
 		Imagem = RBPOCAO;
+	}
+	
+	if(strcmp(Texto, Pocao2) == 0)
+	{
+		Imagem = RBPOCAO2;
+	}
+	
+	if(strcmp(Texto, Pocao3) == 0)
+	{
+		Imagem = RBPOCAO3;
 	}
 	
 	if(strcmp(Texto, Caracol) == 0)
@@ -136,6 +148,16 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 		case RBPOCAO:
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BPOCAORETRATO], AND_PUT);
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BPOCAORETRATO], OR_PUT);
+			break;
+		
+		case RBPOCAO2:
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BPOCAO2RETRATO], AND_PUT);
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BPOCAO2RETRATO], OR_PUT);
+			break;
+		
+		case RBPOCAO3:
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BPOCAO3RETRATO], AND_PUT);
+			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BPOCAO3RETRATO], OR_PUT);
 			break;
 		
 		default:
@@ -288,7 +310,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 	turnoDosPersonagens = true;
 	q = 0;
 	
-	while(!(batalhaFinalizada) && Tecla != ESC)
+	while(!(batalhaFinalizada))
 	{
 		Gt2 = GetTickCount();
 		if(Gt2 < Gt1)
@@ -428,7 +450,27 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 				
 				if(MenuID == 0)
 				{
-					strcpy(Texto, "A - Ataque");
+					putimage(27 + 15, 337 + 10 + (50 * 0), Sprites_HUD_Mascaras[BOTAOATACAR], AND_PUT);
+					putimage(27 + 15, 337 + 10 + (50 * 0), Sprites_HUD[BOTAOATACAR], OR_PUT);
+					
+					putimage(27 + 15, 337 + 10 + (50 * 1), Sprites_HUD_Mascaras[BOTAOITENS], AND_PUT);
+					putimage(27 + 15, 337 + 10 + (50 * 1), Sprites_HUD[BOTAOITENS], OR_PUT);
+					
+					putimage(27 + 15, 337 + 10 + (50 * 2), Sprites_HUD_Mascaras[BOTAOHABILIDADES2], AND_PUT);
+					putimage(27 + 15, 337 + 10 + (50 * 2), Sprites_HUD[BOTAOHABILIDADES2], OR_PUT);
+					
+					if(q > 0 || podeFugir == false)
+					{
+						putimage(27 + 15, 337 + 10 + (50 * 3), Sprites_HUD_Mascaras[BOTAOCORRER2], AND_PUT);
+						putimage(27 + 15, 337 + 10 + (50 * 3), Sprites_HUD[BOTAOCORRER2], OR_PUT);
+					}
+					else
+					{
+						putimage(27 + 15, 337 + 10 + (50 * 3), Sprites_HUD_Mascaras[BOTAOCORRER], AND_PUT);
+						putimage(27 + 15, 337 + 10 + (50 * 3), Sprites_HUD[BOTAOCORRER], OR_PUT);
+					}
+					
+					/*strcpy(Texto, "A - Ataque");
 					outtextxy(96, 370, Texto);
 					
 					strcpy(Texto, "Z - Habilidades");
@@ -443,6 +485,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 					}
 					strcpy(Texto, "X - Dar no pe!");
 					outtextxy(358, 483, Texto);
+					*/
 				}
 				
 				/*
@@ -599,6 +642,10 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 							MenuID = 2;
 							itensScroll = 0;
 							Selecao = 0;
+						}
+						if(Tecla == TECLAZ)
+						{
+							reproduzirSom(CURSORERRO);
 						}
 						if(Tecla == TECLAX )
 						{
@@ -1793,8 +1840,9 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 	else
 	{
 		gameOver = true;
+		reproduzirSom(MUSICAGAMEOVER);
 	}
-	while(resultados == true && Tecla != ESC)
+	while(resultados == true)
 	{	
 		Gt2 = GetTickCount();
 		if(Gt2 < Gt1)
@@ -1932,6 +1980,11 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 					outtextxy(199 + 85 + 132 + 142 + 170 + 10, 140 + 75 + (73 * i) + 30, Texto);
 				}
 			}
+			else
+			{
+				strcpy(Texto, "Fim de jogo...");
+				outtextxy(27 + 200, 337 + 103, Texto);
+			}
 			
 			//Torna visivel a pagina de desenho.
 			setvisualpage(PG);
@@ -1941,6 +1994,11 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 			{
 				reproduzirSom(CURSORMOVE);
 				resultados = false;
+				
+				if(gameOver == true)
+				{
+					*fecharJogo = true;
+				}
 			}
 			
 			//Variavel Tecla

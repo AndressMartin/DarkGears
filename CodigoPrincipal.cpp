@@ -52,15 +52,18 @@ const int Cenario_ObjetosQ = 5;
 void* Cenario_Objetos[Cenario_ObjetosQ];
 void* Cenario_Objetos_Mascaras[Cenario_ObjetosQ];
 
+const int Cenario_BatalhaQ = 2;
+void* Cenario_Batalha[Cenario_BatalhaQ];
+
 const int Sprites_BausQ = 2;
 void* Sprites_Baus[Sprites_BausQ];
 void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
-const int Sprites_RetratosQ = 14;
+const int Sprites_RetratosQ = 16;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
-const int Sprites_HUDQ = 14;
+const int Sprites_HUDQ = 20;
 void* Sprites_HUD[Sprites_HUDQ];
 void* Sprites_HUD_Mascaras[Sprites_HUDQ];
 
@@ -68,7 +71,7 @@ const int Sprites_MobsQ = 2;
 void* Sprites_Mobs[Sprites_MobsQ];
 void* Sprites_Mobs_Mascaras[Sprites_MobsQ];
 
-const int Sprites_InimigosMapaQ = 3;
+const int Sprites_InimigosMapaQ = 6;
 void* Sprites_InimigosMapa[Sprites_InimigosMapaQ];
 void* Sprites_InimigosMapa_Mascaras[Sprites_InimigosMapaQ];
 
@@ -84,6 +87,9 @@ char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
 
 char Cenario_Nomes[CenarioQ][30] = {"Sprites/Cenarios/area1",
 									"Sprites/Cenarios/Cenario01_02"};
+
+char Cenario_Batalha_Nomes[Cenario_BatalhaQ][30] = {"Sprites/Cenarios/area1",
+											  "Sprites/Cenarios/Cenario01_02"};
 
 char Cenario_Objetos_Nomes[Cenario_ObjetosQ][38] = {"Sprites/ObjetoC_Teste_01-1",
 							 						"Sprites/ObjetoC_Teste_01-2",
@@ -104,7 +110,9 @@ char Sprites_Retratos_Nomes[Sprites_RetratosQ][46] = {"Sprites/Retratos/lily",
 													  "Sprites/Retratos/cafeMarrom_Pequeno",
 													  "Sprites/Retratos/caracol",
 													  "Sprites/Retratos/golem",
-													  "Sprites/Retratos/potionSmall"};
+													  "Sprites/Retratos/potionSmall",
+													  "Sprites/Retratos/potionSmall2",
+													  "Sprites/Retratos/potionSmall3"};
 									 				
 char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_1",
@@ -119,12 +127,21 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/creditos",
 											"Sprites/HUD/sair",
 											"Sprites/HUD/telaDeCreditos",
-											"Sprites/HUD/menuInventario_1"};
+											"Sprites/HUD/menuInventario_1",
+											"Sprites/HUD/atacar",
+											"Sprites/HUD/habilidades",
+											"Sprites/HUD/habilidades2",
+											"Sprites/HUD/itens",
+											"Sprites/HUD/correr",
+											"Sprites/HUD/correr2"};
 											
 char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
 											  "Sprites/Mobs/wumpus"};
 
 char Sprites_InimigosMapa_Nomes[Sprites_InimigosMapaQ][26] = {"Sprites/Mobs/golem_mapa",
+															  "Sprites/Mobs/golem_mapa2",
+															  "Sprites/Mobs/golem_mapa3",
+															  "Sprites/Mobs/golem_mapa4",
 											  				  "Sprites/Mobs/wumpus_mapa",
 															  "Sprites/Mobs/caracol_mapa"};
 
@@ -176,6 +193,8 @@ int Sprites_Retratos_Tamanhos[Sprites_RetratosQ][2] = {{180, 220},
 													   {85, 74},
 													   {85, 74},
 													   {85, 74},
+													   {85, 74},
+													   {85, 74},
 													   {85, 74}};
 
 int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
@@ -191,12 +210,21 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 											 {230, 45},
 											 {230, 45},
 											 {1024, 576},
-											 {280, 74}};
+											 {280, 74},
+											 {360, 45},
+											 {360, 45},
+											 {360, 45},
+											 {360, 45},
+											 {360, 45},
+											 {360, 45}};
 											 
 int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
 											   {275, 275}};
 
-int Sprites_InimigosMapa_Tamanhos[Sprites_InimigosMapaQ][2] = {{200, 200},
+int Sprites_InimigosMapa_Tamanhos[Sprites_InimigosMapaQ][2] = {{128, 128},
+															   {128, 128},
+															   {128, 128},
+															   {128, 128},
 											   				   {100, 100},
 															   {64, 64}};
 
@@ -262,12 +290,12 @@ int main()
 	itemconsumivel[POCAO].tipo = POCAO;
 	itemconsumivel[POCAO].qtd = 1;
 	
-	strcpy(itemconsumivel[POCAO2].nome, "Pocao S.");
+	strcpy(itemconsumivel[POCAO2].nome, "Super Pocao");
     itemconsumivel[POCAO2].id = POCAO2 + 1;
 	itemconsumivel[POCAO2].tipo = POCAO2;
 	itemconsumivel[POCAO2].qtd = 1;
 	
-	strcpy(itemconsumivel[POCAO3].nome, "Pocao M.");
+	strcpy(itemconsumivel[POCAO3].nome, "Mega Pocao");
     itemconsumivel[POCAO3].id = POCAO3 + 1;
 	itemconsumivel[POCAO3].tipo = POCAO3;
 	itemconsumivel[POCAO3].qtd = 1;
@@ -288,11 +316,12 @@ int main()
 	char lily [5]  = "Lily";
 	char cueio [9] = "Chaddrit";
 	char quem [9] = "Qsou eu?";
-	char golem[] = "Golem";
-	char wumpus[] = "Wumpus";
+	char golem[6] = "Golem";
+	char wumpus[7] = "Wumpus";
+	char caracol[8] = "Caracol";
 	
-	li = lista_insere(li, 1, lily, 30, 10, 70, 8, 5, 1, 100, 0);
-	li = lista_insere(li, 2, cueio, 30, 6, 80, 12, 15, 5, 200, 0);
+	li = lista_insere(li, 1, lily, 20, 10, 70, 12, 5, 1, 100, 0);
+	li = lista_insere(li, 2, cueio, 30, 6, 80, 8, 15, 5, 200, 115);
 	li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999, 0);
 	
 	//Equipando os itens nos personagens, é preciso passar a party, o indice do personagem da party e o item que deseja equipar
@@ -403,23 +432,23 @@ int main()
 	PosicaoBaus[0].DisX = 700;
 	PosicaoBaus[0].DisY = 300;
 	PosicaoBaus[0].LarX = 50;
-	PosicaoBaus[0].LarY = 50;
+	PosicaoBaus[0].LarY = 20;
 	
 	PosicaoBaus[1].DisX = 680;
 	PosicaoBaus[1].DisY = 370;
 	PosicaoBaus[1].LarX = 50;
-	PosicaoBaus[1].LarY = 50;
+	PosicaoBaus[1].LarY = 20;
 	
 	PosicoesD BausCenaDesenho[NumeroDeBaus];
 	
 	BausCenaDesenho[0].IndIm = 0;
 	BausCenaDesenho[1].IndIm = 0;
 	
-	BausCenaDesenho[0].VTroca = 50;
-	BausCenaDesenho[1].VTroca = 50;
+	BausCenaDesenho[0].VTroca = 19;
+	BausCenaDesenho[1].VTroca = 19;
 	
-	BausCenaDesenho[0].DeslocamentoDaImagem = 10;
-	BausCenaDesenho[1].DeslocamentoDaImagem = 10;
+	BausCenaDesenho[0].DeslocamentoDaImagem = 40;
+	BausCenaDesenho[1].DeslocamentoDaImagem = 40;
 	
 	//Inimigos --------------------------------------------------------------------------------------------------------------------
 	int NInimigos = 2;
@@ -437,21 +466,21 @@ int main()
 	//Posicoes
 	RetangulosDeColisao InimigosPosicoes[NInimigos];
 	
-	InimigosPosicoes[0].DisX = 220;
-	InimigosPosicoes[0].DisY = 50;
-	InimigosPosicoes[0].LarX = 200;
-	InimigosPosicoes[0].LarY = 200;
+	InimigosPosicoes[0].DisX = 540;
+	InimigosPosicoes[0].DisY = 160;
+	InimigosPosicoes[0].LarX = 92;
+	InimigosPosicoes[0].LarY = 40;
 	
-	InimigosPosicoes[1].DisX = 300;
-	InimigosPosicoes[1].DisY = 400;
-	InimigosPosicoes[1].LarX = 100;
-	InimigosPosicoes[1].LarY = 100;
+	InimigosPosicoes[1].DisX = 275;
+	InimigosPosicoes[1].DisY = 480;
+	InimigosPosicoes[1].LarX = 40;
+	InimigosPosicoes[1].LarY = 20;
 	
 	//Struct para o desenho dos inimigos
 	PosicoesD InimigosDesenho[NInimigos];
 	
-	InimigosDesenho[0].IndIm = 0;
-	InimigosDesenho[1].IndIm = 1;
+	InimigosDesenho[0].IndIm = 2;
+	InimigosDesenho[1].IndIm = 5;
 	
 	
 	//Variaveis do cenario ------------------------------------------------------------------------------------------------------------------------
@@ -571,14 +600,19 @@ int main()
 	
 	for(i=0; i < NInimigos; i++)
 	{
-		if(InimigosDesenho[i].IndIm == 0)
+		if(InimigosDesenho[i].IndIm == 0 || InimigosDesenho[i].IndIm == 1 || InimigosDesenho[i].IndIm == 2 || InimigosDesenho[i].IndIm == 3)
+		{
+			InimigosDesenho[i].DeslocamentoDaImagem = 82;
+			InimigosDesenho[i].VTroca = 0;
+		}
+		else if(InimigosDesenho[i].IndIm == 4)
 		{
 			InimigosDesenho[i].DeslocamentoDaImagem = 0;
 			InimigosDesenho[i].VTroca = 0;
 		}
-		if(InimigosDesenho[i].IndIm == 1)
+		else if(InimigosDesenho[i].IndIm == 5)
 		{
-			InimigosDesenho[i].DeslocamentoDaImagem = 0;
+			InimigosDesenho[i].DeslocamentoDaImagem = 26;
 			InimigosDesenho[i].VTroca = 0;
 		}
 		
@@ -911,6 +945,8 @@ int main()
 							{
 								putimage(CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX, CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_InimigosMapa_Mascaras[listaObjetosC[i].IndIm], AND_PUT);
 								putimage(CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX, CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY - InimigosDesenho[listaObjetosC[i].Ind].DeslocamentoDaImagem, Sprites_InimigosMapa[listaObjetosC[i].IndIm], OR_PUT);
+								
+								//bar(CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX, CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY, CPosX + InimigosPosicoes[listaObjetosC[i].Ind].DisX +  InimigosPosicoes[listaObjetosC[i].Ind].LarX, CPosY + InimigosPosicoes[listaObjetosC[i].Ind].DisY +  InimigosPosicoes[listaObjetosC[i].Ind].LarY);
 							}
 						}
 					}
@@ -1334,7 +1370,7 @@ void CarregarImagens(int Imagem)
 			{
 				strcpy(StrcatTemp, Sprites_Baus_Nomes[i]);
 		
-				readimagefile(strcat(StrcatTemp, JPG), 0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1);
+				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1);
 			    Sprites_Baus[i] = malloc(imagesize(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1));
 			    getimage(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1, Sprites_Baus[i]);
 			}
@@ -1343,7 +1379,7 @@ void CarregarImagens(int Imagem)
 			{
 				strcpy(StrcatTemp, Sprites_Baus_Nomes[i]);
 		
-				readimagefile(strcat(StrcatTemp, MJPG), 0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1);
+				readimagefile(strcat(StrcatTemp, MBMP), 0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1);
 			    Sprites_Baus_Mascaras[i] = malloc(imagesize(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1));
 			    getimage(0, 0, Sprites_Baus_Tamanhos[i][0]-1, Sprites_Baus_Tamanhos[i][1]-1, Sprites_Baus_Mascaras[i]);
 			}

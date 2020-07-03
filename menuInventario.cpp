@@ -61,7 +61,7 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 		*ArrayIdsItens = NULL,
 		*ArrayIdsAux = NULL;
 	
-	char Texto[30] = "Texto",
+	char Texto[40] = "Texto",
 		 HpTexto[4] = "999";
 	
 	bool Voltar = false,
@@ -280,20 +280,28 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 							switch (ArrayIdsItens[Selecao])
 							{
 								case POCAO:
-						            outtextxy(540, 60, "Recupera 80 de vida.");
-						            outtextxy(540, 80, "Nao revive um personagem morto.");
+									strcpy(Texto, "Recupera 80 de vida.");
+						            outtextxy(600, 60, Texto);
+						            strcpy(Texto, "Nao revive um personagem morto.");
+						            outtextxy(600, 80, Texto);
 						            break;
 						        case POCAO2:
-						            outtextxy(540, 60, "Recupera 200 de vida.");
-						            outtextxy(540, 80, "Nao revive um personagem morto.");
+						        	strcpy(Texto, "Recupera 200 de vida.");
+						            outtextxy(600, 60, Texto);
+						            strcpy(Texto, "Nao revive um personagem morto.");
+						            outtextxy(600, 80, Texto);
 						            break;
 					            case POCAO3:
-					            	outtextxy(540, 60, "Recupera 500 de vida.");
-					            	outtextxy(540, 80, "Nao revive um personagem morto.");
+					            	strcpy(Texto, "Recupera 500 de vida.");
+					            	outtextxy(600, 60, Texto);
+					            	strcpy(Texto, "Nao revive um personagem morto.");
+					            	outtextxy(600, 80, Texto);
 					            	break;
 					            case CAFE:
-					            	outtextxy(540, 60, "Revive um personagem morto ");
-					            	outtextxy(540, 80, "com metade de sua vida maxima.");
+					            	strcpy(Texto, "Revive um personagem morto ");
+					            	outtextxy(600, 60, Texto);
+					            	strcpy(Texto, "com metade de sua vida maxima.");
+					            	outtextxy(600, 80, Texto);
 					            	break;
 						        default:
 						            printf("\n");
@@ -435,7 +443,44 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 				putimage(70 + 326, 50 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
 				putimage(70 + 326, 50 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
 				
+				a = lista_busca(li, ArrayIds[Selecao]);
 				
+				itoa(a->atk, HpTexto, 10);
+				strcpy(Texto, "Ataque: ");
+				strcat(Texto, HpTexto);
+				outtextxy(540, 60, Texto);
+				
+				itoa(a->def, HpTexto, 10);
+				strcpy(Texto, "Defesa: ");
+				strcat(Texto, HpTexto);
+				outtextxy(540, 80, Texto);
+				
+				itoa(a->luc, HpTexto, 10);
+				strcpy(Texto, "Sorte: ");
+				strcat(Texto, HpTexto);
+				outtextxy(540, 100, Texto);
+				
+				itoa(a->prec, HpTexto, 10);
+				strcpy(Texto, "Precisao: ");
+				strcat(Texto, HpTexto);
+				outtextxy(540, 120, Texto);
+				
+				itoa(a->vel, HpTexto, 10);
+				strcpy(Texto, "Velocidade: ");
+				strcat(Texto, HpTexto);
+				outtextxy(540, 140, Texto);
+				
+				itoa(a->exp, HpTexto, 10);
+				strcpy(Texto, "Experiencia: ");
+				strcat(Texto, HpTexto);
+				outtextxy(540, 160, Texto);
+				
+				itoa(a->levels, HpTexto, 10);
+				strcpy(Texto, "Nivel: ");
+				strcat(Texto, HpTexto);
+				outtextxy(540, 180, Texto);
+			            
+				/*
 				switch (ArrayIds[Selecao])
 				{
 					case 1:
@@ -478,6 +523,7 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 			        default:
 			            printf("\n");
 				}
+				*/
 			}
 			//Bestiário
 			if(MenuID == 5)
