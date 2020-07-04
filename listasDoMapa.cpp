@@ -13,7 +13,7 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 		case 0:
 			{
 				//Preciso colocar as chaves para limitar o escopo da variavel local que e declarada (ListaT), se nao da erro.
-				*TamanhoListaOC = 8;
+				*TamanhoListaOC = 9;
 				
 				PersonagemD.PosY = PosY - PersonagemD.VTroca;
 				
@@ -23,13 +23,14 @@ void criarListaObjetosC(int CenarioAtual, int CPosY, int PosY, PosicoesD Persona
 				
 				//Preencher a ListaT.
 				ListaT[0] = PersonagemD;
-				ListaT[1] = ObjetosCenaDesenho[OTESTE_01_1];
-				ListaT[2] = ObjetosCenaDesenho[OTESTE_01_2];
-				ListaT[3] = ObjetosCenaDesenho[OTESTE_01_3];
-				ListaT[4] = BausCenaDesenho[0];
-				ListaT[5] = BausCenaDesenho[1];
-				ListaT[6] = InimigosDesenho[0];
-				ListaT[7] = InimigosDesenho[1];
+				ListaT[1] = BausCenaDesenho[0];
+				ListaT[2] = BausCenaDesenho[1];
+				ListaT[3] = InimigosDesenho[0];
+				ListaT[4] = InimigosDesenho[1];
+				ListaT[5] = InimigosDesenho[2];
+				ListaT[6] = InimigosDesenho[3];
+				ListaT[7] = InimigosDesenho[4];
+				ListaT[8] = InimigosDesenho[5];
 				
 				// O valor de X e Y que os objetos guardam e a distancia deles em relacao ao X e Y do cenario,
 				// aqui na lista, e necessario o valor real da posicao na tela, por isso a soma.

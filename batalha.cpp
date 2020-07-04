@@ -212,7 +212,7 @@ void desenhaMenu(Personagens* li, int ArrayIds[], int iMax, void* Sprites_Retrat
 	}
 }
 
-void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consumiveis, bool podeFugir, bool *fecharJogo, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[])
+void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consumiveis, bool podeFugir, bool *fecharJogo, void* Sprites_Retratos[], void* Sprites_Retratos_Mascaras[], void* Sprites_HUD[], void* Sprites_HUD_Mascaras[], void* Sprites_Mobs[], void* Sprites_Mobs_Mascaras[], void* Sprites_Efeitos[], void* Sprites_Efeitos_Mascaras[], void* Cenario_Batalha[])
 {	
 	srand(time(0));
 	
@@ -421,6 +421,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 			//Fundo e cenario
 			setbkcolor(RGB(240, 240, 240));
 			cleardevice();
+			putimage(0, 0, Cenario_Batalha[CENARIOBATALHA1], COPY_PUT);
 			
 			//Mostrar os mobs
 			for(i = 0; i < iMaxMobInicial; i++)
@@ -1036,6 +1037,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 										//Fundo e cenario
 										setbkcolor(RGB(240, 240, 240));
 										cleardevice();
+										putimage(0, 0, Cenario_Batalha[CENARIOBATALHA1], COPY_PUT);
 										
 										for(p = 0; p < iMaxMobInicial; p++)
 										{
@@ -1245,6 +1247,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 										//Fundo e cenario
 										setbkcolor(RGB(240, 240, 240));
 										cleardevice();
+										putimage(0, 0, Cenario_Batalha[CENARIOBATALHA1], COPY_PUT);
 										
 										for(p = 0; p < iMaxMobInicial; p++)
 										{
@@ -1545,6 +1548,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 										//Fundo e cenario
 										setbkcolor(RGB(240, 240, 240));
 										cleardevice();
+										putimage(0, 0, Cenario_Batalha[CENARIOBATALHA1], COPY_PUT);
 										
 										for(p = 0; p < iMaxMobInicial; p++)
 										{
@@ -1915,6 +1919,7 @@ void iniciarBatalha(Personagens* li, Personagens* mob, Consumivel** lista_consum
 			//Fundo e cenario
 			setbkcolor(RGB(240, 240, 240));
 			cleardevice();
+			putimage(0, 0, Cenario_Batalha[CENARIOBATALHA1], COPY_PUT);
 			
 			//Mostrar os mobs
 			for(i = 0; i < iMaxMobInicial; i++)

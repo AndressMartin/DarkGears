@@ -17,8 +17,9 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 		case 0:
 			{
 				int InteracaoN = 0;
-				char golem[] = "Golem";
-				char wumpus[] = "Wumpus";
+				char golem[6] = "Golem";
+				char wumpus[7] = "Wumpus";
+				char caracol[8] = "Caracol";
 				
 				Personagens* a = lista_cria();
 				
@@ -75,6 +76,87 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 					}
 				}
 				
+				InteracaoN = 2;
+				if(!(Baus[InteracaoN] == NADA) && *PodeFazerInteracao == true)
+				{
+					if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
+					{
+						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
+					    {
+					    	*AdicionarItem = true;
+					    	*AdicionarItemIndice = InteracaoN;
+							
+							*Arquivo = (char *)malloc(sizeof(char) * 17);
+					    	strcpy(*Arquivo, "Textos/MensagensDosBaus.txt");
+					    	
+					    	//*MudancaDeTexto = (char *)malloc(sizeof(char) * 40);
+					    	//strcpy(*MudancaDeTexto, "Poção!");
+					    	
+					    	*DialogoPosX = 169,
+							*DialogoPosY = 435,
+							*DialogoPartToStart = 4,
+							*DialogoPartToStop = 5;
+							
+					    	*PodeFazerInteracao = false;
+					    	*CaixaDeTexto = true;
+						}
+					}
+				}
+				
+				InteracaoN = 3;
+				if(!(Baus[InteracaoN] == NADA) && *PodeFazerInteracao == true)
+				{
+					if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
+					{
+						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
+					    {
+					    	*AdicionarItem = true;
+					    	*AdicionarItemIndice = InteracaoN;
+							
+							*Arquivo = (char *)malloc(sizeof(char) * 17);
+					    	strcpy(*Arquivo, "Textos/MensagensDosBaus.txt");
+					    	
+					    	//*MudancaDeTexto = (char *)malloc(sizeof(char) * 40);
+					    	//strcpy(*MudancaDeTexto, "Poção!");
+					    	
+					    	*DialogoPosX = 169,
+							*DialogoPosY = 435,
+							*DialogoPartToStart = 6,
+							*DialogoPartToStop = 7;
+							
+					    	*PodeFazerInteracao = false;
+					    	*CaixaDeTexto = true;
+						}
+					}
+				}
+				
+				InteracaoN = 4;
+				if(!(Baus[InteracaoN] == NADA) && *PodeFazerInteracao == true)
+				{
+					if((PosX < PosicaoBaus[InteracaoN].DisX + PosicaoBaus[InteracaoN].LarX + CPosX + Bau_AreaDeInteracao) && (PosX + PLarX > PosicaoBaus[InteracaoN].DisX + CPosX - Bau_AreaDeInteracao) && (PosY < PosicaoBaus[InteracaoN].DisY + PosicaoBaus[InteracaoN].LarY + CPosY + Bau_AreaDeInteracao) && (PosY + PLarY > PosicaoBaus[InteracaoN].DisY + CPosY - Bau_AreaDeInteracao))
+					{
+						if((GetKeyState(VK_SPACE)&0x80) && *SpacePress == false)
+					    {
+					    	*AdicionarItem = true;
+					    	*AdicionarItemIndice = InteracaoN;
+							
+							*Arquivo = (char *)malloc(sizeof(char) * 17);
+					    	strcpy(*Arquivo, "Textos/MensagensDosBaus.txt");
+					    	
+					    	//*MudancaDeTexto = (char *)malloc(sizeof(char) * 40);
+					    	//strcpy(*MudancaDeTexto, "Poção!");
+					    	
+					    	*DialogoPosX = 169,
+							*DialogoPosY = 435,
+							*DialogoPartToStart = 8,
+							*DialogoPartToStop = 9;
+							
+					    	*PodeFazerInteracao = false;
+					    	*CaixaDeTexto = true;
+						}
+					}
+				}
+				
 				//Inimigos
 				InteracaoN = 0;
 				if(InimigosVivos[InteracaoN] == true && *PodeFazerInteracao == true)
@@ -92,7 +174,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						}
 						
 						//Adicionar os novos mobs
-						*mob = lista_insere(*mob, 1, golem, 20, 18, 50, 6, 5, 1, 400, 15);
+						*mob = lista_insere(*mob, 1, caracol, 8, 5, 50, 6, 5, 3, 50, 10);
 						
 						//printf("\nDepois:");
 						//detalhaStatus(*mob);
@@ -119,11 +201,114 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						}
 						
 						//Adicionar os novos mobs
-						*mob = lista_insere(*mob, 2, wumpus, 25, 19, 80, 9, 20, 2, 200, 10);
-						*mob = lista_insere(*mob, 1, golem, 20, 18, 50, 6, 5, 1, 300, 15);
-						*mob = lista_insere(*mob, 3, wumpus, 99, 19, 80, 9, 20, 2, 200, 10);
+						*mob = lista_insere(*mob, 1, caracol, 8, 5, 50, 6, 5, 3, 50, 10);
+						*mob = lista_insere(*mob, 2, wumpus, 5, 10, 80, 9, 20, 2, 60, 10);
 						
 						*MusicaDaBatalha = MUSICABATALHA;
+						
+						*InimigoIndice = InteracaoN;
+						
+						*PodeFazerInteracao = false;
+						*IniciarBatalha = true;
+					}
+				}
+				
+				InteracaoN = 2;
+				if(InimigosVivos[InteracaoN] == true && *PodeFazerInteracao == true)
+				{
+					if((PosX < InimigosPosicoes[InteracaoN].DisX + InimigosPosicoes[InteracaoN].LarX + CPosX) && (PosX + PLarX > InimigosPosicoes[InteracaoN].DisX + CPosX) && (PosY < InimigosPosicoes[InteracaoN].DisY + InimigosPosicoes[InteracaoN].LarY + CPosY) && (PosY + PLarY > InimigosPosicoes[InteracaoN].DisY + CPosY))
+					{
+						//Tirar os itens da lista de mobs.
+						while(*mob != NULL)
+						{
+							a = *mob;
+							*mob = lista_retira(*mob, a->id);
+						}
+						
+						//Adicionar os novos mobs
+						*mob = lista_insere(*mob, 1, wumpus, 5, 10, 80, 9, 20, 2, 60, 10);
+						*mob = lista_insere(*mob, 2, caracol, 8, 5, 50, 6, 5, 3, 50, 10);
+						*mob = lista_insere(*mob, 3, wumpus, 5, 10, 80, 9, 20, 2, 60, 10);
+						
+						*MusicaDaBatalha = MUSICABATALHA;
+						
+						*InimigoIndice = InteracaoN;
+						
+						*PodeFazerInteracao = false;
+						*IniciarBatalha = true;
+					}
+				}
+				
+				InteracaoN = 3;
+				if(InimigosVivos[InteracaoN] == true && *PodeFazerInteracao == true)
+				{
+					if((PosX < InimigosPosicoes[InteracaoN].DisX + InimigosPosicoes[InteracaoN].LarX + CPosX) && (PosX + PLarX > InimigosPosicoes[InteracaoN].DisX + CPosX) && (PosY < InimigosPosicoes[InteracaoN].DisY + InimigosPosicoes[InteracaoN].LarY + CPosY) && (PosY + PLarY > InimigosPosicoes[InteracaoN].DisY + CPosY))
+					{
+						//Tirar os itens da lista de mobs.
+						while(*mob != NULL)
+						{
+							a = *mob;
+							*mob = lista_retira(*mob, a->id);
+						}
+						
+						//Adicionar os novos mobs
+						*mob = lista_insere(*mob, 1, wumpus, 5, 10, 80, 9, 20, 2, 60, 10);
+						*mob = lista_insere(*mob, 2, golem, 15, 20, 50, 6, 8, 1, 100, 15);
+						*mob = lista_insere(*mob, 3, caracol, 8, 5, 50, 6, 5, 3, 50, 10);
+						
+						*MusicaDaBatalha = MUSICABATALHA;
+						
+						*InimigoIndice = InteracaoN;
+						
+						*PodeFazerInteracao = false;
+						*IniciarBatalha = true;
+					}
+				}
+				
+				InteracaoN = 4;
+				if(InimigosVivos[InteracaoN] == true && *PodeFazerInteracao == true)
+				{
+					if((PosX < InimigosPosicoes[InteracaoN].DisX + InimigosPosicoes[InteracaoN].LarX + CPosX) && (PosX + PLarX > InimigosPosicoes[InteracaoN].DisX + CPosX) && (PosY < InimigosPosicoes[InteracaoN].DisY + InimigosPosicoes[InteracaoN].LarY + CPosY) && (PosY + PLarY > InimigosPosicoes[InteracaoN].DisY + CPosY))
+					{
+						//Tirar os itens da lista de mobs.
+						while(*mob != NULL)
+						{
+							a = *mob;
+							*mob = lista_retira(*mob, a->id);
+						}
+						
+						//Adicionar os novos mobs
+						*mob = lista_insere(*mob, 1, wumpus, 10, 10, 80, 9, 20, 2, 60, 10);
+						*mob = lista_insere(*mob, 2, golem, 15, 20, 50, 6, 8, 1, 100, 15);
+						*mob = lista_insere(*mob, 3, wumpus, 10, 10, 80, 9, 20, 2, 60, 10);
+						
+						*MusicaDaBatalha = MUSICABATALHA;
+						
+						*InimigoIndice = InteracaoN;
+						
+						*PodeFazerInteracao = false;
+						*IniciarBatalha = true;
+					}
+				}
+				
+				InteracaoN = 5;
+				if(InimigosVivos[InteracaoN] == true && *PodeFazerInteracao == true)
+				{
+					if((PosX < InimigosPosicoes[InteracaoN].DisX + InimigosPosicoes[InteracaoN].LarX + CPosX) && (PosX + PLarX > InimigosPosicoes[InteracaoN].DisX + CPosX) && (PosY < InimigosPosicoes[InteracaoN].DisY + InimigosPosicoes[InteracaoN].LarY + CPosY) && (PosY + PLarY > InimigosPosicoes[InteracaoN].DisY + CPosY))
+					{
+						//Tirar os itens da lista de mobs.
+						while(*mob != NULL)
+						{
+							a = *mob;
+							*mob = lista_retira(*mob, a->id);
+						}
+						
+						//Adicionar os novos mobs
+						*mob = lista_insere(*mob, 1, wumpus, 15, 20, 100, 9, 50, 2, 300, 100);
+						*mob = lista_insere(*mob, 2, golem, 20, 30, 70, 6, 10, 1, 400, 150);
+						*mob = lista_insere(*mob, 3, caracol, 13, 10, 80, 6, 5, 3, 350, 100);
+						
+						*MusicaDaBatalha = MUSICACHEFE;
 						
 						*InimigoIndice = InteracaoN;
 						

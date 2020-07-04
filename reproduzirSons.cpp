@@ -43,6 +43,16 @@ void reproduzirSom(int Comando)
 		mciSendString("open .\\Sons\\ff6_rest_in_peace.mp3 type MPEGVideo alias musica", NULL, 0, 0); 
       	mciSendString("play musica", NULL, 0, 0);
 	}
+	else if(Comando == MUSICACAVERNA)
+	{
+		mciSendString("open .\\Sons\\chrono_trigger_forest_theme.mp3 type MPEGVideo alias musica", NULL, 0, 0);
+      	mciSendString("play musica repeat", NULL, 0, 0);
+	}
+	else if(Comando == MUSICACHEFE)
+	{
+		mciSendString("open .\\Sons\\ff6_musica_chefe.mp3 type MPEGVideo alias musica", NULL, 0, 0);
+      	mciSendString("play musica repeat", NULL, 0, 0);
+	}
 	
 	//Reproduzir efeitos sonoros
 	else if (Comando == PARAREFEITOSONORO)

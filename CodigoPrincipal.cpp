@@ -67,7 +67,7 @@ const int Sprites_HUDQ = 20;
 void* Sprites_HUD[Sprites_HUDQ];
 void* Sprites_HUD_Mascaras[Sprites_HUDQ];
 
-const int Sprites_MobsQ = 2;
+const int Sprites_MobsQ = 3;
 void* Sprites_Mobs[Sprites_MobsQ];
 void* Sprites_Mobs_Mascaras[Sprites_MobsQ];
 
@@ -88,8 +88,8 @@ char Sprites_Nomes[SpritesQ][25] = {"Sprites/imagem01",
 char Cenario_Nomes[CenarioQ][30] = {"Sprites/Cenarios/area1",
 									"Sprites/Cenarios/Cenario01_02"};
 
-char Cenario_Batalha_Nomes[Cenario_BatalhaQ][30] = {"Sprites/Cenarios/area1",
-											  "Sprites/Cenarios/Cenario01_02"};
+char Cenario_Batalha_Nomes[Cenario_BatalhaQ][35] = {"Sprites/Cenarios/cenario_Batalha1",
+											  		"Sprites/Cenarios/cenario_Batalha2"};
 
 char Cenario_Objetos_Nomes[Cenario_ObjetosQ][38] = {"Sprites/ObjetoC_Teste_01-1",
 							 						"Sprites/ObjetoC_Teste_01-2",
@@ -135,8 +135,9 @@ char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/correr",
 											"Sprites/HUD/correr2"};
 											
-char Sprites_Mobs_Nomes[Sprites_MobsQ][20] = {"Sprites/Mobs/golem",
-											  "Sprites/Mobs/wumpus"};
+char Sprites_Mobs_Nomes[Sprites_MobsQ][27] = {"Sprites/Mobs/golem",
+											  "Sprites/Mobs/wumpus",
+											  "Sprites/Mobs/Lesma_batalha"};
 
 char Sprites_InimigosMapa_Nomes[Sprites_InimigosMapaQ][26] = {"Sprites/Mobs/golem_mapa",
 															  "Sprites/Mobs/golem_mapa2",
@@ -170,6 +171,9 @@ int Sprites_Tamanhos[SpritesQ][2] = {{100, 50},
 
 int Cenario_Tamanhos[CenarioQ][2] = {{1024, 576},
 									 {2000, 1000}};
+
+int Cenario_Batalha_Tamanhos[Cenario_BatalhaQ][2] = {{1024, 576},
+									 				{1024, 576}};
 
 int Cenario_Objetos_Tamanhos[Cenario_ObjetosQ][2] = {{110, 115},
 							  		 				 {110, 115},
@@ -219,6 +223,7 @@ int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
 											 {360, 45}};
 											 
 int Sprites_Mobs_Tamanhos[Sprites_MobsQ][2] = {{275, 275},
+											   {275, 275},
 											   {275, 275}};
 
 int Sprites_InimigosMapa_Tamanhos[Sprites_InimigosMapaQ][2] = {{128, 128},
@@ -322,7 +327,7 @@ int main()
 	
 	li = lista_insere(li, 1, lily, 20, 10, 70, 12, 5, 1, 100, 0);
 	li = lista_insere(li, 2, cueio, 30, 6, 80, 8, 15, 5, 200, 115);
-	li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999, 0);
+	//li = lista_insere(li, 3, quem, 99, 99, 99, 99, 99, 99, 999, 0);
 	
 	//Equipando os itens nos personagens, é preciso passar a party, o indice do personagem da party e o item que deseja equipar
 	li = equipa_item(li, 1, &item[0]);
@@ -418,40 +423,67 @@ int main()
 	RetangulosDeColisao *ListaRetangulosDeColisao = NULL;
 	
 	//Baus -------------------------------------------------------------------------------------------------------------------
-	int NumeroDeBaus = 2;
+	int NumeroDeBaus = 5;
 	int *Baus;
 	Baus = (int *)malloc(sizeof(int) * NumeroDeBaus);
 	
 	Baus[0] = POCAO;
 	Baus[1] = CAFE;
+	Baus[2] = POCAO2;
+	Baus[3] = POCAO3;
+	Baus[4] = CAFE;
 	
 	int Bau_AreaDeInteracao = 10;
 	
 	RetangulosDeColisao PosicaoBaus[NumeroDeBaus];
 	
-	PosicaoBaus[0].DisX = 700;
-	PosicaoBaus[0].DisY = 300;
+	PosicaoBaus[0].DisX = 355;
+	PosicaoBaus[0].DisY = 552;
 	PosicaoBaus[0].LarX = 50;
 	PosicaoBaus[0].LarY = 20;
 	
-	PosicaoBaus[1].DisX = 680;
-	PosicaoBaus[1].DisY = 370;
+	PosicaoBaus[1].DisX = 464;
+	PosicaoBaus[1].DisY = 516;
 	PosicaoBaus[1].LarX = 50;
 	PosicaoBaus[1].LarY = 20;
+	
+	PosicaoBaus[2].DisX = 114;
+	PosicaoBaus[2].DisY = 203;
+	PosicaoBaus[2].LarX = 50;
+	PosicaoBaus[2].LarY = 20;
+	
+	PosicaoBaus[3].DisX = 406;
+	PosicaoBaus[3].DisY = 298;
+	PosicaoBaus[3].LarX = 50;
+	PosicaoBaus[3].LarY = 20;
+	
+	PosicaoBaus[4].DisX = 528;
+	PosicaoBaus[4].DisY = 56;
+	PosicaoBaus[4].LarX = 50;
+	PosicaoBaus[4].LarY = 20;
 	
 	PosicoesD BausCenaDesenho[NumeroDeBaus];
 	
 	BausCenaDesenho[0].IndIm = 0;
 	BausCenaDesenho[1].IndIm = 0;
+	BausCenaDesenho[2].IndIm = 0;
+	BausCenaDesenho[3].IndIm = 0;
+	BausCenaDesenho[4].IndIm = 0;
 	
 	BausCenaDesenho[0].VTroca = 19;
 	BausCenaDesenho[1].VTroca = 19;
+	BausCenaDesenho[2].VTroca = 19;
+	BausCenaDesenho[3].VTroca = 19;
+	BausCenaDesenho[4].VTroca = 19;
 	
 	BausCenaDesenho[0].DeslocamentoDaImagem = 40;
 	BausCenaDesenho[1].DeslocamentoDaImagem = 40;
+	BausCenaDesenho[2].DeslocamentoDaImagem = 40;
+	BausCenaDesenho[3].DeslocamentoDaImagem = 40;
+	BausCenaDesenho[4].DeslocamentoDaImagem = 40;
 	
 	//Inimigos --------------------------------------------------------------------------------------------------------------------
-	int NInimigos = 2;
+	int NInimigos = 6;
 	int inimigoIndice = 0;
 	
 	//Lista dizendo se o inimigo esta ativo ou nao.
@@ -466,21 +498,45 @@ int main()
 	//Posicoes
 	RetangulosDeColisao InimigosPosicoes[NInimigos];
 	
-	InimigosPosicoes[0].DisX = 540;
-	InimigosPosicoes[0].DisY = 160;
-	InimigosPosicoes[0].LarX = 92;
-	InimigosPosicoes[0].LarY = 40;
+	InimigosPosicoes[0].DisX = 275;
+	InimigosPosicoes[0].DisY = 480;
+	InimigosPosicoes[0].LarX = 40;
+	InimigosPosicoes[0].LarY = 20;
 	
-	InimigosPosicoes[1].DisX = 275;
-	InimigosPosicoes[1].DisY = 480;
+	InimigosPosicoes[1].DisX = 370;
+	InimigosPosicoes[1].DisY = 414;
 	InimigosPosicoes[1].LarX = 40;
 	InimigosPosicoes[1].LarY = 20;
+	
+	InimigosPosicoes[2].DisX = 212;
+	InimigosPosicoes[2].DisY = 270;
+	InimigosPosicoes[2].LarX = 40;
+	InimigosPosicoes[2].LarY = 20;
+	
+	InimigosPosicoes[3].DisX = 381;
+	InimigosPosicoes[3].DisY = 97;
+	InimigosPosicoes[3].LarX = 92;
+	InimigosPosicoes[3].LarY = 40;
+	
+	InimigosPosicoes[4].DisX = 638;
+	InimigosPosicoes[4].DisY = 314;
+	InimigosPosicoes[4].LarX = 92;
+	InimigosPosicoes[4].LarY = 40;
+	
+	InimigosPosicoes[5].DisX = 886;
+	InimigosPosicoes[5].DisY = 385;
+	InimigosPosicoes[5].LarX = 92;
+	InimigosPosicoes[5].LarY = 40;
 	
 	//Struct para o desenho dos inimigos
 	PosicoesD InimigosDesenho[NInimigos];
 	
-	InimigosDesenho[0].IndIm = 2;
+	InimigosDesenho[0].IndIm = 5;
 	InimigosDesenho[1].IndIm = 5;
+	InimigosDesenho[2].IndIm = 5;
+	InimigosDesenho[3].IndIm = 2;
+	InimigosDesenho[4].IndIm = 2;
+	InimigosDesenho[5].IndIm = 0;
 	
 	
 	//Variaveis do cenario ------------------------------------------------------------------------------------------------------------------------
@@ -550,7 +606,7 @@ int main()
 	PersonagemD.IndIm = 0;
 	PersonagemD.Ind = 0;
 	PersonagemD.VTroca = -PLarY;
-	PersonagemD.DeslocamentoDaImagem = 83;
+	PersonagemD.DeslocamentoDaImagem = 71;
 	
 	PosicoesD ListaObjCenaTemp; //Struct para ser usada na hora do sort.
 	
@@ -676,6 +732,7 @@ int main()
 	initwindow(TelaLarX, TelaLarY, "Dark Gears - Testes", 50, 30);
 	
 	reproduzirSom(VOLUME2);
+	MusicaDoCenario = MUSICACAVERNA;
 	
 	Gt1 = GetTickCount();
   	Gt2 = Gt1;
@@ -756,6 +813,7 @@ int main()
 						
 						if(Selecao == 0)
 						{
+							reproduzirSom(MusicaDoCenario);
 							telaDoJogo = EXPLORACAO;
 						}
 						if(Selecao == 1)
@@ -869,6 +927,7 @@ int main()
 				
 				//Desenhar os objetos e a personagem
 				
+				/*
 				//Teste ----------------
 				if(CenarioAtual == 0)
 				{
@@ -890,6 +949,7 @@ int main()
 					bar(ListaRetangulosDeColisao[i].DisX + CPosX, ListaRetangulosDeColisao[i].DisY + CPosY, ListaRetangulosDeColisao[i].DisX + ListaRetangulosDeColisao[i].LarX + CPosX, ListaRetangulosDeColisao[i].DisY + ListaRetangulosDeColisao[i].LarY + CPosY);
 				}
 				//Teste ----------------
+				*/
 				
 				//printf("\nPosX = %d, PosY = %d", PosX, PosY);
 				//printf("\nCPosX = %d, CPosY = %d", CPosX, CPosY);
@@ -898,16 +958,16 @@ int main()
 				{
 					if(listaObjetosC[i].Tipo == PER)
 					{
-						setfillstyle(1, RGB(133, 144, 200));
-						bar(PosX, PosY, PosX + PLarX, PosY + PLarY);
+						//setfillstyle(1, RGB(133, 144, 200));
+						//bar(PosX, PosY, PosX + PLarX, PosY + PLarY);
 						//setfillstyle(1, RGB(255, 242, 0));
 						//bar(PosX - 50, PosY - 80, PosX + PLarX + 50, PosY + PLarY - 80);
 						//putimage(PosX, PosY, Sprites_Mascaras[LILY], AND_PUT); //Primeiro a mascara.
 						//putimage(PosX, PosY, Sprites[LILY], OR_PUT); //Depois a imagem normal.
 						//putimage(PosX - 30, PosY - 60, Sprites_Mascaras[CHADDRIT], AND_PUT);
 						//putimage(PosX - 30, PosY - 60, Sprites[CHADDRIT], OR_PUT);
-						putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites_Mascaras[LILY3D], AND_PUT);
-						putimage(PosX - 13, PosY - PersonagemD.DeslocamentoDaImagem, Sprites[LILY3D], OR_PUT);
+						putimage(PosX, PosY - PersonagemD.DeslocamentoDaImagem, Sprites_Mascaras[LILY3D], AND_PUT);
+						putimage(PosX, PosY - PersonagemD.DeslocamentoDaImagem, Sprites[LILY3D], OR_PUT);
 					}
 					
 					if(listaObjetosC[i].Tipo == OBJ)
@@ -968,9 +1028,9 @@ int main()
 				{
 					reproduzirSom(PARARMUSICA);
 					reproduzirSom(MusicaDaBatalha);
-					iniciarBatalha(li, mob, &lista_consumiveis, true, &fecharJogo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras);
+					iniciarBatalha(li, mob, &lista_consumiveis, true, &fecharJogo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras, Cenario_Batalha);
 					reproduzirSom(PARARMUSICA);
-					//reproduzirSom(MusicaDoCenario);
+					reproduzirSom(MusicaDoCenario);
 					
 					//Deixar o inimigo "morto".
 					InimigosVivos[InimigoIndice] = false;
@@ -1128,6 +1188,7 @@ int main()
 					reproduzirSom(SOMABRIRBAU);
 					AdicionarItem = false;
 					
+					/*
 					detalhaConsumiveis(lista_consumiveis);
 					
 					printf("\n");
@@ -1135,6 +1196,7 @@ int main()
 					{
 						printf("%d", Baus[i]);
 					}
+					*/
 				}
 				
 				//Transicoes de mapas.
@@ -1200,9 +1262,22 @@ int main()
 	
 	//Liberar a memoria dos ponteiros.
 	//Dar free separadamente em cada um dos itens do li, mob e lista_consumiveis.
+	while(li != NULL)
+	{
+		li = lista_retira(li, li->id);
+	}
+	while(mob != NULL)
+	{
+		mob = lista_retira(mob, mob->id);
+	}
+	while(lista_consumiveis != NULL)
+	{
+		lista_consumiveis = lista_consumiveis_retira(lista_consumiveis, lista_consumiveis->tipo);
+	}
 	free(li);
 	free(mob);
 	free(lista_consumiveis);
+	free(lcAux);
 	free(Arquivo);
 	free(listaObjetosC);
 	free(ListaRetangulosDeColisao);
@@ -1318,6 +1393,15 @@ void CarregarImagens(int Imagem)
 				readimagefile(strcat(StrcatTemp, CBMP), 0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1);
 			    Cenario_Colisao[i] = malloc(imagesize(0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1));
 			    getimage(0, 0, Cenario_Tamanhos[i][0]-1, Cenario_Tamanhos[i][1]-1, Cenario_Colisao[i]);
+			}
+			
+			for(int i=0; i < Cenario_BatalhaQ; i++)
+			{
+				strcpy(StrcatTemp, Cenario_Batalha_Nomes[i]);
+				
+				readimagefile(strcat(StrcatTemp, BMP), 0, 0, Cenario_Batalha_Tamanhos[i][0]-1, Cenario_Batalha_Tamanhos[i][1]-1);
+			    Cenario_Batalha[i] = malloc(imagesize(0, 0, Cenario_Batalha_Tamanhos[i][0]-1, Cenario_Batalha_Tamanhos[i][1]-1));
+			    getimage(0, 0, Cenario_Batalha_Tamanhos[i][0]-1, Cenario_Batalha_Tamanhos[i][1]-1, Cenario_Batalha[i]);
 			}
 			
 			cleardevice();
