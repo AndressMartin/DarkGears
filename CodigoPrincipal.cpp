@@ -59,7 +59,7 @@ const int Sprites_BausQ = 2;
 void* Sprites_Baus[Sprites_BausQ];
 void* Sprites_Baus_Mascaras[Sprites_BausQ];
 
-const int Sprites_RetratosQ = 16;
+const int Sprites_RetratosQ = 22;
 void* Sprites_Retratos[Sprites_RetratosQ];
 void* Sprites_Retratos_Mascaras[Sprites_RetratosQ];
 
@@ -112,7 +112,13 @@ char Sprites_Retratos_Nomes[Sprites_RetratosQ][46] = {"Sprites/Retratos/lily",
 													  "Sprites/Retratos/golem",
 													  "Sprites/Retratos/potionSmall",
 													  "Sprites/Retratos/potionSmall2",
-													  "Sprites/Retratos/potionSmall3"};
+													  "Sprites/Retratos/potionSmall3",
+													  "Sprites/Retratos/lily_scared",
+													  "Sprites/Retratos/lily_scared_clear",
+													  "Sprites/Retratos/lily_smirk",
+													  "Sprites/Retratos/chaddrit",
+													  "Sprites/Retratos/chaddrit_mee",
+													  "Sprites/Retratos/wumpus"};
 									 				
 char Sprites_HUD_Nomes[Sprites_HUDQ][38] = {"Sprites/HUD/caixa_de_texto",
 											"Sprites/HUD/menuDeBatalha_1",
@@ -199,6 +205,12 @@ int Sprites_Retratos_Tamanhos[Sprites_RetratosQ][2] = {{180, 220},
 													   {85, 74},
 													   {85, 74},
 													   {85, 74},
+													   {85, 74},
+													   {180, 220},
+													   {180, 220},
+													   {180, 220},
+													   {180, 220},
+													   {180, 220},
 													   {85, 74}};
 
 int Sprites_HUD_Tamanhos[Sprites_HUDQ][2] = {{686, 115},
@@ -395,7 +407,8 @@ int main()
 		 CaixaDeTexto = false,
 		 IniciarBatalha = false,
 		 AdicionarItem = false,
-	 	 SpacePress = false;
+	 	 SpacePress = false,
+	 	 podeFugirVar = true;
 	
 	int AdicionarItemIndice = 0,
 		InimigoIndice = 0,
@@ -458,7 +471,7 @@ int main()
 	PosicaoBaus[3].LarY = 20;
 	
 	PosicaoBaus[4].DisX = 528;
-	PosicaoBaus[4].DisY = 56;
+	PosicaoBaus[4].DisY = 106;
 	PosicaoBaus[4].LarX = 50;
 	PosicaoBaus[4].LarY = 20;
 	
@@ -503,10 +516,10 @@ int main()
 	InimigosPosicoes[0].LarX = 40;
 	InimigosPosicoes[0].LarY = 20;
 	
-	InimigosPosicoes[1].DisX = 370;
-	InimigosPosicoes[1].DisY = 414;
-	InimigosPosicoes[1].LarX = 40;
-	InimigosPosicoes[1].LarY = 20;
+	InimigosPosicoes[1].DisX = 350;
+	InimigosPosicoes[1].DisY = 410;
+	InimigosPosicoes[1].LarX = 90;
+	InimigosPosicoes[1].LarY = 30;
 	
 	InimigosPosicoes[2].DisX = 212;
 	InimigosPosicoes[2].DisY = 270;
@@ -532,7 +545,7 @@ int main()
 	PosicoesD InimigosDesenho[NInimigos];
 	
 	InimigosDesenho[0].IndIm = 5;
-	InimigosDesenho[1].IndIm = 5;
+	InimigosDesenho[1].IndIm = 4;
 	InimigosDesenho[2].IndIm = 5;
 	InimigosDesenho[3].IndIm = 2;
 	InimigosDesenho[4].IndIm = 2;
@@ -663,7 +676,7 @@ int main()
 		}
 		else if(InimigosDesenho[i].IndIm == 4)
 		{
-			InimigosDesenho[i].DeslocamentoDaImagem = 0;
+			InimigosDesenho[i].DeslocamentoDaImagem = 62;
 			InimigosDesenho[i].VTroca = 0;
 		}
 		else if(InimigosDesenho[i].IndIm == 5)
@@ -1015,6 +1028,22 @@ int main()
 				//Torna visivel a pagina de desenho.
 				setvisualpage(PG);
 				
+				//Fim do jogo - Parte 1
+				if(InimigosVivos[5] == false)
+				{
+					//Iniciar um dialogo
+					Arquivo = (char *)malloc(sizeof(char) * 17);
+			    	strcpy(Arquivo, "Textos/Teste.txt");
+			    	
+			    	DialogoPosX = 229,
+					DialogoPosY = 435,
+					DialogoPartToStart = 94,
+					DialogoPartToStop = 133;
+					
+			    	PodeFazerInteracao = false;
+			    	CaixaDeTexto = true;
+				}
+				
 				//Caixa de Texto
 				if(CaixaDeTexto == true)
 				{
@@ -1023,12 +1052,18 @@ int main()
 					PodeFazerInteracao = true;
 				}
 				
+				//Fim do jogo - Parte 2
+				if(InimigosVivos[5] == false)
+				{
+					fecharJogo = true;
+				}
+				
 				//Iniciar a batalha
 				if(IniciarBatalha == true)
 				{
 					reproduzirSom(PARARMUSICA);
 					reproduzirSom(MusicaDaBatalha);
-					iniciarBatalha(li, mob, &lista_consumiveis, true, &fecharJogo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras, Cenario_Batalha);
+					iniciarBatalha(li, mob, &lista_consumiveis, podeFugirVar, &fecharJogo, Sprites_Retratos, Sprites_Retratos_Mascaras, Sprites_HUD, Sprites_HUD_Mascaras, Sprites_Mobs, Sprites_Mobs_Mascaras, Sprites_Efeitos, Sprites_Efeitos_Mascaras, Cenario_Batalha);
 					reproduzirSom(PARARMUSICA);
 					reproduzirSom(MusicaDoCenario);
 					
@@ -1170,7 +1205,7 @@ int main()
 				}
 				
 				//Interacoes com o mapa.
-				interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &AdicionarItem, &AdicionarItemIndice, &InimigoIndice, InimigosVivos, InimigosPosicoes, &mob, &IniciarBatalha, &MusicaDoCenario, &MusicaDaBatalha);
+				interacoesComOMapa(CenarioAtual, PosX, PosY, PLarX, PLarY, CPosX, CPosY, Bau_AreaDeInteracao, PosicaoBaus, Baus, &PodeFazerInteracao, &SpacePress, &MudancaDeCenario, &MudancaDeCenarioNumero, Portas, &CaixaDeTexto, &Arquivo, &DialogoPosX, &DialogoPosY, &DialogoPartToStart, &DialogoPartToStop, &AdicionarItem, &AdicionarItemIndice, &InimigoIndice, InimigosVivos, InimigosPosicoes, &mob, &IniciarBatalha, &MusicaDoCenario, &MusicaDaBatalha, &podeFugirVar);
 				
 				//Adicionar itens dos baus
 				if(AdicionarItem == true)

@@ -38,3 +38,96 @@ $
 Voce ganhou uma #
 E so isso que tem no jogo por enquanto.
 $
+
+------------------- Texto do Chefe --------------------------
+%1
+Parabens por ter chegado ate aqui, mas sua hora chegou.
+$
+%0
+Aha! Agora nos vamos acabar com voce!...
+$
+%17
+Ei! Aonde voce ta indo?
+$
+%18
+Ta com medinho?
+$
+%1
+Eu tenho assuntos mais importantes para resover.
+Nao e porque nao deu tempo de terminar os meus
+sprites ou algo do tipo... Diana!
+$
+%0
+Ah, ele foi embora...
+$
+%19
+Sim, mas parece que ele nao vai deixar as coisas serem
+tao faceis assim.
+$
+%16
+Ah! Eles estao vindo atras de nos!
+$
+%18
+Calma, Lily, voce da conta facil facil...
+Chaddrit, voce vai na frente e me protege.
+$
+%20
+Ora, ora!... tu ta muito abusada pro meu gosto.
+$
+%16
+La vem eles!
+$
+------------------- Texto da primeira batalha --------------------------
+%0
+Olha, um inimigo!
+Vamos pegar ele!
+$
+%19
+Calma, raposa, batalhar nao e uma brincadeira.
+$
+Fique calma e preste aten-
+%0
+
+Porrada!
+$
+------------------- Fim do jogo --------------------------
+%0
+Ufa... conseguimos! Nos derrotamos os malvadoes, eba!
+$
+%20
+Admito que eu esperava um pouco mais...
+$
+%19
+Mas nao temos tempo a perder, vamos atras daquele
+morcego e pegar a chave pra te levar de volta pra
+casa.
+$
+%17
+Ai, eu ja to meio cansada de ficar andando tanto...
+$
+%0
+Voce nao pode me carregar um pouco?
+$
+%19
+Nao.
+$
+%0
+Ah, seu chato!
+$
+Bem, nos temos que ir andando, mas acho que esse
+e o fim, por enquanto.
+$
+Talvez a gente se encontre de novo no futuro,
+quem sabe.
+E tenhamos mais aventuras em Dark Gears!
+$
+%19
+Ate a proxima!
+$
+%1
+Adeus.
+$
+%0
+Obrigada por jogar nosso jogo!
+Tchau tchau!
+$

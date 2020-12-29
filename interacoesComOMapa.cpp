@@ -7,7 +7,7 @@
 #include<conio.h>
 #include<string.h>
 
-void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int Baus[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, bool *AdicionarItem, int *AdicionarItemIndice, int *InimigoIndice, bool InimigosVivos[], RetangulosDeColisao InimigosPosicoes[], Personagens **mob, bool *IniciarBatalha, int *MusicaDoCenario, int *MusicaDaBatalha)
+void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLarY, int CPosX, int CPosY, int Bau_AreaDeInteracao, RetangulosDeColisao PosicaoBaus[], int Baus[], bool *PodeFazerInteracao, bool *SpacePress, bool *MudancaDeCenario, int *MudancaDeCenarioNumero, RetangulosDeColisao Portas[], bool *CaixaDeTexto, char **Arquivo, int *DialogoPosX, int *DialogoPosY, int *DialogoPartToStart, int *DialogoPartToStop, bool *AdicionarItem, int *AdicionarItemIndice, int *InimigoIndice, bool InimigosVivos[], RetangulosDeColisao InimigosPosicoes[], Personagens **mob, bool *IniciarBatalha, int *MusicaDoCenario, int *MusicaDaBatalha, bool *podeFugirVar)
 {
 	// Funcao onde vamos tentar colocar todas as interacoes com o mapa. Vai depender do mapa atual.
 	// Interacoes como abrir baus, apertar botoes, falr com NPCs, e as transicoes dos mapas.
@@ -184,7 +184,20 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						*InimigoIndice = InteracaoN;
 						
 						*PodeFazerInteracao = false;
+						*podeFugirVar = true;
 						*IniciarBatalha = true;
+						
+						//Iniciar um dialogo
+						*Arquivo = (char *)malloc(sizeof(char) * 17);
+				    	strcpy(*Arquivo, "Textos/Teste.txt");
+				    	
+				    	*DialogoPosX = 229,
+						*DialogoPosY = 435,
+						*DialogoPartToStart = 81,
+						*DialogoPartToStop = 92;
+						
+				    	*PodeFazerInteracao = false;
+				    	*CaixaDeTexto = true;
 					}
 				}
 				
@@ -201,14 +214,15 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						}
 						
 						//Adicionar os novos mobs
-						*mob = lista_insere(*mob, 1, caracol, 8, 5, 50, 6, 5, 3, 50, 10);
 						*mob = lista_insere(*mob, 2, wumpus, 5, 10, 80, 9, 20, 2, 60, 10);
+						*mob = lista_insere(*mob, 1, caracol, 8, 5, 50, 6, 5, 3, 50, 10);
 						
 						*MusicaDaBatalha = MUSICABATALHA;
 						
 						*InimigoIndice = InteracaoN;
 						
 						*PodeFazerInteracao = false;
+						*podeFugirVar = true;
 						*IniciarBatalha = true;
 					}
 				}
@@ -235,6 +249,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						*InimigoIndice = InteracaoN;
 						
 						*PodeFazerInteracao = false;
+						*podeFugirVar = true;
 						*IniciarBatalha = true;
 					}
 				}
@@ -261,6 +276,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						*InimigoIndice = InteracaoN;
 						
 						*PodeFazerInteracao = false;
+						*podeFugirVar = true;
 						*IniciarBatalha = true;
 					}
 				}
@@ -287,6 +303,7 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						*InimigoIndice = InteracaoN;
 						
 						*PodeFazerInteracao = false;
+						*podeFugirVar = true;
 						*IniciarBatalha = true;
 					}
 				}
@@ -304,16 +321,29 @@ void interacoesComOMapa(int CenarioAtual, int PosX, int PosY, int PLarX, int PLa
 						}
 						
 						//Adicionar os novos mobs
-						*mob = lista_insere(*mob, 1, wumpus, 15, 20, 100, 9, 50, 2, 300, 100);
-						*mob = lista_insere(*mob, 2, golem, 20, 30, 70, 6, 10, 1, 400, 150);
-						*mob = lista_insere(*mob, 3, caracol, 13, 10, 80, 6, 5, 3, 350, 100);
+						*mob = lista_insere(*mob, 1, wumpus, 20, 20, 100, 9, 50, 2, 300, 100);
+						*mob = lista_insere(*mob, 2, golem, 30, 30, 70, 6, 10, 1, 400, 150);
+						*mob = lista_insere(*mob, 3, caracol, 18, 10, 80, 6, 5, 3, 350, 100);
 						
 						*MusicaDaBatalha = MUSICACHEFE;
 						
 						*InimigoIndice = InteracaoN;
 						
 						*PodeFazerInteracao = false;
+						*podeFugirVar = false;
 						*IniciarBatalha = true;
+						
+						//Iniciar um dialogo
+						*Arquivo = (char *)malloc(sizeof(char) * 17);
+				    	strcpy(*Arquivo, "Textos/Teste.txt");
+				    	
+				    	*DialogoPosX = 229,
+						*DialogoPosY = 435,
+						*DialogoPartToStart = 43,
+						*DialogoPartToStop = 79;
+						
+				    	*PodeFazerInteracao = false;
+				    	*CaixaDeTexto = true;
 					}
 				}
 				

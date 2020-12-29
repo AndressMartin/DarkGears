@@ -7,6 +7,7 @@
 #include<stdio.h>
 #include<graphics.h>
 #include<conio.h>
+#include<string.h>
 
 #define ESC  27
 #define One  49
@@ -29,7 +30,7 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 	int i = 0;
 
 	float x = 83.5;
-	float y = 140;
+	float y = 210;
 	float c = 166.5;
 	char btn[7];
 	
@@ -134,8 +135,8 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 			if (MenuID == 0)
 			{
 				i = 0;
-				x = 83.5;
-				c = 166.5;
+				x = 83.5 + 50;
+				c = 166.5 + 50;
 				
 //				circle(60, 60, 40);
 //				line(60, 20, 310, 20);
@@ -150,20 +151,43 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 //			  	line(740, 100, 990, 100);
 //			  	line(990, 20, 990, 100);
 		    
-			  	for (i; i <= 4; i++)
+			  	for (i; i <= 2; i++)
 				{
 			  		rectangle(x, y, x + (166.5), y + 160);
 			  		circle (c, (y + 160), 12);
 			  		itoa(i+1, btn, 10);
 			  		outtextxy(c-5, y + 153, btn);
-			  		resultQuadrado = c-5;
-			  		x += 166.5;
-			  		c += 166.5;
+			  		//resultQuadrado = c-5;
+			  		
+			  		switch(i)
+			  		{
+			  			case 0:
+			  				strcpy(Texto, "Itens");
+			  				outtextxy(x + 65, y + 75, Texto);
+			  				break;
+			  			
+			  			case 1:
+			  				strcpy(Texto, "Status");
+			  				outtextxy(x + 62, y + 75, Texto);
+			  				break;
+			  			
+			  			case 2:
+			  				strcpy(Texto, "Dossiê");
+			  				outtextxy(x + 59, y + 75, Texto);
+			  				break;
+			  			
+			  			default:
+			  				printf("Raios! O operador esta incorreto!");
+			  				
+					}
+			  		
+			  		x += 300;
+			  		c += 300;
 				}
 			  	
 			  	//Itens
-			  	rectangle(60, 340, 500, 530);
-			  	rectangle(500, 340, 960, 530);
+			  	//rectangle(60, 340, 500, 530);
+			  	//rectangle(500, 340, 960, 530);
 			  	
 			  	//Nomes dos personagens e HPs
 			  	for(int i = 0; i < iMax; i++)
@@ -340,79 +364,9 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 					putimage(70 + 326, 50 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
 					putimage(70 + 326, 50 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
 				}
-				
-				/*
-				itemCont = 0;
-				yItem = 50;
-				
-				//Itens Disponiveis
-				for (itemCont; itemCont < qntItens; itemCont++)
-				{
-					if (yItem+50 < 530)
-					{
-						rectangle(70, yItem, 470, yItem+50);
-						line(150, yItem, 150, yItem+50);
-						outtextxy(150+20, yItem+20, (itemNames[itemCont]));
-						yItem+= 55;
-					}
-				}
-				printf("1.");
-				*/
 			}
-			//Menu de habilidades
+			//Menu de status
 			if(MenuID == 2)
-			{
-				/*
-				skillCont = 0;
-				ySkill = 50;
-				
-				rectangle(12, 13, 1012, 563);
-				rectangle(60, 40, 480, 530);
-				rectangle(520, 40, 960, 530);
-				
-				//Itens Disponiveis
-				for (skillCont; skillCont < qntSkills; skillCont++)
-				{
-					if (ySkill+50 < 530)
-					{
-						rectangle(70, ySkill, 470, ySkill+50);
-						line(150, ySkill, 150, ySkill+50);
-						outtextxy(150+20, ySkill+20, (skillNames[skillCont]));
-						ySkill+= 55;
-					}
-				}
-				
-				printf("2.");
-				*/
-			}
-			//Menu de equipamentos
-			if(MenuID == 3)
-			{
-				/*
-				equipCont = 0;
-				yEquip = 50;
-				
-				rectangle(12, 13, 1012, 563);
-				rectangle(60, 40, 480, 530);
-				rectangle(520, 40, 960, 530);
-				
-				//Itens Disponiveis
-				for (equipCont; equipCont < qntEquip; equipCont++)
-				{
-					if (yEquip+50 < 530)
-					{
-						rectangle(70, yEquip, 470, yEquip+50);
-						line(150, yEquip, 150, yEquip+50);
-						outtextxy(150+20, yEquip+20, (equipNames[equipCont]));
-						yEquip+= 55;
-					}
-				}
-				
-				printf("3.");
-				*/
-			}
-			//Menu de personagens
-			if(MenuID == 4)
 			{	
 				rectangle(12, 13, 1012, 563);
 				rectangle(60, 40, 480, 530);
@@ -525,31 +479,135 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 				}
 				*/
 			}
-			//Bestiário
-			if(MenuID == 5)
+			
+			//Dossie
+			if(MenuID == 3)
 			{
-				/*
-				beastCont = 0;
-				yBeast = 50;
-				
 				rectangle(12, 13, 1012, 563);
 				rectangle(60, 40, 480, 530);
 				rectangle(520, 40, 960, 530);
 				
-				//Itens Disponiveis
-				for (beastCont; beastCont < qntBeasts; beastCont++)
+				//Mostrar os aliados disponiveis para selecionar
+				for(i = 0; i < iMax; i++)
 				{
-					if (yBeast+50 < 530)
+					a = lista_busca(li, ArrayIds[i]);
+				
+				    putimage(70, 50 + (73 * i), Sprites_HUD_Mascaras[MENUBATALHA3], AND_PUT);
+					putimage(70, 50 + (73 * i), Sprites_HUD[MENUBATALHA3], OR_PUT);
+					
+					strcpy(Texto, a->nome);
+					
+					if(a->hp > 0)
 					{
-						rectangle(70, yBeast, 470, yBeast+50);
-						line(150, yBeast, 150, yBeast+50);
-						outtextxy(150+20, yBeast+20, (beastNames[beastCont]));
-						yBeast+= 55;
+						retratoDeBatalha(70, 50, Texto, RETRATOBATALHANORMAL, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
 					}
+					else
+					{
+						retratoDeBatalha(70, 50, Texto, RETRATOBATALHANOCAUTEADO, i, Sprites_Retratos, Sprites_Retratos_Mascaras);
+					}
+					
+					outtextxy(70 + 85 + 10, 50 + (73 * i) + 30, Texto);
 				}
 				
-				printf("5.");
-				*/
+				putimage(70 + 326, 50 + (73 * Selecao), Sprites_HUD_Mascaras[SELECAOM], AND_PUT);
+				putimage(70 + 326, 50 + (73 * Selecao), Sprites_HUD[SELECAOM], OR_PUT);
+				
+				//Mostra umas informações da historia do personagem selecionado        
+				switch (ArrayIds[Selecao])
+				{
+					case 1:
+						strcpy(Texto, "Esta sou eu, Lily. Eu vim lá de cima,");
+			            outtextxy(540, 60, Texto);
+			            
+			            strcpy(Texto, "de um vilarejo rodeado por campos de flores.");
+			            outtextxy(540, 80, Texto);
+			            
+			            strcpy(Texto, "Não há muito o que falar da minha casa. Resumo: Lá");
+			            outtextxy(540, 100, Texto);
+			            
+			            strcpy(Texto, "se planta muita cenoura e batata-doce. Acho que é isso.");
+			            outtextxy(540, 120, Texto);
+			            
+			            strcpy(Texto, "Como toda boa raposa, eu sou muito curiosa.");
+			            outtextxy(540, 140, Texto);
+			            
+			            strcpy(Texto, "Portanto, do começo do dia até o fim dele, eu estou");
+			            outtextxy(540, 160, Texto);
+			            
+			            strcpy(Texto, "correndo e explorando por aí.");
+			            outtextxy(540, 180, Texto);
+			            
+			            strcpy(Texto, "Em um dia qualquer, eu acabei indo meio longe");
+			            outtextxy(540, 220, Texto);
+			            
+			            strcpy(Texto, "na floresta. Lá encontrei um coelho de características...");
+			            outtextxy(540, 240, Texto);
+			            
+			            strcpy(Texto, "Peculiares. Eu o persegui até cair em um buraco profundo,");
+			            outtextxy(540, 260, Texto);
+			            
+			            strcpy(Texto, "e agora estava presa em uma caverna.");
+			            outtextxy(540, 280, Texto);
+			            
+			            strcpy(Texto, "Até hoje é difícil acreditar no que eu vi:");
+			            outtextxy(540, 300, Texto);
+			            
+			            strcpy(Texto, "A caverna era tão grande que não dava para ver o outro lado,");
+			            outtextxy(540, 320, Texto); 
+			            
+			            strcpy(Texto, "e uma cidade subterrânea cintilava no horizonte.");
+						outtextxy(540, 340, Texto);
+						
+			            strcpy(Texto, "Casas e monumentos pontudos que alcançam o topo.");
+						outtextxy(540, 360, Texto);
+						
+			            strcpy(Texto, "Máquinas se mexem por toda parte, poluindo o ar com fumaças.");
+						outtextxy(540, 380, Texto);
+						
+			            strcpy(Texto, "Criaturas negras, prateadas e douradas andando pelas ruas.");
+						outtextxy(540, 400, Texto);
+						
+			            strcpy(Texto, "Foi assim que cheguei à cidade de Dark Gears.");
+			            outtextxy(580, 500, Texto);
+			            
+			            break;
+			            
+			        case 2:
+			            strcpy(Texto, "Este é Chaddrit.");
+			            outtextxy(540, 60, Texto);
+			            
+			            strcpy(Texto, "Eu não sei muito sobre ele não, mas pelo que sei,");
+			            outtextxy(540, 80, Texto);
+			            
+			            strcpy(Texto, "Ele também é parte metal, parte animal, como todo mundo");
+			            outtextxy(540, 100, Texto);
+			            
+			            strcpy(Texto, "aqui em Dark Gears.");
+			            outtextxy(540, 120, Texto);
+			            
+			            strcpy(Texto, "Será que ele é amigo? Parece ser. Ele tentou me");
+			            outtextxy(540, 160, Texto);
+			            
+			            strcpy(Texto, "ajudar a voltar para casa, mas fomos atacados por um");
+			            outtextxy(540, 180, Texto);
+			            
+			            strcpy(Texto, "morcego que parecia odiar muito a gente.");
+			            outtextxy(540, 200, Texto);
+			            
+			            strcpy(Texto, "Estranho, eu nunca nem vi ele na vida.");
+			            outtextxy(540, 220, Texto);
+			            
+			            strcpy(Texto, "Ganhamos a batalha mas Chaddrit ficou machucado demais,");
+			            outtextxy(540, 240, Texto);
+			            
+			            strcpy(Texto, "e agora sinto que preciso ajudá-lo.");
+			            outtextxy(540, 260, Texto);
+			            
+			            break;
+			            
+			        default:
+			            printf("\n");
+				}
 			}
 		  	
 		  	//Torna visivel a pagina de desenho.
@@ -578,22 +636,17 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 				}
 				if(Tecla == Two)
 				{	
+					reproduzirSom(CURSORMOVE);
+					
 					MenuID = 2;
+					Selecao = 0;
 				}
 				if(Tecla == Three)
 				{	
-					MenuID = 3;
-				}
-				if(Tecla == Four)
-				{	
 					reproduzirSom(CURSORMOVE);
 					
-					MenuID = 4;
+					MenuID = 3;
 					Selecao = 0;
-				}
-				if(Tecla == Five)
-				{	
-					MenuID = 5;
 				}
 			}
 			//Menu de Itens
@@ -737,44 +790,8 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 					}
 				}
 			}
-			//Menu de habilidades
+			//Menu de status
 			if(MenuID == 2)
-			{
-				if(Tecla == TECLABACKSPACE)
-				{	
-					MenuID = 0;
-				}
-				if((Tecla == UP || Tecla == LEFT) && (Selecao > 0))
-				{
-					reproduzirSom(CURSORMOVE);
-					
-					Selecao --;
-					if(Selecao < itensScroll)
-					{
-						itensScroll = Selecao;
-					}
-				}
-				if((Tecla == DOWN || Tecla == RIGHT) && (Selecao < iMaxItens - 1))
-				{
-					reproduzirSom(CURSORMOVE);
-					
-					Selecao ++;
-					if(Selecao - itensScroll > 2)
-					{
-						itensScroll = Selecao - 2;
-					}
-				}
-			}
-			//Menu de equipamentos
-			if(MenuID == 3)
-			{
-				if(Tecla == TECLABACKSPACE)
-				{	
-					MenuID = 0;
-				}
-			}
-			//Menu de personagens
-			if(MenuID == 4)
 			{
 				if(Tecla == TECLABACKSPACE)
 				{	
@@ -792,12 +809,23 @@ void DrawMenu(Personagens* li, Consumivel** lista_consumiveis, void* Sprites_Ret
 					Selecao ++;
 				}
 			}
-			//Bestiário
-			if(MenuID == 5)
+			//Dossie
+			if(MenuID == 3)
 			{
 				if(Tecla == TECLABACKSPACE)
 				{	
+					reproduzirSom(CURSORVOLTA);
 					MenuID = 0;
+				}
+				if((Tecla == UP || Tecla == LEFT) && (Selecao > 0))
+				{
+					reproduzirSom(CURSORMOVE);
+					Selecao --;
+				}
+				if((Tecla == DOWN || Tecla == RIGHT) && (Selecao < iMax - 1))
+				{
+					reproduzirSom(CURSORMOVE);
+					Selecao ++;
 				}
 			}
 		  	

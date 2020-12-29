@@ -34,7 +34,8 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 		 Pocao2[12] = "Super Pocao",
 		 Pocao3[11] = "Mega Pocao",
 		 Caracol[8] = "Caracol",
-		 Golem[6] = "Golem";
+		 Golem[6] = "Golem",
+		 Wumpus[7] = "Wumpus";
 	
 	if(strcmp(Texto, Lily) == 0)
 	{
@@ -74,6 +75,11 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 	if(strcmp(Texto, Golem) == 0)
 	{
 		Imagem = RBGOLEM;
+	}
+	
+	if(strcmp(Texto, Wumpus) == 0)
+	{
+		Imagem = RBWUMPUS;
 	}
 	
 	switch(Imagem)
@@ -159,6 +165,11 @@ void retratoDeBatalha(int PosX, int PosY, char Texto[30], int Tipo, int i, void*
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BPOCAO3RETRATO], AND_PUT);
 			putimage(PosX, PosY + (73 * i), Sprites_Retratos[BPOCAO3RETRATO], OR_PUT);
 			break;
+			
+		case RBWUMPUS:
+		putimage(PosX, PosY + (73 * i), Sprites_Retratos_Mascaras[BWUMPUSRETRATO], AND_PUT);
+		putimage(PosX, PosY + (73 * i), Sprites_Retratos[BWUMPUSRETRATO], OR_PUT);
+		break;
 		
 		default:
 			printf("\nRaios multiplos! O operador esta incorreto.");
